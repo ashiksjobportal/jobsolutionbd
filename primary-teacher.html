@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>প্রাইমারি প্রস্তুতি - ৩০ দিনের প্ল্যান</title>
+    <title>৩০ দিনের প্রাইমারি প্রস্তুতি</title>
     <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
@@ -13,48 +13,42 @@
 
         header { background: #fff; padding: 15px 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 1000; }
         .navbar { max-width: 800px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
-        .logo { font-size: 22px; font-weight: 700; color: #2c3e50; text-decoration: none; }
+        .logo { font-size: 20px; font-weight: 700; color: #2c3e50; text-decoration: none; }
         .back-btn { text-decoration: none; color: #3498db; font-weight: 600; }
 
         .container { max-width: 800px; margin: 30px auto; padding: 0 20px; }
         .page-title { text-align: center; margin-bottom: 30px; color: #2c3e50; }
 
-        .day-card { background: white; margin-bottom: 15px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); overflow: hidden; }
-        
-        .day-header {
-            padding: 15px 20px;
-            background: #fff;
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-weight: 600;
+        /* গ্রিড লেআউট - ড্যাশবোর্ড বাটন */
+        .day-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 15px;
+        }
+
+        .day-box {
+            background: white;
+            padding: 20px 10px;
+            border-radius: 10px;
+            text-align: center;
+            text-decoration: none;
             color: #2c3e50;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
             transition: 0.3s;
-            border-left: 5px solid #3498db;
+            border: 1px solid #eee;
         }
 
-        .day-header:hover { background: #f8f9fa; }
-        .day-header.active { background: #eaf6ff; color: #2980b9; }
-        .day-header i { transition: 0.3s; }
-        .day-header.active i { transform: rotate(180deg); }
-
-        .day-content { display: none; padding: 20px; border-top: 1px solid #eee; }
-        
-        .mcq-box { margin-bottom: 20px; border-bottom: 1px dashed #ddd; padding-bottom: 15px; }
-        .mcq-box:last-child { border-bottom: none; }
-        .question { font-size: 17px; font-weight: 600; margin-bottom: 10px; color: #2c3e50; }
-        .options { margin-left: 15px; list-style-type: none; }
-        .options li { margin-bottom: 8px; color: #555; font-size: 16px; }
-        
-        .answer-btn {
-            background: #27ae60; color: white; border: none; padding: 8px 15px;
-            border-radius: 4px; cursor: pointer; font-size: 14px; margin-top: 5px;
-            transition: 0.3s;
+        .day-box:hover {
+            transform: translateY(-5px);
+            background: #3498db;
+            color: white;
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
         }
-        .answer-btn:hover { background: #219150; }
-        .answer { display: none; margin-top: 10px; color: #2980b9; font-weight: 600; background: #eafaf1; padding: 10px; border-radius: 5px; border-left: 3px solid #27ae60; }
 
+        .day-number { font-size: 24px; font-weight: 700; display: block; margin-bottom: 5px; }
+        .day-topic { font-size: 12px; opacity: 0.8; display: block; }
+        
+        .locked { opacity: 0.6; cursor: not-allowed; background: #eee; }
     </style>
 </head>
 <body>
@@ -62,656 +56,34 @@
     <header>
         <div class="navbar">
             <a href="index.html" class="logo">JobSolutionBD</a>
-            <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> ফিরে যান</a>
+            <a href="index.html" class="back-btn"><i class="fas fa-home"></i> হোম</a>
         </div>
     </header>
 
     <div class="container">
-        <h2 class="page-title">৩০ দিনের প্রাইমারি মিশন</h2>
+        <h2 class="page-title">৩০ দিনের স্টাডি প্ল্যান</h2>
+        
+        <div class="day-grid">
+            <a href="day01.html" class="day-box">
+                <span class="day-number">০১</span>
+                <span class="day-topic">বাংলা সাহিত্য</span>
+            </a>
 
-        <div class="day-card">
-            <div class="day-header" onclick="toggleDay(this)">
-                <span>📌 Day-01: বাংলা সাহিত্য ও ব্যাকরণ (১-৫০)</span>
-                <i class="fas fa-chevron-down"></i>
+            <a href="day02.html" class="day-box">
+                <span class="day-number">০২</span>
+                <span class="day-topic">English</span>
+            </a>
+
+            <a href="#" class="day-box locked">
+                <span class="day-number">০৩</span>
+                <span class="day-topic">শীঘ্রই আসছে</span>
+            </a>
+            <a href="#" class="day-box locked">
+                <span class="day-number">০৪</span>
+                <span class="day-topic">শীঘ্রই আসছে</span>
+            </a>
             </div>
-            <div class="day-content">
-                
-                <div class="mcq-box">
-                    <p class="question">১. বাংলা সাহিত্যের যুগ কে কয় ভাগে ভাগ করা যায়?</p>
-                    <ul class="options">
-                        <li>A. ২ ভাগে</li>
-                        <li>B. ৩ ভাগে</li>
-                        <li>C. ৪ ভাগে</li>
-                        <li>D. ৫ ভাগে</li>
-                    </ul>
-                    <button class="answer-btn" onclick="toggleAnswer(this)">উত্তর দেখুন</button>
-                    <p class="answer">✅ সঠিক উত্তর: B. ৩ ভাগে</p>
-                </div>
-
-                <div class="mcq-box">
-                    <p class="question">২. বাংলা ভাষা ও সাহিত্যে প্রাচীনতম শাখা কোনটি?</p>
-                    <ul class="options">
-                        <li>A. নাটক</li>
-                        <li>B. ছোটগল্প</li>
-                        <li>C. কাব্য</li>
-                        <li>D. উপন্যাস</li>
-                    </ul>
-                    <button class="answer-btn" onclick="toggleAnswer(this)">উত্তর দেখুন</button>
-                    <p class="answer">✅ সঠিক উত্তর: C. কাব্য</p>
-                </div>
-
-                <div class="mcq-box">
-                    <p class="question">৩. চর্যাপদের সঙ্গে কোন ধর্মের নাম সংশ্লিষ্ট?</p>
-                    <ul class="options">
-                        <li>A. হিন্দু ধর্ম</li>
-                        <li>B. বৌদ্ধ ধর্ম</li>
-                        <li>C. জৈন ধর্ম</li>
-                        <li>D. ইসলাম ধর্ম</li>
-                    </ul>
-                    <button class="answer-btn" onclick="toggleAnswer(this)">উত্তর দেখুন</button>
-                    <p class="answer">✅ সঠিক উত্তর: B. বৌদ্ধ ধর্ম</p>
-                </div>
-
-                <div class="mcq-box">
-                    <p class="question">৪. কোন রাজবংশের আমলে চর্যাপদ শুরু হয়?</p>
-                    <ul class="options">
-                        <li>A. সেন রাজবংশ</li>
-                        <li>B. পাল রাজবংশ</li>
-                        <li>C. মৌর্য রাজবংশ</li>
-                        <li>D. গুপ্ত রাজবংশ</li>
-                    </ul>
-                    <button class="answer-btn" onclick="toggleAnswer(this)">উত্তর দেখুন</button>
-                    <p class="answer">✅ সঠিক উত্তর: B. পাল রাজবংশ</p>
-                </div>
-
-                <div class="mcq-box">
-                    <p class="question">৫. চর্যাপদ আবিষ্কৃত হয় কোথা থেকে?</p>
-                    <ul class="options">
-                        <li>A. তিব্বত থেকে</li>
-                        <li>B. ভুটান থেকে</li>
-                        <li>C. নেপাল থেকে</li>
-                        <li>D. ভারত থেকে</li>
-                    </ul>
-                    <button class="answer-btn" onclick="toggleAnswer(this)">উত্তর দেখুন</button>
-                    <p class="answer">✅ সঠিক উত্তর: C. নেপাল থেকে</p>
-                </div>
-
-                <div class="mcq-box">
-                    <p class="question">৬. হরপ্রসাদ শাস্ত্রী পুঁথি সাহিত্য সংগ্রহের জন্য গিয়েছিলেন—</p>
-                    <ul class="options">
-                        <li>A. তিব্বত, নেপাল</li>
-                        <li>B. ভুটান, সিকিম</li>
-                        <li>C. কাশী, বেনারস</li>
-                        <li>D. বোম্বে, জয়পুর</li>
-                    </ul>
-                    <button class="answer-btn" onclick="toggleAnswer(this)">উত্তর দেখুন</button>
-                    <p class="answer">✅ সঠিক উত্তর: A. তিব্বত, নেপাল</p>
-                </div>
-
-                <div class="mcq-box">
-                    <p class="question">৭. চর্যাপদের একমাত্র বাঙালি কবি কে?</p>
-                    <ul class="options">
-                        <li>A. ভুসুকুপা</li>
-                        <li>B. শবরপা</li>
-                        <li>C. লুইপা</li>
-                        <li>D. কাহ্নপা</li>
-                    </ul>
-                    <button class="answer-btn" onclick="toggleAnswer(this)">উত্তর দেখুন</button>
-                    <p class="answer">✅ সঠিক উত্তর: A. ভুসুকুপা</p>
-                </div>
-
-                <div class="mcq-box">
-                    <p class="question">৮. 'শ্রীকৃষ্ণকীর্তনের' রচয়িতা কে?</p>
-                    <ul class="options">
-                        <li>A. জ্ঞান দাস</li>
-                        <li>B. দীন চণ্ডীদাস</li>
-                        <li>C. দীনহীন চণ্ডীদাস</li>
-                        <li>D. অনন্ত বড়ু</li>
-                    </ul>
-                    <button class="answer-btn" onclick="toggleAnswer(this)">উত্তর দেখুন</button>
-                    <p class="answer">✅ সঠিক উত্তর: D. অনন্ত বড়ু</p>
-                </div>
-
-                <div class="mcq-box">
-                    <p class="question">৯. শ্রীকৃষ্ণকীর্তন কাব্য কত সালে আবিষ্কৃত হয়?</p>
-                    <ul class="options">
-                        <li>A. ১৯০৭</li>
-                        <li>B. ১৯০৯</li>
-                        <li>C. ১৯১৬</li>
-                        <li>D. ১৯১৩</li>
-                    </ul>
-                    <button class="answer-btn" onclick="toggleAnswer(this)">উত্তর দেখুন</button>
-                    <p class="answer">✅ সঠিক উত্তর: B. ১৯০৯</p>
-                </div>
-
-                <div class="mcq-box">
-                    <p class="question">১০. মনসাবিজয় কাব্যের রচয়িতা কে?</p>
-                    <ul class="options">
-                        <li>A. বিজয় গুপ্ত</li>
-                        <li>B. বিপ্রদাস পিপিলাই</li>
-                        <li>C. কেতকাদাস ক্ষেমানন্দ</li>
-                        <li>D. নারায়ণ দেব</li>
-                    </ul>
-                    <button class="answer-btn" onclick="toggleAnswer(this)">উত্তর দেখুন</button>
-                    <p class="answer">✅ সঠিক উত্তর: B. বিপ্রদাস পিপিলাই</p>
-                </div>
-
-                <div class="mcq-box">
-                    <p class="question">১১. চণ্ডীমঙ্গল কাব্যে কয়টি খণ্ড রয়েছে?</p>
-                    <ul class="options">
-                        <li>A. ২টি</li>
-                        <li>B. ৩টি</li>
-                        <li>C. ৫টি</li>
-                        <li>D. ১৩টি</li>
-                    </ul>
-                    <button class="answer-btn" onclick="toggleAnswer(this)">উত্তর দেখুন</button>
-                    <p class="answer">✅ সঠিক উত্তর: A. ২টি</p>
-                </div>
-
-                <div class="mcq-box">
-                    <p class="question">১২. ভাড়ুদত্ত কোন কাব্যের চরিত্র?</p>
-                    <ul class="options">
-                        <li>A. চণ্ডীমঙ্গল</li>
-                        <li>B. শ্রীকৃষ্ণকীর্তন</li>
-                        <li>C. মনসামঙ্গল</li>
-                        <li>D. অন্নদামঙ্গল</li>
-                    </ul>
-                    <button class="answer-btn" onclick="toggleAnswer(this)">উত্তর দেখুন</button>
-                    <p class="answer">✅ সঠিক উত্তর: A. চণ্ডীমঙ্গল</p>
-                </div>
-
-                <div class="mcq-box">
-                    <p class="question">১৩. চাঁদ সওদাগর বাংলা কোন কাব্যধারার চরিত্র?</p>
-                    <ul class="options">
-                        <li>A. চণ্ডীমঙ্গল</li>
-                        <li>B. মনসামঙ্গল</li>
-                        <li>C. ধর্মমঙ্গল</li>
-                        <li>D. অন্নদামঙ্গল</li>
-                    </ul>
-                    <button class="answer-btn" onclick="toggleAnswer(this)">উত্তর দেখুন</button>
-                    <p class="answer">✅ সঠিক উত্তর: B. মনসামঙ্গল</p>
-                </div>
-
-                <div class="mcq-box">
-                    <p class="question">১৪. মধ্যযুগের প্রথম কবি হচ্ছেন—</p>
-                    <ul class="options">
-                        <li>A. কাহ্নপা</li>
-                        <li>B. বিদ্যাপতি</li>
-                        <li>C. বড়ু চণ্ডীদাস</li>
-                        <li>D. মালাধর বসু</li>
-                    </ul>
-                    <button class="answer-btn" onclick="toggleAnswer(this)">উত্তর দেখুন</button>
-                    <p class="answer">✅ সঠিক উত্তর: C. বড়ু চণ্ডীদাস</p>
-                </div>
-
-                <div class="mcq-box">
-                    <p class="question">১৫. আলাওলের তোহফা কোন ধরনের কাব্য?</p>
-                    <ul class="options">
-                        <li>A. রোমান্টিক</li>
-                        <li>B. নীতিকাব্য</li>
-                        <li>C. শোকগাঁথা</li>
-                        <li>D. ইতিহাস আশ্রিত</li>
-                    </ul>
-                    <button class="answer-btn" onclick="toggleAnswer(this)">উত্তর দেখুন</button>
-                    <p class="answer">✅ সঠিক উত্তর: B. নীতিকাব্য</p>
-                </div>
-
-                <div class="mcq-box">
-                    <p class="question">১৬. গুলে বকাওলি গ্রন্থের রচয়িতা কে?</p>
-                    <ul class="options">
-                        <li>A. দৌলত উজির</li>
-                        <li>B. মুহম্মদ মুকিম</li>
-                        <li>C. শাহ মুহম্মদ সগীর</li>
-                        <li>D. সৈয়দ সুলতান</li>
-                    </ul>
-                    <button class="answer-btn" onclick="toggleAnswer(this)">উত্তর দেখুন</button>
-                    <p class="answer">✅ সঠিক উত্তর: B. মুহম্মদ মুকিম</p>
-                </div>
-
-                <div class="mcq-box">
-                    <p class="question">১৭. লাইলী-মজনু উপাখ্যান কোন দেশের?</p>
-                    <ul class="options">
-                        <li>A. ইরান</li>
-                        <li>B. মিশর</li>
-                        <li>C. ভারত</li>
-                        <li>D. ইরাক</li>
-                    </ul>
-                    <button class="answer-btn" onclick="toggleAnswer(this)">উত্তর দেখুন</button>
-                    <p class="answer">✅ সঠিক উত্তর: A. ইরান</p>
-                </div>
-
-                <div class="mcq-box">
-                    <p class="question">১৮. বাংলা একাডেমি প্রকাশিত প্রমিত বাংলা বানানের নিয়ম প্রথম কত সালে প্রকাশিত হয়?</p>
-                    <ul class="options">
-                        <li>A. ১৯৯২</li>
-                        <li>B. ১৯৯৪</li>
-                        <li>C. ১৯৯৫</li>
-                        <li>D. ১৯৯৬</li>
-                    </ul>
-                    <button class="answer-btn" onclick="toggleAnswer(this)">উত্তর দেখুন</button>
-                    <p class="answer">✅ সঠিক উত্তর: A. ১৯৯২</p>
-                </div>
-
-                <div class="mcq-box">
-                    <p class="question">১৯. কোনটি সঠিক বানান?</p>
-                    <ul class="options">
-                        <li>A. মন্ত্রীসভা</li>
-                        <li>B. মন্ত্রিসভা</li>
-                        <li>C. মন্ত্রী সভা</li>
-                        <li>D. কোনোটিই নয়</li>
-                    </ul>
-                    <button class="answer-btn" onclick="toggleAnswer(this)">উত্তর দেখুন</button>
-                    <p class="answer">✅ সঠিক উত্তর: B. মন্ত্রিসভা</p>
-                </div>
-
-                <div class="mcq-box">
-                    <p class="question">২০. নিচের কোন বানানটি শুদ্ধ?</p>
-                    <ul class="options">
-                        <li>A. প্রানিজগৎ</li>
-                        <li>B. প্রাণীজগৎ</li>
-                        <li>C. মন্ত্রীসভা</li>
-                        <li>D. সহায়ীত্ব</li>
-                    </ul>
-                    <button class="answer-btn" onclick="toggleAnswer(this)">উত্তর দেখুন</button>
-                    <p class="answer">✅ সঠিক উত্তর: B. প্রাণীজগৎ <br><small>(নোট: ব্যাকরণ অনুযায়ী 'প্রাণিজগৎ' বা 'প্রাণীজগৎ' এর ক্ষেত্রে 'প্রাণিজগৎ' অধিক শুদ্ধ, তবে অপশন অনুযায়ী B)</small></p>
-                </div>
-
-                <div class="mcq-box">
-                    <p class="question">২১. নিচের কোন বানানটি শুদ্ধ?</p>
-                    <ul class="options">
-                        <li>A. মনীষী</li>
-                        <li>B. মনীষি</li>
-                        <li>C. মনিষি</li>
-                        <li>D. মনিষী</li>
-                    </ul>
-                    <button class="answer-btn" onclick="toggleAnswer(this)">উত্তর দেখুন</button>
-                    <p class="answer">✅ সঠিক উত্তর: A. মনীষী</p>
-                </div>
-
-                <div class="mcq-box">
-                    <p class="question">২২. কোন বানানটি শুদ্ধ?</p>
-                    <ul class="options">
-                        <li>A. শীতাতপ</li>
-                        <li>B. শীতাতপ</li>
-                        <li>C. শিততাপ</li>
-                        <li>D. শিততাপ</li>
-                    </ul>
-                    <button class="answer-btn" onclick="toggleAnswer(this)">উত্তর দেখুন</button>
-                    <p class="answer">✅ সঠিক উত্তর: A. শীতাতপ</p>
-                </div>
-
-                <div class="mcq-box">
-                    <p class="question">২৩. কোন বানানটি শুদ্ধ?</p>
-                    <ul class="options">
-                        <li>A. উরপাত</li>
-                        <li>B. উরপাৎ</li>
-                        <li>C. উৎপাৎ</li>
-                        <li>D. উৎপাত</li>
-                    </ul>
-                    <button class="answer-btn" onclick="toggleAnswer(this)">উত্তর দেখুন</button>
-                    <p class="answer">✅ সঠিক উত্তর: D. উৎপাত</p>
-                </div>
-
-                <div class="mcq-box">
-                    <p class="question">২৪. চন্দ্রবিন্দুর ভুল প্রয়োগ ঘটেছে কোনটিতে?</p>
-                    <ul class="options">
-                        <li>A. কাঁধ</li>
-                        <li>B. সাঁকো</li>
-                        <li>C. আঁকাবাঁকা</li>
-                        <li>D. সাঁতার</li>
-                    </ul>
-                    <button class="answer-btn" onclick="toggleAnswer(this)">উত্তর দেখুন</button>
-                    <p class="answer">✅ সঠিক উত্তর: C. আঁকাবাঁকা <br><small>(নোট: আঁকাবাঁকা শব্দে চন্দ্রবিন্দু হবে না)</small></p>
-                </div>
-
-                <div class="mcq-box">
-                    <p class="question">২৫. কোনটি শুদ্ধ বানান?</p>
-                    <ul class="options">
-                        <li>A. সন্ন্যাসী</li>
-                        <li>B. সন্যাসী</li>
-                        <li>C. সন্যাসিব</li>
-                        <li>D. স্বন্যাসী</li>
-                    </ul>
-                    <button class="answer-btn" onclick="toggleAnswer(this)">উত্তর দেখুন</button>
-                    <p class="answer">✅ সঠিক উত্তর: A. সন্ন্যাসী</p>
-                </div>
-
-                <div class="mcq-box">
-                    <p class="question">২৬. শুদ্ধ বাক্যটি নির্দেশ করুন—</p>
-                    <ul class="options">
-                        <li>A. বিরাট গরু- ছাগলের হাট</li>
-                        <li>B. বিরাট গরু ও বিরাট ছাগলের হাট</li>
-                        <li>C. গরু - ছাগলের বিরাট হাট</li>
-                        <li>D. বিরাট গবাদি পশুর হাট</li>
-                    </ul>
-                    <button class="answer-btn" onclick="toggleAnswer(this)">উত্তর দেখুন</button>
-                    <p class="answer">✅ সঠিক উত্তর: C. গরু - ছাগলের বিরাট হাট</p>
-                </div>
-
-                <div class="mcq-box">
-                    <p class="question">২৭. শুদ্ধ বাক্য নয় কোনটি?</p>
-                    <ul class="options">
-                        <li>A. ইশ! যদি পাখির মত পাখা পেতাম</li>
-                        <li>B. বিদ্বান হলেও তার কোনো অহংকার নেই</li>
-                        <li>C. অকারণে ঋণ করিও না</li>
-                        <li>D. হয়তো সোহমা আসতে পারে ।</li>
-                    </ul>
-                    <button class="answer-btn" onclick="toggleAnswer(this)">উত্তর দেখুন</button>
-                    <p class="answer">✅ সঠিক উত্তর: D. হয়তো সোহমা আসতে পারে ।</p>
-                </div>
-
-                <div class="mcq-box">
-                    <p class="question">২৮. কোন বাক্যটিতে ভুল নেই?</p>
-                    <ul class="options">
-                        <li>A. দরিদ্রতা অভিশাপ</li>
-                        <li>B. ফুল দেখতে সুন্দর</li>
-                        <li>C. ভুল লিখতে ভুল করো না</li>
-                        <li>D. শনিতে অশনি দেখতে পাইলাম</li>
-                    </ul>
-                    <button class="answer-btn" onclick="toggleAnswer(this)">উত্তর দেখুন</button>
-                    <p class="answer">✅ সঠিক উত্তর: C. ভুল লিখতে ভুল করো না</p>
-                </div>
-
-                <div class="mcq-box">
-                    <p class="question">২৯. নিচের কোন বাক্যটি শুদ্ধ?</p>
-                    <ul class="options">
-                        <li>A. সূর্য উদয় হয়েছে ?</li>
-                        <li>B. তার সৌজন্যতায় মুগ্ধ হয়েছি</li>
-                        <li>C. যুক্তি খণ্ডন হয়েছে কিন্তু মুক্তি মিলেনি</li>
-                        <li>D. বিধি লঙ্ঘন হয়েছে</li>
-                    </ul>
-                    <button class="answer-btn" onclick="toggleAnswer(this)">উত্তর দেখুন</button>
-                    <p class="answer">✅ সঠিক উত্তর: C. যুক্তি খণ্ডন হয়েছে কিন্তু মুক্তি মিলেনি</p>
-                </div>
-
-                <div class="mcq-box">
-                    <p class="question">৩০. ‘পাখির ডাক’ এক কথায় প্রকাশ কি হবে?</p>
-                    <ul class="options">
-                        <li>A. কেকা</li>
-                        <li>B. হ্রেষা</li>
-                        <li>C. কুজন</li>
-                        <li>D. অজিন</li>
-                    </ul>
-                    <button class="answer-btn" onclick="toggleAnswer(this)">উত্তর দেখুন</button>
-                    <p class="answer">✅ সঠিক উত্তর: C. কুজন</p>
-                </div>
-
-                <div class="mcq-box">
-                    <p class="question">৩১. ‘গম্ভীর ধ্বনি’ এর বাক্য সংকোচন করুন।</p>
-                    <ul class="options">
-                        <li>A. মন্ত্র</li>
-                        <li>B. মন্দ্র</li>
-                        <li>C. মর্মন্তুদ</li>
-                        <li>D. মধুপ</li>
-                    </ul>
-                    <button class="answer-btn" onclick="toggleAnswer(this)">উত্তর দেখুন</button>
-                    <p class="answer">✅ সঠিক উত্তর: B. মন্দ্র</p>
-                </div>
-
-                <div class="mcq-box">
-                    <p class="question">৩২. ‘নাদ’ শব্দের অর্থ কি?</p>
-                    <ul class="options">
-                        <li>A. মেঘের ডাক</li>
-                        <li>B. বাঘের ডাক</li>
-                        <li>C. সিংহের ডাক</li>
-                        <li>D. ময়ূরের ডাক</li>
-                    </ul>
-                    <button class="answer-btn" onclick="toggleAnswer(this)">উত্তর দেখুন</button>
-                    <p class="answer">✅ সঠিক উত্তর: C. সিংহের ডাক</p>
-                </div>
-
-                <div class="mcq-box">
-                    <p class="question">৩৩. ‘নূপুরের ধ্বনি’- এক কথায় কি বলে?</p>
-                    <ul class="options">
-                        <li>A. শিঞ্জন</li>
-                        <li>B. রুমঝুম</li>
-                        <li>C. ঝংকার</li>
-                        <li>D. নিক্কণ</li>
-                    </ul>
-                    <button class="answer-btn" onclick="toggleAnswer(this)">উত্তর দেখুন</button>
-                    <p class="answer">✅ সঠিক উত্তর: D. নিক্কণ</p>
-                </div>
-
-                <div class="mcq-box">
-                    <p class="question">৩৪. ‘মেঘের ধ্বনি’ এর বাক্য সংকোচন কোনটি?</p>
-                    <ul class="options">
-                        <li>A. মন্ময়</li>
-                        <li>B. জীমূতমন্দ্র</li>
-                        <li>C. জীমূতেন্দ্র</li>
-                        <li>D. শানকি</li>
-                    </ul>
-                    <button class="answer-btn" onclick="toggleAnswer(this)">উত্তর দেখুন</button>
-                    <p class="answer">✅ সঠিক উত্তর: B. জীমূতমন্দ্র</p>
-                </div>
-
-                <div class="mcq-box">
-                    <p class="question">৩৫. ‘অলংকারের ঝংকার’র বাক্য সংকোচন কি?</p>
-                    <ul class="options">
-                        <li>A. কিন্নর</li>
-                        <li>B. শিঞ্জন</li>
-                        <li>C. অজিন</li>
-                        <li>D. অঞ্জন</li>
-                    </ul>
-                    <button class="answer-btn" onclick="toggleAnswer(this)">উত্তর দেখুন</button>
-                    <p class="answer">✅ সঠিক উত্তর: B. শিঞ্জন</p>
-                </div>
-
-                <div class="mcq-box">
-                    <p class="question">৩৬. যা কোথাও উঁচু কোথাও নিচু—</p>
-                    <ul class="options">
-                        <li>A. বন্ধুর</li>
-                        <li>B. বর্ধিষ্ণু</li>
-                        <li>C. প্রত্যুদগমন</li>
-                        <li>D. মেদুর</li>
-                    </ul>
-                    <button class="answer-btn" onclick="toggleAnswer(this)">উত্তর দেখুন</button>
-                    <p class="answer">✅ সঠিক উত্তর: A. বন্ধুর</p>
-                </div>
-
-                <div class="mcq-box">
-                    <p class="question">৩৭. ‘কষ্টে অতিক্রম করা যায় যা’—</p>
-                    <ul class="options">
-                        <li>A. দুর্নিবার</li>
-                        <li>B. দুর্লভ</li>
-                        <li>C. বন্ধুর</li>
-                        <li>D. দুরতিক্রম্য</li>
-                    </ul>
-                    <button class="answer-btn" onclick="toggleAnswer(this)">উত্তর দেখুন</button>
-                    <p class="answer">✅ সঠিক উত্তর: D. দুরতিক্রম্য</p>
-                </div>
-
-                <div class="mcq-box">
-                    <p class="question">৩৮. এক কথায় প্রকাশ করুন: ‘পাওয়ার ইচ্ছা’</p>
-                    <ul class="options">
-                        <li>A. জিগীষা</li>
-                        <li>B. ঈপ্সা</li>
-                        <li>C. বুভুক্ষা</li>
-                        <li>D. লিপ্সা</li>
-                    </ul>
-                    <button class="answer-btn" onclick="toggleAnswer(this)">উত্তর দেখুন</button>
-                    <p class="answer">✅ সঠিক উত্তর: B. ঈপ্সা</p>
-                </div>
-
-                <div class="mcq-box">
-                    <p class="question">৩৯. ‘প্রবেশ করার ইচ্ছা’কে এককথায় কী বলা হয়?</p>
-                    <ul class="options">
-                        <li>A. বিবিক্ষা</li>
-                        <li>B. বিবিক্ত</li>
-                        <li>C. বিবাসন</li>
-                        <li>D. -</li>
-                    </ul>
-                    <button class="answer-btn" onclick="toggleAnswer(this)">উত্তর দেখুন</button>
-                    <p class="answer">✅ সঠিক উত্তর: A. বিবিক্ষা</p>
-                </div>
-
-                <div class="mcq-box">
-                    <p class="question">৪০. যা চুষে খাওয়া হয়—</p>
-                    <ul class="options">
-                        <li>A. লেহ্য</li>
-                        <li>B. চুষ্য</li>
-                        <li>C. চর্ব্য</li>
-                        <li>D. পেয়</li>
-                    </ul>
-                    <button class="answer-btn" onclick="toggleAnswer(this)">উত্তর দেখুন</button>
-                    <p class="answer">✅ সঠিক উত্তর: B. চুষ্য</p>
-                </div>
-
-                <div class="mcq-box">
-                    <p class="question">৪১. ‘যা বলা হয়েছে’-এককথায় প্রকাশ করলে হবে :</p>
-                    <ul class="options">
-                        <li>A. বক্তব্য</li>
-                        <li>B. বক্তৃতা</li>
-                        <li>C. উক্ত</li>
-                        <li>D. বিবৃতি</li>
-                    </ul>
-                    <button class="answer-btn" onclick="toggleAnswer(this)">উত্তর দেখুন</button>
-                    <p class="answer">✅ সঠিক উত্তর: C. উক্ত</p>
-                </div>
-
-                <div class="mcq-box">
-                    <p class="question">৪২. ‘যা বলা উচিত নয়’- কোন শব্দে বিধৃত?</p>
-                    <ul class="options">
-                        <li>A. কুকথ্য</li>
-                        <li>B. অকথ্য</li>
-                        <li>C. অসত্য</li>
-                        <li>D. অযোগ্য</li>
-                    </ul>
-                    <button class="answer-btn" onclick="toggleAnswer(this)">উত্তর দেখুন</button>
-                    <p class="answer">✅ সঠিক উত্তর: B. অকথ্য</p>
-                </div>
-
-                <div class="mcq-box">
-                    <p class="question">৪৩. ‘দিনের আলো ও সন্ধ্যার আলোর মিলন’ এককথায়—</p>
-                    <ul class="options">
-                        <li>A. সায়াহ্ন</li>
-                        <li>B. প্রদোষ</li>
-                        <li>C. অপরাহ্ণ</li>
-                        <li>D. গোধূলি</li>
-                    </ul>
-                    <button class="answer-btn" onclick="toggleAnswer(this)">উত্তর দেখুন</button>
-                    <p class="answer">✅ সঠিক উত্তর: D. গোধূলি</p>
-                </div>
-
-                <div class="mcq-box">
-                    <p class="question">৪৪. ‘গাছে উঠতে পটু যে’ এককথায় কী হবে?</p>
-                    <ul class="options">
-                        <li>A. গাছো</li>
-                        <li>B. গাছি</li>
-                        <li>C. গেছো</li>
-                        <li>D. আরোহী</li>
-                    </ul>
-                    <button class="answer-btn" onclick="toggleAnswer(this)">উত্তর দেখুন</button>
-                    <p class="answer">✅ সঠিক উত্তর: C. গেছো</p>
-                </div>
-
-                <div class="mcq-box">
-                    <p class="question">৪৫. যার দুই হাত সমান চলে, তাকে কি বলে?</p>
-                    <ul class="options">
-                        <li>A. দু’হাতি</li>
-                        <li>B. সমান তালী</li>
-                        <li>C. সব্যসাচী</li>
-                        <li>D. -</li>
-                    </ul>
-                    <button class="answer-btn" onclick="toggleAnswer(this)">উত্তর দেখুন</button>
-                    <p class="answer">✅ সঠিক উত্তর: C. সব্যসাচী</p>
-                </div>
-
-                <div class="mcq-box">
-                    <p class="question">৪৬. ‘সাপের খোলস’- বাক্য সংকোচন কী হবে?</p>
-                    <ul class="options">
-                        <li>A. নির্মোক</li>
-                        <li>B. উরগ</li>
-                        <li>C. কৃত্তি</li>
-                        <li>D. প্লাবক</li>
-                    </ul>
-                    <button class="answer-btn" onclick="toggleAnswer(this)">উত্তর দেখুন</button>
-                    <p class="answer">✅ সঠিক উত্তর: A. নির্মোক</p>
-                </div>
-
-                <div class="mcq-box">
-                    <p class="question">৪৭. ‘গণনার যোগ্য নয় যা’ এককথায় বলা যায়—</p>
-                    <ul class="options">
-                        <li>A. অগণ্য</li>
-                        <li>B. নগণ্য</li>
-                        <li>C. অপরিমিত</li>
-                        <li>D. অসংখ্য</li>
-                    </ul>
-                    <button class="answer-btn" onclick="toggleAnswer(this)">উত্তর দেখুন</button>
-                    <p class="answer">✅ সঠিক উত্তর: B. নগণ্য</p>
-                </div>
-
-                <div class="mcq-box">
-                    <p class="question">৪৮. ‘রাত্রির শেষ ভাগ’ এক কথায়—</p>
-                    <ul class="options">
-                        <li>A. পররাত্র</li>
-                        <li>B. মহানিশা</li>
-                        <li>C. যামিনী</li>
-                        <li>D. রাত্রিশেষ</li>
-                    </ul>
-                    <button class="answer-btn" onclick="toggleAnswer(this)">উত্তর দেখুন</button>
-                    <p class="answer">✅ সঠিক উত্তর: A. পররাত্র</p>
-                </div>
-
-                <div class="mcq-box">
-                    <p class="question">৪৯. ‘রাত্রিকালীন যুদ্ধ’ এর এককথায় প্রকাশ কোনটি?</p>
-                    <ul class="options">
-                        <li>A. কোকনদ</li>
-                        <li>B. রিরংসা</li>
-                        <li>C. সৌপ্তিক</li>
-                        <li>D. ক্রেঙ্কার</li>
-                    </ul>
-                    <button class="answer-btn" onclick="toggleAnswer(this)">উত্তর দেখুন</button>
-                    <p class="answer">✅ সঠিক উত্তর: C. সৌপ্তিক</p>
-                </div>
-
-                <div class="mcq-box">
-                    <p class="question">৫০. ‘যা কষ্টে জয় করা যায়’- এককথায় প্রকাশ কি?</p>
-                    <ul class="options">
-                        <li>A. কষ্টার্জিত</li>
-                        <li>B. পরিশ্রমলব্ধ</li>
-                        <li>C. দুর্জয়</li>
-                        <li>D. দুর্লভ</li>
-                    </ul>
-                    <button class="answer-btn" onclick="toggleAnswer(this)">উত্তর দেখুন</button>
-                    <p class="answer">✅ সঠিক উত্তর: C. দুর্জয়</p>
-                </div>
-
-            </div>
-        </div>
-        <div class="day-card">
-            <div class="day-header" onclick="toggleDay(this)">
-                <span>📌 Day-02: সাধারণ জ্ঞান (বাংলাদেশ)</span>
-                <i class="fas fa-chevron-down"></i>
-            </div>
-            <div class="day-content">
-                <p style="text-align: center; color: #777;">এই দিনের পড়া এখনো আপলোড করা হয়নি...</p>
-            </div>
-        </div>
-
     </div>
-
-    <script>
-        function toggleDay(element) {
-            element.classList.toggle("active");
-            var content = element.nextElementSibling;
-            if (content.style.display === "block") {
-                content.style.display = "none";
-            } else {
-                content.style.display = "block";
-            }
-        }
-
-        function toggleAnswer(btn) {
-            var answer = btn.nextElementSibling;
-            if (answer.style.display === "block") {
-                answer.style.display = "none";
-                btn.textContent = "উত্তর দেখুন";
-            } else {
-                answer.style.display = "block";
-                btn.textContent = "লুকান";
-            }
-        }
-    </script>
 
 </body>
 </html>
