@@ -11,7 +11,7 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Hind Siliguri', sans-serif; }
         body { background-color: #f4f6f9; color: #333; padding-bottom: 50px; }
 
-        /* Sticky Timer Only */
+        /* Sticky Header with Timer */
         .sticky-header {
             background: #fff;
             padding: 10px 20px;
@@ -36,14 +36,15 @@
 
         .container { max-width: 800px; margin: 20px auto; padding: 0 20px; }
 
-        /* Header Card (Blue) */
+        /* Header Card */
         .header-card {
             background: linear-gradient(135deg, #3498db, #2980b9);
             color: white; padding: 30px; border-radius: 10px; text-align: center; margin-bottom: 25px;
         }
         .header-card h2 { font-size: 26px; margin-bottom: 10px; }
+        .exam-info { font-size: 14px; background: rgba(255,255,255,0.2); padding: 5px 15px; border-radius: 50px; display: inline-block; margin-top: 5px; }
 
-        /* Result Dashboard (Hidden Initially) */
+        /* Result Dashboard */
         .result-dashboard {
             display: none;
             background: white;
@@ -55,20 +56,26 @@
             border-top: 5px solid #3498db;
         }
 
-        .score-circle {
-            width: 100px; height: 100px;
-            background: #3498db;
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 32px;
-            font-weight: 700;
-            margin: 0 auto 20px;
+        .score-box {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: inline-block;
+            min-width: 200px;
         }
 
-        /* Filter Buttons in Result (UPDATED ROUNDNESS) */
+        .final-score {
+            font-size: 42px;
+            font-weight: 700;
+            color: #3498db;
+            display: block;
+        }
+        
+        .score-label { font-size: 16px; color: #555; }
+        .negative-alert { font-size: 13px; color: #c0392b; margin-top: 5px; font-weight: 600; }
+
+        /* Filter Buttons */
         .filter-buttons {
             display: flex;
             justify-content: center;
@@ -78,8 +85,8 @@
         }
         
         .filter-btn {
-            padding: 10px 20px;
-            border-radius: 8px; /* Changed from 50px to 8px for less roundness */
+            padding: 8px 16px;
+            border-radius: 8px;
             border: 2px solid transparent;
             cursor: pointer;
             font-weight: 600;
@@ -87,6 +94,7 @@
             align-items: center;
             gap: 5px;
             transition: 0.2s;
+            font-size: 14px;
         }
 
         .btn-correct { background: #eafaf1; color: #27ae60; border-color: #27ae60; }
@@ -129,7 +137,6 @@
         .option-item:hover { background: #f8f9fa; border-color: #bdc3c7; }
         .option-item.selected { background: #eaf6ff; border-color: #3498db; color: #2980b9; font-weight: 600; }
 
-        /* Result Styles */
         .option-item.correct { background: #d4edda; border-color: #28a745; color: #155724; }
         .option-item.wrong { background: #f8d7da; border-color: #dc3545; color: #721c24; }
         
@@ -144,12 +151,8 @@
             border-left: 4px solid #ffeeba;
         }
 
-        /* Bottom Submit Button */
-        .submit-container {
-            text-align: center;
-            margin-top: 30px;
-            margin-bottom: 50px;
-        }
+        /* Submit Button */
+        .submit-container { text-align: center; margin-top: 30px; margin-bottom: 50px; }
         
         .big-submit-btn {
             background: #27ae60;
@@ -180,15 +183,20 @@
         <div class="header-card" id="introHeader">
             <h2>Day 02: English Grammar & Literature</h2>
             <p>50 Questions | Time: 30 Minutes</p>
+            <span class="exam-info">⚠️ প্রতিটি ভুল উত্তরের জন্য ০.৫০ নম্বর কাটা যাবে</span>
         </div>
 
         <div class="result-dashboard" id="resultDashboard">
-            <div class="score-circle" id="finalScore">00</div>
-            <h3>Exam Completed!</h3>
-            <p>Filter your results below:</p>
+            <div class="score-box">
+                <span class="score-label">Final Score</span>
+                <span class="final-score" id="finalScoreDisplay">0.00</span>
+                <div class="negative-alert" id="negativeInfo">(-0.00 for wrong answers)</div>
+            </div>
+            
+            <p>ফলাফল ফিল্টার করুন:</p>
             
             <div class="filter-buttons">
-                <button class="filter-btn btn-all active" onclick="filterQuestions('all', this)">All</button>
+                <button class="filter-btn btn-all active" onclick="filterQuestions('all', this)">Show All</button>
                 <button class="filter-btn btn-correct" onclick="filterQuestions('correct', this)">Correct (<span id="countCorrect">0</span>)</button>
                 <button class="filter-btn btn-wrong" onclick="filterQuestions('wrong', this)">Wrong (<span id="countWrong">0</span>)</button>
                 <button class="filter-btn btn-skipped" onclick="filterQuestions('skipped', this)">Skipped (<span id="countSkipped">0</span>)</button>
@@ -546,8 +554,7 @@
             const allQuestions = document.querySelectorAll('.mcq-box');
             
             allQuestions.forEach((questionBox, index) => {
-                const qId = index + 1; // Assuming IDs are q1, q2...
-                // Get ID from element ID string "q1" -> 1
+                const qId = index + 1;
                 const actualId = parseInt(questionBox.id.replace('q', ''));
                 
                 const correctAns = parseInt(questionBox.getAttribute('data-correct'));
@@ -577,14 +584,20 @@
                 explanation.style.display = 'block';
             });
 
+            // Calculate Score with 0.50 negative marking
+            const negativeMarks = wrongCount * 0.50;
+            const finalScore = correctCount - negativeMarks;
+
             // UI Changes
             document.getElementById('introHeader').style.display = 'none';
             document.getElementById('submitContainer').style.display = 'none';
-            document.getElementById('stickyHeader').style.display = 'none'; // Hide timer after submit
+            document.getElementById('stickyHeader').style.display = 'none';
             document.getElementById('resultDashboard').style.display = 'block';
 
             // Set Scores
-            document.getElementById('finalScore').innerText = correctCount;
+            document.getElementById('finalScoreDisplay').innerText = finalScore.toFixed(2);
+            document.getElementById('negativeInfo').innerText = `(-${negativeMarks.toFixed(2)} for wrong answers)`;
+            
             document.getElementById('countCorrect').innerText = correctCount;
             document.getElementById('countWrong').innerText = wrongCount;
             document.getElementById('countSkipped').innerText = skippedCount;
@@ -595,7 +608,6 @@
 
         // Filter Logic
         function filterQuestions(filterType, btnElement) {
-            // Button Active State
             document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
             btnElement.classList.add('active');
 
