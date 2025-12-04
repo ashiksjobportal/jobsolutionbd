@@ -1,2 +1,245 @@
-<h1>Welcome to Job Solution BD</h1>
-<p>Website coming soon...</p>
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Solution BD - সরকারি চাকরির প্রস্তুতি</title>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        /* বেসিক রিসেট */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Hind Siliguri', sans-serif;
+        }
+
+        body {
+            background-color: #f4f6f9;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* হেডার ডিজাইন */
+        header {
+            background-color: #fff;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: #2c3e50;
+            text-decoration: none;
+        }
+
+        .logo span {
+            color: #3498db;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #555;
+            margin-left: 20px;
+            font-weight: 500;
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #3498db;
+        }
+
+        /* হিরো সেকশন (সার্চ বার সহ) */
+        .hero {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .hero h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .hero p {
+            font-size: 18px;
+            margin-bottom: 25px;
+            opacity: 0.9;
+        }
+
+        .search-box {
+            max-width: 600px;
+            margin: 0 auto;
+            display: flex;
+            background: white;
+            padding: 5px;
+            border-radius: 50px;
+        }
+
+        .search-box input {
+            flex: 1;
+            padding: 12px 20px;
+            border: none;
+            outline: none;
+            border-radius: 50px;
+            font-size: 16px;
+        }
+
+        .search-box button {
+            background: #27ae60;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        /* ক্যাটাগরি কার্ড ডিজাইন */
+        .container {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #2c3e50;
+            font-size: 24px;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            transition: 0.3s;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+        }
+
+        .card i {
+            font-size: 40px;
+            color: #3498db;
+            margin-bottom: 15px;
+        }
+
+        .card h3 {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        /* ফুটার */
+        footer {
+            background: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 50px;
+        }
+
+        /* রেস্পন্সিভ মোবাইল ডিজাইন */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+            }
+            .nav-links {
+                margin-top: 15px;
+            }
+            .hero h1 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="navbar">
+            <a href="#" class="logo">JobSolution<span>BD</span></a>
+            <div class="nav-links">
+                <a href="#">হোম</a>
+                <a href="#">পরীক্ষা</a>
+                <a href="#">পিডিএফ</a>
+                <a href="#">লগইন</a>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero">
+        <h1>সরকারি চাকরির সেরা প্রস্তুতি</h1>
+        <p>প্রাইমারি, বিসিএস এবং সাঁটলিপিকার প্রস্তুতির এক নির্ভরযোগ্য প্লাটফর্ম</p>
+        
+        <div class="search-box">
+            <input type="text" placeholder="কী খুঁজতে চান? (যেমন: প্রাইমারি প্রশ্ন...)">
+            <button>খুঁজুন</button>
+        </div>
+    </section>
+
+    <div class="container">
+        <h2 class="section-title">জনপ্রিয় ক্যাটাগরি</h2>
+        <div class="grid-container">
+            
+            <a href="#" class="card">
+                <i class="fas fa-chalkboard-teacher"></i>
+                <h3>প্রাইমারি শিক্ষক</h3>
+                <p>বিগত সালের প্রশ্ন ও মডেল টেস্ট</p>
+            </a>
+
+            <a href="#" class="card">
+                <i class="fas fa-pen-nib"></i>
+                <h3>সাঁটলিপিকার</h3>
+                <p>সাঁটলিপি ও কম্পিউটার টেস্ট প্রস্তুতি</p>
+            </a>
+
+            <a href="#" class="card">
+                <i class="fas fa-book-open"></i>
+                <h3>জব সলিউশন</h3>
+                <p>সকল সরকারি চাকরির প্রশ্নব্যাংক</p>
+            </a>
+
+            <a href="#" class="card">
+                <i class="fas fa-clock"></i>
+                <h3>লাইভ এক্সাম</h3>
+                <p>নিজেকে যাচাই করার সেরা মাধ্যম</p>
+            </a>
+
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; ২০২৫ Job Solution BD | সর্বস্বত্ব সংরক্ষিত</p>
+    </footer>
+
+</body>
+</html>
