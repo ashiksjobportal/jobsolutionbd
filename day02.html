@@ -68,7 +68,7 @@
             margin: 0 auto 20px;
         }
 
-        /* Filter Buttons in Result */
+        /* Filter Buttons in Result (UPDATED ROUNDNESS) */
         .filter-buttons {
             display: flex;
             justify-content: center;
@@ -79,7 +79,7 @@
         
         .filter-btn {
             padding: 10px 20px;
-            border-radius: 50px;
+            border-radius: 8px; /* Changed from 50px to 8px for less roundness */
             border: 2px solid transparent;
             cursor: pointer;
             font-weight: 600;
@@ -209,7 +209,289 @@
             <ul class="options"><li class="option-item" onclick="selectOption(2, 1)">A. The old man was died yesterday</li><li class="option-item" onclick="selectOption(2, 2)">B. The old man dad died yesterday</li><li class="option-item" onclick="selectOption(2, 3)">C. The old man has died yesterday</li><li class="option-item" onclick="selectOption(2, 4)">D. The old man died yesterday</li></ul>
             <div class="explanation">✅ Correct Answer: D. The old man died yesterday</div>
         </div>
-        
+
+        <div class="mcq-box" id="q3" data-correct="3">
+            <p class="question">3. I quickly lost interest in Mr. Rahim's story because he was ______ himself.</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(3, 1)">A. repetitions</li><li class="option-item" onclick="selectOption(3, 2)">B. repeated</li><li class="option-item" onclick="selectOption(3, 3)">C. repeating</li><li class="option-item" onclick="selectOption(3, 4)">D. repeatedly</li></ul>
+            <div class="explanation">✅ Correct Answer: C. repeating</div>
+        </div>
+
+        <div class="mcq-box" id="q4" data-correct="1">
+            <p class="question">4. I (finish) the work before he came back.</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(4, 1)">A. had finished</li><li class="option-item" onclick="selectOption(4, 2)">B. finished</li><li class="option-item" onclick="selectOption(4, 3)">C. finish</li><li class="option-item" onclick="selectOption(4, 4)">D. have finished</li></ul>
+            <div class="explanation">✅ Correct Answer: A. had finished</div>
+        </div>
+
+        <div class="mcq-box" id="q5" data-correct="1">
+            <p class="question">5. The baby ______ because it is hungry now.</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(5, 1)">A. is crying</li><li class="option-item" onclick="selectOption(5, 2)">B. cries</li><li class="option-item" onclick="selectOption(5, 3)">C. is</li><li class="option-item" onclick="selectOption(5, 4)">D. are</li></ul>
+            <div class="explanation">✅ Correct Answer: A. is crying</div>
+        </div>
+
+        <div class="mcq-box" id="q6" data-correct="2">
+            <p class="question">6. He ______ here yesterday.</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(6, 1)">A. has come</li><li class="option-item" onclick="selectOption(6, 2)">B. came</li><li class="option-item" onclick="selectOption(6, 3)">C. had come</li><li class="option-item" onclick="selectOption(6, 4)">D. was coming</li></ul>
+            <div class="explanation">✅ Correct Answer: B. came</div>
+        </div>
+
+        <div class="mcq-box" id="q7" data-correct="3">
+            <p class="question">7. It was not long since I ______ her last.</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(7, 1)">A. see</li><li class="option-item" onclick="selectOption(7, 2)">B. saw</li><li class="option-item" onclick="selectOption(7, 3)">C. had seen</li><li class="option-item" onclick="selectOption(7, 4)">D. have seen</li></ul>
+            <div class="explanation">✅ Correct Answer: C. had seen</div>
+        </div>
+
+        <div class="mcq-box" id="q8" data-correct="1">
+            <p class="question">8. The teacher had him ______ for the test.</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(8, 1)">A. sit</li><li class="option-item" onclick="selectOption(8, 2)">B. to sit</li><li class="option-item" onclick="selectOption(8, 3)">C. sat</li><li class="option-item" onclick="selectOption(8, 4)">D. sitting</li></ul>
+            <div class="explanation">✅ Correct Answer: A. sit</div>
+        </div>
+
+        <div class="mcq-box" id="q9" data-correct="2">
+            <p class="question">9. Ellen got Marvin (type) her paper.</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(9, 1)">A. typing</li><li class="option-item" onclick="selectOption(9, 2)">B. to type</li><li class="option-item" onclick="selectOption(9, 3)">C. in typing</li><li class="option-item" onclick="selectOption(9, 4)">D. type</li></ul>
+            <div class="explanation">✅ Correct Answer: B. to type</div>
+        </div>
+
+        <div class="mcq-box" id="q10" data-correct="2">
+            <p class="question">10. We shall ______ the work before he comes.</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(10, 1)">A. finish</li><li class="option-item" onclick="selectOption(10, 2)">B. have finished</li><li class="option-item" onclick="selectOption(10, 3)">C. finished</li><li class="option-item" onclick="selectOption(10, 4)">D. be finishing</li></ul>
+            <div class="explanation">✅ Correct Answer: B. have finished</div>
+        </div>
+
+        <div class="mcq-box" id="q11" data-correct="2">
+            <p class="question">11. I heard the little boy ______.</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(11, 1)">A. cry</li><li class="option-item" onclick="selectOption(11, 2)">B. crying</li><li class="option-item" onclick="selectOption(11, 3)">C. cried</li><li class="option-item" onclick="selectOption(11, 4)">D. is crying</li></ul>
+            <div class="explanation">✅ Correct Answer: B. crying</div>
+        </div>
+
+        <div class="mcq-box" id="q12" data-correct="1">
+            <p class="question">12. When water ______ it turns into ice.</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(12, 1)">A. freezes</li><li class="option-item" onclick="selectOption(12, 2)">B. will freeze</li><li class="option-item" onclick="selectOption(12, 3)">C. would freeze</li><li class="option-item" onclick="selectOption(12, 4)">D. froze</li></ul>
+            <div class="explanation">✅ Correct Answer: A. freezes</div>
+        </div>
+
+        <div class="mcq-box" id="q13" data-correct="4">
+            <p class="question">13. He said that he ______ be unable come.</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(13, 1)">A. will</li><li class="option-item" onclick="selectOption(13, 2)">B. shall</li><li class="option-item" onclick="selectOption(13, 3)">C. should</li><li class="option-item" onclick="selectOption(13, 4)">D. would</li></ul>
+            <div class="explanation">✅ Correct Answer: D. would</div>
+        </div>
+
+        <div class="mcq-box" id="q14" data-correct="4">
+            <p class="question">14. He has been ill ______ Friday last.</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(14, 1)">A. From</li><li class="option-item" onclick="selectOption(14, 2)">B. On</li><li class="option-item" onclick="selectOption(14, 3)">C. In</li><li class="option-item" onclick="selectOption(14, 4)">D. Since</li></ul>
+            <div class="explanation">✅ Correct Answer: D. Since</div>
+        </div>
+
+        <div class="mcq-box" id="q15" data-correct="3">
+            <p class="question">15. Dad wants his egg ______.</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(15, 1)">A. boiling</li><li class="option-item" onclick="selectOption(15, 2)">B. to boil</li><li class="option-item" onclick="selectOption(15, 3)">C. boiled</li><li class="option-item" onclick="selectOption(15, 4)">D. has boiled</li></ul>
+            <div class="explanation">✅ Correct Answer: C. boiled</div>
+        </div>
+
+        <div class="mcq-box" id="q16" data-correct="4">
+            <p class="question">16. A bird has to learn __ its wings.</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(16, 1)">A. using</li><li class="option-item" onclick="selectOption(16, 2)">B. to use</li><li class="option-item" onclick="selectOption(16, 3)">C. to using</li><li class="option-item" onclick="selectOption(16, 4)">D. how to use</li></ul>
+            <div class="explanation">✅ Correct Answer: D. how to use</div>
+        </div>
+
+        <div class="mcq-box" id="q17" data-correct="4">
+            <p class="question">17. My uncle arrived while I __ TV.</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(17, 1)">A. was watched</li><li class="option-item" onclick="selectOption(17, 2)">B. had watched</li><li class="option-item" onclick="selectOption(17, 3)">C. would watch</li><li class="option-item" onclick="selectOption(17, 4)">D. was watching</li></ul>
+            <div class="explanation">✅ Correct Answer: D. was watching</div>
+        </div>
+
+        <div class="mcq-box" id="q18" data-correct="3">
+            <p class="question">18. I cannot help __ there.</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(18, 1)">A. to go</li><li class="option-item" onclick="selectOption(18, 2)">B. went</li><li class="option-item" onclick="selectOption(18, 3)">C. going</li><li class="option-item" onclick="selectOption(18, 4)">D. have gone</li></ul>
+            <div class="explanation">✅ Correct Answer: C. going</div>
+        </div>
+
+        <div class="mcq-box" id="q19" data-correct="2">
+            <p class="question">19. (Glass) the table.</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(19, 1)">A. Glassing</li><li class="option-item" onclick="selectOption(19, 2)">B. Glass</li><li class="option-item" onclick="selectOption(19, 3)">C. Glasses</li><li class="option-item" onclick="selectOption(19, 4)">D. To glass</li></ul>
+            <div class="explanation">✅ Correct Answer: B. Glass</div>
+        </div>
+
+        <div class="mcq-box" id="q20" data-correct="1">
+            <p class="question">20. Stay where you are until help __.</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(20, 1)">A. arrives</li><li class="option-item" onclick="selectOption(20, 2)">B. arrived</li><li class="option-item" onclick="selectOption(20, 3)">C. to arrive</li><li class="option-item" onclick="selectOption(20, 4)">D. arriving</li></ul>
+            <div class="explanation">✅ Correct Answer: A. arrives</div>
+        </div>
+
+        <div class="mcq-box" id="q21" data-correct="2">
+            <p class="question">21. We (to write) in the examination hall.</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(21, 1)">A. writing</li><li class="option-item" onclick="selectOption(21, 2)">B. write</li><li class="option-item" onclick="selectOption(21, 3)">C. shall be writing</li><li class="option-item" onclick="selectOption(21, 4)">D. written</li></ul>
+            <div class="explanation">✅ Correct Answer: B. write</div>
+        </div>
+
+        <div class="mcq-box" id="q22" data-correct="3">
+            <p class="question">22. Slow and steady --- the race.</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(22, 1)">A. win</li><li class="option-item" onclick="selectOption(22, 2)">B. has won</li><li class="option-item" onclick="selectOption(22, 3)">C. wins</li><li class="option-item" onclick="selectOption(22, 4)">D. won</li></ul>
+            <div class="explanation">✅ Correct Answer: C. wins</div>
+        </div>
+
+        <div class="mcq-box" id="q23" data-correct="3">
+            <p class="question">23. Choose the correct sentence</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(23, 1)">A. He lives here for five months</li><li class="option-item" onclick="selectOption(23, 2)">B. He is living here for five months</li><li class="option-item" onclick="selectOption(23, 3)">C. He has been living here for five months</li><li class="option-item" onclick="selectOption(23, 4)">D. He live here for five months</li></ul>
+            <div class="explanation">✅ Correct Answer: C. He has been living here for five months</div>
+        </div>
+
+        <div class="mcq-box" id="q24" data-correct="1">
+            <p class="question">24. We shall return before the sun -</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(24, 1)">A. sets</li><li class="option-item" onclick="selectOption(24, 2)">B. will set</li><li class="option-item" onclick="selectOption(24, 3)">C. is setting</li><li class="option-item" onclick="selectOption(24, 4)">D. has set</li></ul>
+            <div class="explanation">✅ Correct Answer: A. sets</div>
+        </div>
+
+        <div class="mcq-box" id="q25" data-correct="2">
+            <p class="question">25. Choose the correct sentence.</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(25, 1)">A. He has been absent from Friday</li><li class="option-item" onclick="selectOption(25, 2)">B. He has been absent since Friday</li><li class="option-item" onclick="selectOption(25, 3)">C. He is absent since Friday</li><li class="option-item" onclick="selectOption(25, 4)">D. He was absent since Friday</li></ul>
+            <div class="explanation">✅ Correct Answer: B. He has been absent since Friday</div>
+        </div>
+
+        <div class="mcq-box" id="q26" data-correct="4">
+            <p class="question">26. By 2010, I __ for this firm 15 years.</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(26, 1)">A. will be working</li><li class="option-item" onclick="selectOption(26, 2)">B. will work</li><li class="option-item" onclick="selectOption(26, 3)">C. have worked</li><li class="option-item" onclick="selectOption(26, 4)">D. will have worked</li></ul>
+            <div class="explanation">✅ Correct Answer: D. will have worked</div>
+        </div>
+
+        <div class="mcq-box" id="q27" data-correct="2">
+            <p class="question">27. I was tired that night, I __ wood all morning.</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(27, 1)">A. was cutting</li><li class="option-item" onclick="selectOption(27, 2)">B. had been cutting</li><li class="option-item" onclick="selectOption(27, 3)">C. had cut</li><li class="option-item" onclick="selectOption(27, 4)">D. cut</li></ul>
+            <div class="explanation">✅ Correct Answer: B. had been cutting</div>
+        </div>
+
+        <div class="mcq-box" id="q28" data-correct="1">
+            <p class="question">28. When water __ it turns into ice.</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(28, 1)">A. freezes</li><li class="option-item" onclick="selectOption(28, 2)">B. will freeze</li><li class="option-item" onclick="selectOption(28, 3)">C. would freeze</li><li class="option-item" onclick="selectOption(28, 4)">D. froze</li></ul>
+            <div class="explanation">✅ Correct Answer: A. freezes</div>
+        </div>
+
+        <div class="mcq-box" id="q29" data-correct="2">
+            <p class="question">29. Before my father ____ a house on the plot, paddy was grown here.</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(29, 1)">A. constructing</li><li class="option-item" onclick="selectOption(29, 2)">B. constructed</li><li class="option-item" onclick="selectOption(29, 3)">C. constructs</li><li class="option-item" onclick="selectOption(29, 4)">D. did construct</li></ul>
+            <div class="explanation">✅ Correct Answer: B. constructed</div>
+        </div>
+
+        <div class="mcq-box" id="q30" data-correct="3">
+            <p class="question">30. He said that he __ be faithful to his promise.</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(30, 1)">A. will</li><li class="option-item" onclick="selectOption(30, 2)">B. may</li><li class="option-item" onclick="selectOption(30, 3)">C. would</li><li class="option-item" onclick="selectOption(30, 4)">D. wants</li></ul>
+            <div class="explanation">✅ Correct Answer: C. would</div>
+        </div>
+
+        <div class="mcq-box" id="q31" data-correct="4">
+            <p class="question">31. He promised that he __ come next Monday.</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(31, 1)">A. will</li><li class="option-item" onclick="selectOption(31, 2)">B. should</li><li class="option-item" onclick="selectOption(31, 3)">C. can</li><li class="option-item" onclick="selectOption(31, 4)">D. would</li></ul>
+            <div class="explanation">✅ Correct Answer: D. would</div>
+        </div>
+
+        <div class="mcq-box" id="q32" data-correct="4">
+            <p class="question">32. Nobody knew that he __ face a crisis.</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(32, 1)">A. can</li><li class="option-item" onclick="selectOption(32, 2)">B. may</li><li class="option-item" onclick="selectOption(32, 3)">C. will</li><li class="option-item" onclick="selectOption(32, 4)">D. would</li></ul>
+            <div class="explanation">✅ Correct Answer: D. would</div>
+        </div>
+
+        <div class="mcq-box" id="q33" data-correct="2">
+            <p class="question">33. The word "Adjective" is a/an ___</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(33, 1)">A. Pronoun</li><li class="option-item" onclick="selectOption(33, 2)">B. Noun</li><li class="option-item" onclick="selectOption(33, 3)">C. Verb</li><li class="option-item" onclick="selectOption(33, 4)">D. Adjective</li></ul>
+            <div class="explanation">✅ Correct Answer: B. Noun</div>
+        </div>
+
+        <div class="mcq-box" id="q34" data-correct="4">
+            <p class="question">34. The Padma is a river. Choose the correct part of speech of the underlined word.</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(34, 1)">A. Collective noun</li><li class="option-item" onclick="selectOption(34, 2)">B. Pronoun</li><li class="option-item" onclick="selectOption(34, 3)">C. Abstract noun</li><li class="option-item" onclick="selectOption(34, 4)">D. Proper noun</li></ul>
+            <div class="explanation">✅ Correct Answer: D. Proper noun</div>
+        </div>
+
+        <div class="mcq-box" id="q35" data-correct="1">
+            <p class="question">35. I recognized your voice at once.</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(35, 1)">A. Common</li><li class="option-item" onclick="selectOption(35, 2)">B. Proper</li><li class="option-item" onclick="selectOption(35, 3)">C. Collective</li><li class="option-item" onclick="selectOption(35, 4)">D. Abstract</li></ul>
+            <div class="explanation">✅ Correct Answer: A. Common</div>
+        </div>
+
+        <div class="mcq-box" id="q36" data-correct="2">
+            <p class="question">36. A group of lions is called-</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(36, 1)">A. a pack of lions</li><li class="option-item" onclick="selectOption(36, 2)">B. a pride of lions</li><li class="option-item" onclick="selectOption(36, 3)">C. a flock of lions</li><li class="option-item" onclick="selectOption(36, 4)">D. a colony of lions</li></ul>
+            <div class="explanation">✅ Correct Answer: B. a pride of lions</div>
+        </div>
+
+        <div class="mcq-box" id="q37" data-correct="3">
+            <p class="question">37. 'Salt' is which noun?</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(37, 1)">A. Proper noun</li><li class="option-item" onclick="selectOption(37, 2)">B. Common noun</li><li class="option-item" onclick="selectOption(37, 3)">C. Material noun</li><li class="option-item" onclick="selectOption(37, 4)">D. Abstract noun</li></ul>
+            <div class="explanation">✅ Correct Answer: C. Material noun</div>
+        </div>
+
+        <div class="mcq-box" id="q38" data-correct="4">
+            <p class="question">38. He is a justice of the High Court. Here 'justice' is a/an- noun.</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(38, 1)">A. abstract</li><li class="option-item" onclick="selectOption(38, 2)">B. material</li><li class="option-item" onclick="selectOption(38, 3)">C. proper</li><li class="option-item" onclick="selectOption(38, 4)">D. common</li></ul>
+            <div class="explanation">✅ Correct Answer: D. common</div>
+        </div>
+
+        <div class="mcq-box" id="q39" data-correct="3">
+            <p class="question">39. Which of the following is close to 'archipelago' in meaning?</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(39, 1)">A. A group of archives</li><li class="option-item" onclick="selectOption(39, 2)">B. Archeological sites</li><li class="option-item" onclick="selectOption(39, 3)">C. A group of islands</li><li class="option-item" onclick="selectOption(39, 4)">D. Arch of a building</li></ul>
+            <div class="explanation">✅ Correct Answer: C. A group of islands</div>
+        </div>
+
+        <div class="mcq-box" id="q40" data-correct="1">
+            <p class="question">40. Abstract noun of the word 'Long' is -</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(40, 1)">A. Length</li><li class="option-item" onclick="selectOption(40, 2)">B. Longer</li><li class="option-item" onclick="selectOption(40, 3)">C. Lengthier</li><li class="option-item" onclick="selectOption(40, 4)">D. Lengthen</li></ul>
+            <div class="explanation">✅ Correct Answer: A. Length</div>
+        </div>
+
+        <div class="mcq-box" id="q41" data-correct="2">
+            <p class="question">41. A __ of banknotes.</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(41, 1)">A. bunch</li><li class="option-item" onclick="selectOption(41, 2)">B. wad</li><li class="option-item" onclick="selectOption(41, 3)">C. batch</li><li class="option-item" onclick="selectOption(41, 4)">D. group</li></ul>
+            <div class="explanation">✅ Correct Answer: B. wad</div>
+        </div>
+
+        <div class="mcq-box" id="q42" data-correct="4">
+            <p class="question">42. Advertising is-</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(42, 1)">A. Countable noun</li><li class="option-item" onclick="selectOption(42, 2)">B. Adjective</li><li class="option-item" onclick="selectOption(42, 3)">C. Verb</li><li class="option-item" onclick="selectOption(42, 4)">D. Non-countable noun</li></ul>
+            <div class="explanation">✅ Correct Answer: D. Non-countable noun</div>
+        </div>
+
+        <div class="mcq-box" id="q43" data-correct="4">
+            <p class="question">43. They called __ on the telephone.</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(43, 1)">A. we</li><li class="option-item" onclick="selectOption(43, 2)">B. they</li><li class="option-item" onclick="selectOption(43, 3)">C. hers</li><li class="option-item" onclick="selectOption(43, 4)">D. us</li></ul>
+            <div class="explanation">✅ Correct Answer: D. us</div>
+        </div>
+
+        <div class="mcq-box" id="q44" data-correct="2">
+            <p class="question">44. It is not __ who are to blame.</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(44, 1)">A. me</li><li class="option-item" onclick="selectOption(44, 2)">B. we</li><li class="option-item" onclick="selectOption(44, 3)">C. us</li><li class="option-item" onclick="selectOption(44, 4)">D. him</li></ul>
+            <div class="explanation">✅ Correct Answer: B. we</div>
+        </div>
+
+        <div class="mcq-box" id="q45" data-correct="2">
+            <p class="question">45. My dog is smarter than __.</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(45, 1)">A. their</li><li class="option-item" onclick="selectOption(45, 2)">B. theirs</li><li class="option-item" onclick="selectOption(45, 3)">C. your</li><li class="option-item" onclick="selectOption(45, 4)">D. her</li></ul>
+            <div class="explanation">✅ Correct Answer: B. theirs</div>
+        </div>
+
+        <div class="mcq-box" id="q46" data-correct="2">
+            <p class="question">46. The climate of Dinajpur is like __ of Rangpur.</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(46, 1)">A. the</li><li class="option-item" onclick="selectOption(46, 2)">B. that</li><li class="option-item" onclick="selectOption(46, 3)">C. as</li><li class="option-item" onclick="selectOption(46, 4)">D. exactly</li></ul>
+            <div class="explanation">✅ Correct Answer: B. that</div>
+        </div>
+
+        <div class="mcq-box" id="q47" data-correct="3">
+            <p class="question">47. The two types of adjectives are:</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(47, 1)">A. attributive and relative</li><li class="option-item" onclick="selectOption(47, 2)">B. predicative and collective</li><li class="option-item" onclick="selectOption(47, 3)">C. attributive and predicative</li><li class="option-item" onclick="selectOption(47, 4)">D. predicative and alternative</li></ul>
+            <div class="explanation">✅ Correct Answer: C. attributive and predicative</div>
+        </div>
+
+        <div class="mcq-box" id="q48" data-correct="3">
+            <p class="question">48. Few students come to school today. Here 'few' is an adjective of -</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(48, 1)">A. quality</li><li class="option-item" onclick="selectOption(48, 2)">B. quantity</li><li class="option-item" onclick="selectOption(48, 3)">C. numeral</li><li class="option-item" onclick="selectOption(48, 4)">D. none</li></ul>
+            <div class="explanation">✅ Correct Answer: C. numeral</div>
+        </div>
+
+        <div class="mcq-box" id="q49" data-correct="2">
+            <p class="question">49. Every man is potential. Here 'every' is -</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(49, 1)">A. noun</li><li class="option-item" onclick="selectOption(49, 2)">B. adjective</li><li class="option-item" onclick="selectOption(49, 3)">C. pronoun</li><li class="option-item" onclick="selectOption(49, 4)">D. adverb</li></ul>
+            <div class="explanation">✅ Correct Answer: B. adjective</div>
+        </div>
+
         <div class="mcq-box" id="q50" data-correct="1">
             <p class="question">50. Which one is adjective?</p>
             <ul class="options"><li class="option-item" onclick="selectOption(50, 1)">A. Own</li><li class="option-item" onclick="selectOption(50, 2)">B. Beauty</li><li class="option-item" onclick="selectOption(50, 3)">C. Win</li><li class="option-item" onclick="selectOption(50, 4)">D. Boldness</li></ul>
