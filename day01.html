@@ -629,5 +629,129 @@
         }
     </script>
 
+    <style>
+    /* ডার্ক মোড বাটন ডিজাইন */
+    .dark-toggle-btn {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background: #2c3e50;
+        color: white;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 24px;
+        cursor: pointer;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        z-index: 9999;
+        transition: 0.3s;
+        border: 2px solid white;
+    }
+    .dark-toggle-btn:hover { transform: scale(1.1); background: #1a252f; }
+
+    /* ডার্ক মোড কালার স্কিম */
+    body.dark-mode { background-color: #121212 !important; color: #e0e0e0 !important; }
+    
+    /* কার্ড এবং বক্সের কালার */
+    body.dark-mode .mcq-box, 
+    body.dark-mode .day-card, 
+    body.dark-mode .day-box,
+    body.dark-mode .header-card,
+    body.dark-mode .sticky-header,
+    body.dark-mode header,
+    body.dark-mode .result-dashboard,
+    body.dark-mode .card,
+    body.dark-mode .day-header { 
+        background: #1e1e1e !important; 
+        color: #e0e0e0 !important; 
+        border-color: #333 !important;
+        box-shadow: none !important;
+    }
+
+    /* হেডার কার্ড স্পেশাল কালার */
+    body.dark-mode .header-card { background: linear-gradient(135deg, #2c3e50, #000000) !important; }
+
+    /* টেক্সট কালার ফিক্স */
+    body.dark-mode .question, 
+    body.dark-mode .logo,
+    body.dark-mode h2, 
+    body.dark-mode h3 { color: #ffffff !important; }
+    
+    body.dark-mode .day-topic { color: #bbb !important; }
+
+    /* অপশন বাটন */
+    body.dark-mode .options li,
+    body.dark-mode .option-item { 
+        background-color: #2d2d2d !important; 
+        border-color: #444 !important; 
+        color: #ddd !important; 
+    }
+    
+    /* হোভার ইফেক্ট */
+    body.dark-mode .options li:hover,
+    body.dark-mode .option-item:hover { background-color: #3d3d3d !important; }
+
+    /* সিলেক্টেড অপশন */
+    body.dark-mode .option-item.selected { 
+        background-color: #2c3e50 !important; 
+        border-color: #3498db !important; 
+        color: #3498db !important;
+    }
+
+    /* বাটন ফিক্স */
+    body.dark-mode .search-box, 
+    body.dark-mode .search-box input { background: #2d2d2d !important; color: white !important; }
+    
+    /* টাইমার */
+    body.dark-mode .timer-badge, 
+    body.dark-mode .timer-box { background: #3e2723 !important; color: #ffab91 !important; }
+
+    /* রেজাল্ট বাটন */
+    body.dark-mode .score-box { background: #2d2d2d !important; color: white !important; }
+    body.dark-mode .score-label { color: #bbb !important; }
+    
+    /* লোগো এবং লিঙ্ক */
+    body.dark-mode a { color: #64b5f6 !important; }
+    body.dark-mode .back-btn { color: #64b5f6 !important; }
+    
+</style>
+
+<div class="dark-toggle-btn" onclick="toggleDarkMode()">
+    <i class="fas fa-moon" id="darkIcon"></i>
+</div>
+
+<script>
+    function toggleDarkMode() {
+        const body = document.body;
+        const icon = document.getElementById('darkIcon');
+        
+        // টগল ক্লাস
+        body.classList.toggle('dark-mode');
+        
+        // আইকন এবং সেভ করা
+        if (body.classList.contains('dark-mode')) {
+            icon.classList.remove('fa-moon');
+            icon.classList.add('fa-sun'); // সূর্যের আইকন দেখাবে
+            localStorage.setItem('theme', 'dark'); // মেমোরিতে সেভ থাকবে
+        } else {
+            icon.classList.remove('fa-sun');
+            icon.classList.add('fa-moon'); // চাঁদের আইকন দেখাবে
+            localStorage.setItem('theme', 'light');
+        }
+    }
+
+    // পেজ লোড হলে চেক করবে আগে ডার্ক মোড ছিল কিনা
+    window.onload = function() {
+        if (localStorage.getItem('theme') === 'dark') {
+            document.body.classList.add('dark-mode');
+            document.getElementById('darkIcon').classList.remove('fa-moon');
+            document.getElementById('darkIcon').classList.add('fa-sun');
+        }
+    }
+</script>
+
 </body>
 </html>
