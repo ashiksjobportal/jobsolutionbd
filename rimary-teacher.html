@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>প্রাইমারি প্রস্তুতি - ৩০ দিনের প্ল্যান</title>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Hind Siliguri', sans-serif; }
+        body { background-color: #f4f6f9; color: #333; }
+
+        /* হেডার */
+        header { background: #fff; padding: 15px 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 1000; }
+        .navbar { max-width: 800px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-size: 22px; font-weight: 700; color: #2c3e50; text-decoration: none; }
+        .back-btn { text-decoration: none; color: #3498db; font-weight: 600; }
+
+        /* মেইন কন্টেন্ট */
+        .container { max-width: 800px; margin: 30px auto; padding: 0 20px; }
+        .page-title { text-align: center; margin-bottom: 30px; color: #2c3e50; }
+
+        /* দিনের বাটন ডিজাইন (Accordion) */
+        .day-card { background: white; margin-bottom: 15px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); overflow: hidden; }
+        
+        .day-header {
+            padding: 15px 20px;
+            background: #fff;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            color: #2c3e50;
+            transition: 0.3s;
+            border-left: 5px solid #3498db;
+        }
+
+        .day-header:hover { background: #f8f9fa; }
+        .day-header.active { background: #eaf6ff; color: #2980b9; }
+        .day-header i { transition: 0.3s; }
+        .day-header.active i { transform: rotate(180deg); }
+
+        /* কন্টেন্ট এরিয়া */
+        .day-content { display: none; padding: 20px; border-top: 1px solid #eee; }
+        
+        /* প্রশ্ন এবং উত্তর ডিজাইন */
+        .mcq-box { margin-bottom: 20px; border-bottom: 1px dashed #ddd; padding-bottom: 15px; }
+        .question { font-size: 17px; font-weight: 600; margin-bottom: 10px; }
+        .options { margin-left: 15px; list-style-type: none; }
+        .options li { margin-bottom: 5px; color: #555; }
+        
+        .answer-btn {
+            background: #27ae60; color: white; border: none; padding: 5px 15px;
+            border-radius: 4px; cursor: pointer; font-size: 14px; margin-top: 5px;
+        }
+        .answer { display: none; margin-top: 10px; color: #2980b9; font-weight: 600; background: #eafaf1; padding: 8px; border-radius: 5px; }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="navbar">
+            <a href="index.html" class="logo">JobSolutionBD</a>
+            <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> ফিরে যান</a>
+        </div>
+    </header>
+
+    <div class="container">
+        <h2 class="page-title">৩০ দিনের প্রাইমারি মিশন</h2>
+
+        <div class="day-card">
+            <div class="day-header" onclick="toggleDay(this)">
+                <span>📌 Day-01: বাংলা সাহিত্য ও ব্যাকরণ</span>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="day-content">
+                
+                <div class="mcq-box">
+                    <p class="question">১. 'চর্য্যাপদ' কে আবিষ্কার করেন?</p>
+                    <ul class="options">
+                        <li>ক) ড. মুহম্মদ শহীদুল্লাহ</li>
+                        <li>খ) হরপ্রসাদ শাস্ত্রী</li>
+                        <li>গ) সুনীতিকুমার চট্টোপাধ্যায়</li>
+                        <li>ঘ) লুইপা</li>
+                    </ul>
+                    <button class="answer-btn" onclick="toggleAnswer(this)">উত্তর দেখুন</button>
+                    <p class="answer">সঠিক উত্তর: খ) হরপ্রসাদ শাস্ত্রী</p>
+                </div>
+
+                <div class="mcq-box">
+                    <p class="question">২. কোন বানানটি শুদ্ধ?</p>
+                    <ul class="options">
+                        <li>ক) মুমুর্ষু</li>
+                        <li>খ) মূমূর্ষু</li>
+                        <li>গ) মুমূর্ষু</li>
+                        <li>ঘ) মূমুর্ষু</li>
+                    </ul>
+                    <button class="answer-btn" onclick="toggleAnswer(this)">উত্তর দেখুন</button>
+                    <p class="answer">সঠিক উত্তর: গ) মুমূর্ষু</p>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="day-card">
+            <div class="day-header" onclick="toggleDay(this)">
+                <span>📌 Day-02: সাধারণ জ্ঞান (বাংলাদেশ)</span>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="day-content">
+                <p style="text-align: center; color: #777;">এই দিনের পড়া এখনো আপলোড করা হয়নি...</p>
+            </div>
+        </div>
+        
+        <div class="day-card">
+            <div class="day-header" onclick="toggleDay(this)">
+                <span>📌 Day-03: ইংরেজি গ্রামার</span>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="day-content">
+                 <p style="text-align: center; color: #777;">এই দিনের পড়া এখনো আপলোড করা হয়নি...</p>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // দিন খুলতে/বন্ধ করতে
+        function toggleDay(element) {
+            element.classList.toggle("active");
+            var content = element.nextElementSibling;
+            if (content.style.display === "block") {
+                content.style.display = "none";
+            } else {
+                content.style.display = "block";
+            }
+        }
+
+        // উত্তর দেখতে/লুকোতে
+        function toggleAnswer(btn) {
+            var answer = btn.nextElementSibling;
+            if (answer.style.display === "block") {
+                answer.style.display = "none";
+                btn.textContent = "উত্তর দেখুন";
+            } else {
+                answer.style.display = "block";
+                btn.textContent = "লুকান";
+            }
+        }
+    </script>
+
+</body>
+</html>
