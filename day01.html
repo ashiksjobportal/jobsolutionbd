@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Day 01 - অনলাইন মডেল টেস্ট</title>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Hind Siliguri', sans-serif; }
+        body { background-color: #f4f6f9; color: #333; padding-bottom: 80px; }
+
+        /* স্টিকি টাইমার বার */
+        .sticky-header {
+            background: #fff;
+            padding: 10px 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .timer-box {
+            font-size: 18px;
+            font-weight: 700;
+            color: #e74c3c;
+            background: #fdecec;
+            padding: 5px 15px;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .submit-btn {
+            background: #27ae60;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 5px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .submit-btn:hover { background: #219150; }
+
+        .container { max-width: 800px; margin: 20px auto; padding: 0 20px; }
+
+        .header-card {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white; padding: 20px; border-radius: 10px; text-align: center; margin-bottom: 25px;
+        }
+
+        /* প্রশ্ন এবং অপশন ডিজাইন */
+        .mcq-box { 
+            background: white; 
+            padding: 20px; 
+            border-radius: 8px; 
+            margin-bottom: 15px; 
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            position: relative;
+        }
+        
+        .question { font-size: 18px; font-weight: 600; margin-bottom: 15px; color: #2c3e50; }
+        
+        .options { list-style: none; }
+        .option-item { 
+            padding: 10px 15px; 
+            border: 1px solid #eee; 
+            margin-bottom: 8px; 
+            border-radius: 5px; 
+            cursor: pointer; 
+            transition: 0.2s; 
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .option-item:hover { background: #f8f9fa; border-color: #bdc3c7; }
+        
+        /* সিলেক্টেড স্টাইল */
+        .option-item.selected { 
+            background: #eaf6ff; 
+            border-color: #3498db; 
+            color: #2980b9; 
+            font-weight: 600;
+        }
+
+        /* পরীক্ষা শেষের স্টাইল (সঠিক/ভুল) */
+        .option-item.correct { background: #d4edda; border-color: #28a745; color: #155724; }
+        .option-item.wrong { background: #f8d7da; border-color: #dc3545; color: #721c24; }
+        
+        /* সঠিক উত্তর বাটন (লুকানো থাকে) */
+        .explanation {
+            display: none;
+            margin-top: 10px;
+            padding: 10px;
+            background: #fff3cd;
+            border-radius: 5px;
+            color: #856404;
+            font-size: 14px;
+        }
+
+        /* রেজাল্ট পপআপ (Modal) */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+        
+        .result-card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        .score-circle {
+            width: 100px; height: 100px;
+            background: #3498db;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 32px;
+            font-weight: 700;
+            margin: 0 auto 20px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .stat-box { padding: 10px; border-radius: 8px; background: #f8f9fa; }
+        .stat-val { font-size: 20px; font-weight: 700; display: block; }
+        .stat-label { font-size: 12px; color: #777; }
+        
+        .close-btn {
+            background: #2c3e50;
+            color: white;
+            padding: 10px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 10px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="sticky-header">
+        <div class="timer-box">
+            <i class="fas fa-clock"></i> <span id="timer">30:00</span>
+        </div>
+        <button class="submit-btn" onclick="submitExam()">Submit Exam</button>
+    </div>
+
+    <div class="container">
+        
+        <div class="header-card">
+            <h2>Day 01: বাংলা সাহিত্য ও ব্যাকরণ</h2>
+            <p>প্রতিটি প্রশ্নের মান ১ | ভুল উত্তরের জন্য কোনো নেগেটিভ মার্কিং নেই</p>
+        </div>
+
+        <div class="mcq-box" id="q1" data-correct="2">
+            <p class="question">১. বাংলা সাহিত্যের যুগ কে কয় ভাগে ভাগ করা যায়?</p>
+            <ul class="options">
+                <li class="option-item" onclick="selectOption(1, 1)">ক) ২ ভাগে</li>
+                <li class="option-item" onclick="selectOption(1, 2)">খ) ৩ ভাগে</li>
+                <li class="option-item" onclick="selectOption(1, 3)">গ) ৪ ভাগে</li>
+                <li class="option-item" onclick="selectOption(1, 4)">ঘ) ৫ ভাগে</li>
+            </ul>
+            <div class="explanation">✅ সঠিক উত্তর: খ) ৩ ভাগে</div>
+        </div>
+
+        <div class="mcq-box" id="q2" data-correct="3">
+            <p class="question">২. বাংলা ভাষা ও সাহিত্যে প্রাচীনতম শাখা কোনটি?</p>
+            <ul class="options">
+                <li class="option-item" onclick="selectOption(2, 1)">ক) নাটক</li>
+                <li class="option-item" onclick="selectOption(2, 2)">খ) ছোটগল্প</li>
+                <li class="option-item" onclick="selectOption(2, 3)">গ) কাব্য</li>
+                <li class="option-item" onclick="selectOption(2, 4)">ঘ) উপন্যাস</li>
+            </ul>
+            <div class="explanation">✅ সঠিক উত্তর: গ) কাব্য</div>
+        </div>
+
+        <div class="mcq-box" id="q3" data-correct="2">
+            <p class="question">৩. চর্যাপদের সঙ্গে কোন ধর্মের নাম সংশ্লিষ্ট?</p>
+            <ul class="options">
+                <li class="option-item" onclick="selectOption(3, 1)">ক) হিন্দু ধর্ম</li>
+                <li class="option-item" onclick="selectOption(3, 2)">খ) বৌদ্ধ ধর্ম</li>
+                <li class="option-item" onclick="selectOption(3, 3)">গ) জৈন ধর্ম</li>
+                <li class="option-item" onclick="selectOption(3, 4)">ঘ) ইসলাম ধর্ম</li>
+            </ul>
+            <div class="explanation">✅ সঠিক উত্তর: খ) বৌদ্ধ ধর্ম</div>
+        </div>
+
+        </div>
+
+    <div class="modal-overlay" id="resultModal">
+        <div class="result-card">
+            <div class="score-circle" id="finalScore">00</div>
+            <h3>পরীক্ষা সম্পন্ন হয়েছে!</h3>
+            <p>আপনার ফলাফল নিচে দেওয়া হলো</p>
+            
+            <div class="stats-grid">
+                <div class="stat-box" style="color: #27ae60;">
+                    <span class="stat-val" id="totalCorrect">0</span>
+                    <span class="stat-label">সঠিক</span>
+                </div>
+                <div class="stat-box" style="color: #c0392b;">
+                    <span class="stat-val" id="totalWrong">0</span>
+                    <span class="stat-label">ভুল</span>
+                </div>
+                <div class="stat-box" style="color: #f39c12;">
+                    <span class="stat-val" id="totalSkipped">0</span>
+                    <span class="stat-label">উত্তর দেননি</span>
+                </div>
+            </div>
+
+            <a href="#" class="close-btn" onclick="closeModal()">উত্তরপত্র দেখুন</a>
+            <br><br>
+            <a href="primary-teacher.html" style="color: #888; text-decoration: none;">মেনুতে ফিরে যান</a>
+        </div>
+    </div>
+
+    <script>
+        // টাইমার লজিক
+        let timeLeft = 30 * 60; // 30 মিনিট
+        const timerDisplay = document.getElementById('timer');
+        
+        const countdown = setInterval(() => {
+            let minutes = Math.floor(timeLeft / 60);
+            let seconds = timeLeft % 60;
+            seconds = seconds < 10 ? '0' + seconds : seconds;
+            timerDisplay.innerText = `${minutes}:${seconds}`;
+            
+            if (timeLeft <= 0) {
+                clearInterval(countdown);
+                submitExam();
+            }
+            timeLeft--;
+        }, 1000);
+
+        // উত্তর সিলেকশন লজিক
+        let userAnswers = {}; // ব্যবহারকারীর উত্তর স্টোর হবে
+
+        function selectOption(qId, optionIdx) {
+            // ওই প্রশ্নের সব অপশন থেকে সিলেকশন রিমুভ করা
+            const questionBox = document.getElementById(`q${qId}`);
+            if (questionBox.classList.contains('submitted')) return; // সাবমিট করার পর আর চেঞ্জ করা যাবে না
+
+            const options = questionBox.querySelectorAll('.option-item');
+            options.forEach(opt => opt.classList.remove('selected'));
+
+            // নতুন অপশন সিলেক্ট করা
+            options[optionIdx - 1].classList.add('selected');
+            userAnswers[qId] = optionIdx;
+        }
+
+        // এক্সাম সাবমিট লজিক
+        function submitExam() {
+            clearInterval(countdown); // টাইমার থামানো
+            
+            let correctCount = 0;
+            let wrongCount = 0;
+            let skippedCount = 0;
+            
+            // সব প্রশ্ন লুপ করা (এখানে ৩টি প্রশ্ন আছে, আপনার ৫০টি থাকলে সংখ্যা বাড়াবেন বা ডাইনামিক করবেন)
+            const totalQuestions = document.querySelectorAll('.mcq-box').length;
+
+            for (let i = 1; i <= totalQuestions; i++) {
+                const questionBox = document.getElementById(`q${i}`);
+                const correctAns = parseInt(questionBox.getAttribute('data-correct'));
+                const userAns = userAnswers[i];
+                const options = questionBox.querySelectorAll('.option-item');
+                const explanation = questionBox.querySelector('.explanation');
+
+                questionBox.classList.add('submitted'); // লক করে দেওয়া
+
+                // ভিজুয়াল ফিডব্যাক
+                if (userAns) {
+                    if (userAns === correctAns) {
+                        correctCount++;
+                        options[userAns - 1].classList.add('correct'); // সঠিক হলে সবুজ
+                    } else {
+                        wrongCount++;
+                        options[userAns - 1].classList.add('wrong'); // ভুল হলে লাল
+                        options[correctAns - 1].classList.add('correct'); // সঠিকটি দেখিয়ে দেওয়া
+                    }
+                } else {
+                    skippedCount++;
+                    options[correctAns - 1].classList.add('correct'); // স্কিপ করলে সঠিকটি দেখিয়ে দেওয়া
+                }
+                
+                // ব্যাখ্যা বা সঠিক উত্তর শো করা
+                explanation.style.display = 'block';
+            }
+
+            // রেজাল্ট বোর্ডে ডাটা বসানো
+            document.getElementById('finalScore').innerText = correctCount;
+            document.getElementById('totalCorrect').innerText = correctCount;
+            document.getElementById('totalWrong').innerText = wrongCount;
+            document.getElementById('totalSkipped').innerText = skippedCount;
+
+            // পপআপ দেখানো
+            document.getElementById('resultModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('resultModal').style.display = 'none';
+            window.scrollTo(0, 0); // উপরে নিয়ে যাওয়া
+        }
+
+    </script>
+
+</body>
+</html>
