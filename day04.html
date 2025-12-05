@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Day 04 - সাধারণ জ্ঞান মডেল টেস্ট</title>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Hind Siliguri', sans-serif; }
+        body { background-color: #f4f6f9; color: #333; padding-bottom: 50px; }
+
+        /* Sticky Timer */
+        .sticky-header {
+            background: #fff;
+            padding: 10px 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            text-align: center;
+        }
+        
+        .timer-badge {
+            font-size: 18px;
+            font-weight: 700;
+            color: #e74c3c;
+            background: #fdecec;
+            padding: 5px 20px;
+            border-radius: 50px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .container { max-width: 800px; margin: 20px auto; padding: 0 20px; }
+
+        /* Header Card */
+        .header-card {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white; padding: 30px; border-radius: 10px; text-align: center; margin-bottom: 25px;
+        }
+        .header-card h2 { font-size: 26px; margin-bottom: 10px; }
+        .exam-info { font-size: 14px; background: rgba(255,255,255,0.2); padding: 5px 15px; border-radius: 50px; display: inline-block; margin-top: 5px; }
+
+        /* Result Dashboard */
+        .result-dashboard {
+            display: none;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin-bottom: 25px;
+            border-top: 5px solid #3498db;
+        }
+
+        .score-box {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: inline-block;
+            min-width: 200px;
+        }
+
+        .final-score {
+            font-size: 42px;
+            font-weight: 700;
+            color: #3498db;
+            display: block;
+        }
+        
+        .score-label { font-size: 16px; color: #555; }
+        .negative-alert { font-size: 13px; color: #c0392b; margin-top: 5px; font-weight: 600; }
+
+        /* Filter Buttons */
+        .filter-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .filter-btn {
+            padding: 8px 16px;
+            border-radius: 8px;
+            border: 2px solid transparent;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: 0.2s;
+            font-size: 14px;
+        }
+
+        .btn-correct { background: #eafaf1; color: #27ae60; border-color: #27ae60; }
+        .btn-correct:hover, .btn-correct.active { background: #27ae60; color: white; }
+
+        .btn-wrong { background: #fdecec; color: #c0392b; border-color: #c0392b; }
+        .btn-wrong:hover, .btn-wrong.active { background: #c0392b; color: white; }
+
+        .btn-skipped { background: #fef9e7; color: #f39c12; border-color: #f39c12; }
+        .btn-skipped:hover, .btn-skipped.active { background: #f39c12; color: white; }
+
+        .btn-all { background: #eaf6ff; color: #3498db; border-color: #3498db; }
+        .btn-all:hover, .btn-all.active { background: #3498db; color: white; }
+
+        /* Question Box */
+        .mcq-box { 
+            background: white; 
+            padding: 20px; 
+            border-radius: 8px; 
+            margin-bottom: 15px; 
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        
+        .question { font-size: 18px; font-weight: 600; margin-bottom: 15px; color: #2c3e50; }
+        
+        .options { list-style: none; }
+        .option-item { 
+            padding: 12px 15px; 
+            border: 1px solid #eee; 
+            margin-bottom: 10px; 
+            border-radius: 6px; 
+            cursor: pointer; 
+            transition: 0.2s; 
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 16px;
+        }
+        
+        .option-item:hover { background: #f8f9fa; border-color: #bdc3c7; }
+        .option-item.selected { background: #eaf6ff; border-color: #3498db; color: #2980b9; font-weight: 600; }
+
+        .option-item.correct { background: #d4edda; border-color: #28a745; color: #155724; }
+        .option-item.wrong { background: #f8d7da; border-color: #dc3545; color: #721c24; }
+        
+        .explanation {
+            display: none;
+            margin-top: 15px;
+            padding: 12px;
+            background: #fff3cd;
+            border-radius: 6px;
+            color: #856404;
+            font-size: 15px;
+            border-left: 4px solid #ffeeba;
+        }
+
+        /* Submit Button */
+        .submit-container { text-align: center; margin-top: 30px; margin-bottom: 50px; }
+        
+        .big-submit-btn {
+            background: #27ae60;
+            color: white;
+            border: none;
+            padding: 15px 50px;
+            border-radius: 50px;
+            font-size: 20px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(39, 174, 96, 0.4);
+            transition: 0.3s;
+            width: 100%;
+            max-width: 300px;
+        }
+        .big-submit-btn:hover { background: #219150; transform: translateY(-3px); }
+
+        /* Dark Mode */
+        .dark-toggle-btn {
+            position: fixed; bottom: 20px; right: 20px; background: #2c3e50; color: white;
+            width: 50px; height: 50px; border-radius: 50%; display: flex; justify-content: center;
+            align-items: center; font-size: 24px; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            z-index: 9999; transition: 0.3s; border: 2px solid white;
+        }
+        .dark-toggle-btn:hover { transform: scale(1.1); background: #1a252f; }
+
+        body.dark-mode { background-color: #121212 !important; color: #e0e0e0 !important; }
+        body.dark-mode .mcq-box, body.dark-mode .sticky-header, body.dark-mode .result-dashboard, 
+        body.dark-mode .header-card { background: #1e1e1e !important; color: #e0e0e0 !important; border-color: #333 !important; box-shadow: none !important; }
+        body.dark-mode .header-card { background: linear-gradient(135deg, #2c3e50, #000000) !important; }
+        body.dark-mode .question, body.dark-mode h2, body.dark-mode h3 { color: #ffffff !important; }
+        body.dark-mode .option-item { background-color: #2d2d2d !important; border-color: #444 !important; color: #ddd !important; }
+        body.dark-mode .option-item:hover { background-color: #3d3d3d !important; }
+        body.dark-mode .option-item.selected { background-color: #2c3e50 !important; border-color: #3498db !important; color: #3498db !important; }
+        body.dark-mode .timer-badge { background: #3e2723 !important; color: #ffab91 !important; }
+        body.dark-mode .score-box { background: #2d2d2d !important; }
+        body.dark-mode a { color: #64b5f6 !important; }
+
+    </style>
+</head>
+<body>
+
+    <div class="sticky-header" id="stickyHeader">
+        <div class="timer-badge"><i class="fas fa-clock"></i> <span id="timer">30:00</span></div>
+    </div>
+
+    <div class="container">
+        
+        <div class="header-card" id="introHeader">
+            <h2>Day 04: সাধারণ জ্ঞান (বাংলাদেশ)</h2>
+            <p>৫০টি প্রশ্ন | সময়: ৩০ মিনিট</p>
+            <span class="exam-info">⚠️ প্রতিটি ভুল উত্তরের জন্য ০.৫০ নম্বর কাটা যাবে</span>
+        </div>
+
+        <div class="result-dashboard" id="resultDashboard">
+            <div class="score-box">
+                <span class="score-label">আপনার ফলাফল</span>
+                <span class="final-score" id="finalScoreDisplay">0.00</span>
+                <div class="negative-alert" id="negativeInfo">(-0.00 ভুল উত্তরের জন্য)</div>
+            </div>
+            
+            <p>ফলাফল ফিল্টার করুন:</p>
+            
+            <div class="filter-buttons">
+                <button class="filter-btn btn-all active" onclick="filterQuestions('all', this)">সব দেখুন</button>
+                <button class="filter-btn btn-correct" onclick="filterQuestions('correct', this)">সঠিক (<span id="countCorrect">0</span>)</button>
+                <button class="filter-btn btn-wrong" onclick="filterQuestions('wrong', this)">ভুল (<span id="countWrong">0</span>)</button>
+                <button class="filter-btn btn-skipped" onclick="filterQuestions('skipped', this)">উত্তর দেননি (<span id="countSkipped">0</span>)</button>
+            </div>
+            
+            <br>
+            <a href="primary-teacher.html" style="color: #3498db; text-decoration: none; font-weight: 600;">মেনুতে ফিরে যান</a>
+        </div>
+
+        <div class="mcq-box" id="q1" data-correct="1">
+            <p class="question">১. বাংলার সর্বপ্রাচীন জনপদের নাম?</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(1, 1)">A. পুণ্ড্র</li><li class="option-item" onclick="selectOption(1, 2)">B. তাম্রলিপ্ত</li><li class="option-item" onclick="selectOption(1, 3)">C. গৌড়</li><li class="option-item" onclick="selectOption(1, 4)">D. হরিকেল</li></ul>
+            <div class="explanation">✅ সঠিক উত্তর: A. পুণ্ড্র</div>
+        </div>
+
+        <div class="mcq-box" id="q2" data-correct="1">
+            <p class="question">২. বগুড়া প্রাচীন বাংলার কোন জনপদের অন্তর্ভুক্ত?</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(2, 1)">A. পুণ্ড্র</li><li class="option-item" onclick="selectOption(2, 2)">B. বরেন্দ্র</li><li class="option-item" onclick="selectOption(2, 3)">C. হরিকেল</li><li class="option-item" onclick="selectOption(2, 4)">D. গৌড়</li></ul>
+            <div class="explanation">✅ সঠিক উত্তর: A. পুণ্ড্র</div>
+        </div>
+
+        <div class="mcq-box" id="q3" data-correct="3">
+            <p class="question">৩. সর্বপ্রথম ‘বঙ্গ’ দেশের নাম পাওয়া যায় যে গ্রন্থে-</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(3, 1)">A. আইন-ই-আকবরী</li><li class="option-item" onclick="selectOption(3, 2)">B. বাঙালির ইতিহাস</li><li class="option-item" onclick="selectOption(3, 3)">C. ঐতরেয় আরণ্যক</li><li class="option-item" onclick="selectOption(3, 4)">D. রঘুবংশ</li></ul>
+            <div class="explanation">✅ সঠিক উত্তর: C. ঐতরেয় আরণ্যক</div>
+        </div>
+
+        <div class="mcq-box" id="q4" data-correct="1">
+            <p class="question">৪. কুষ্টিয়া জেলা কোন জনপদে অবস্থিত?</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(4, 1)">A. বঙ্গ</li><li class="option-item" onclick="selectOption(4, 2)">B. সমতট</li><li class="option-item" onclick="selectOption(4, 3)">C. রাঢ়</li><li class="option-item" onclick="selectOption(4, 4)">D. পুণ্ড্র</li></ul>
+            <div class="explanation">✅ সঠিক উত্তর: A. বঙ্গ</div>
+        </div>
+
+        <div class="mcq-box" id="q5" data-correct="2">
+            <p class="question">৫. বরেন্দ্র অঞ্চল বলতে বর্তমানের কোন অঞ্চলকে বোঝায়?</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(5, 1)">A. দিনাজপুর</li><li class="option-item" onclick="selectOption(5, 2)">B. রাজশাহী</li><li class="option-item" onclick="selectOption(5, 3)">C. পাবনা</li><li class="option-item" onclick="selectOption(5, 4)">D. বরিশাল</li></ul>
+            <div class="explanation">✅ সঠিক উত্তর: B. রাজশাহী</div>
+        </div>
+
+        <div class="mcq-box" id="q6" data-correct="2">
+            <p class="question">৬. শালবন বিহার প্রত্নস্থলটি কোন জনপদে অবস্থিত?</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(6, 1)">A. বঙ্গ</li><li class="option-item" onclick="selectOption(6, 2)">B. সমতট</li><li class="option-item" onclick="selectOption(6, 3)">C. রাঢ়</li><li class="option-item" onclick="selectOption(6, 4)">D. পুণ্ড্র</li></ul>
+            <div class="explanation">✅ সঠিক উত্তর: B. সমতট</div>
+        </div>
+
+        <div class="mcq-box" id="q7" data-correct="3">
+            <p class="question">৭. চট্টগ্রাম অঞ্চলের প্রাচীন নাম-</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(7, 1)">A. রাঢ়</li><li class="option-item" onclick="selectOption(7, 2)">B. বঙ্গ</li><li class="option-item" onclick="selectOption(7, 3)">C. হরিকেল</li><li class="option-item" onclick="selectOption(7, 4)">D. গৌড়</li></ul>
+            <div class="explanation">✅ সঠিক উত্তর: C. হরিকেল</div>
+        </div>
+
+        <div class="mcq-box" id="q8" data-correct="4">
+            <p class="question">৮. ‘সিলেট’ প্রাচীন কোন জনপদের অন্তর্ভুক্ত?</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(8, 1)">A. বঙ্গ</li><li class="option-item" onclick="selectOption(8, 2)">B. পুণ্ড্র</li><li class="option-item" onclick="selectOption(8, 3)">C. সমতট</li><li class="option-item" onclick="selectOption(8, 4)">D. হরিকেল</li></ul>
+            <div class="explanation">✅ সঠিক উত্তর: D. হরিকেল</div>
+        </div>
+
+        <div class="mcq-box" id="q9" data-correct="3">
+            <p class="question">৯. প্রাচীন রাঢ় জনপদ অবস্থিত-</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(9, 1)">A. বগুড়া</li><li class="option-item" onclick="selectOption(9, 2)">B. কুমিল্লা</li><li class="option-item" onclick="selectOption(9, 3)">C. বর্ধমান</li><li class="option-item" onclick="selectOption(9, 4)">D. বরিশাল</li></ul>
+            <div class="explanation">✅ সঠিক উত্তর: C. বর্ধমান</div>
+        </div>
+
+        <div class="mcq-box" id="q10" data-correct="1">
+            <p class="question">১০. প্রাচীন বাংলায় কতটি স্বাধীন রাজ্য ছিল?</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(10, 1)">A. ২টি</li><li class="option-item" onclick="selectOption(10, 2)">B. ৩টি</li><li class="option-item" onclick="selectOption(10, 3)">C. ৪টি</li><li class="option-item" onclick="selectOption(10, 4)">D. ৫টি</li></ul>
+            <div class="explanation">✅ সঠিক উত্তর: A. ২টি</div>
+        </div>
+
+        <div class="mcq-box" id="q11" data-correct="2">
+            <p class="question">১১. সুলতান মাহমুদ কত বার ভারতবর্ষ আক্রমণ করেন?</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(11, 1)">A. ১৫ বার</li><li class="option-item" onclick="selectOption(11, 2)">B. ১৭ বার</li><li class="option-item" onclick="selectOption(11, 3)">C. ১৮ বার</li><li class="option-item" onclick="selectOption(11, 4)">D. ১৯ বার</li></ul>
+            <div class="explanation">✅ সঠিক উত্তর: B. ১৭ বার</div>
+        </div>
+
+        <div class="mcq-box" id="q12" data-correct="2">
+            <p class="question">১২. মুহাম্মদ ঘুরী ও পৃথ্বীরাজ চৌহানের মধ্যে দ্বিতীয় তরাইনের যুদ্ধ কত সালে সংঘটিত হয়?</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(12, 1)">A. ১১৯০</li><li class="option-item" onclick="selectOption(12, 2)">B. ১১৯২</li><li class="option-item" onclick="selectOption(12, 3)">C. ১২০৬</li><li class="option-item" onclick="selectOption(12, 4)">D. ৭১২</li></ul>
+            <div class="explanation">✅ সঠিক উত্তর: B. ১১৯২</div>
+        </div>
+
+        <div class="mcq-box" id="q13" data-correct="1">
+            <p class="question">১৩. বাংলার প্রথম মুসলিম বিজেতা কে?</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(13, 1)">A. বখতিয়ার খলজি</li><li class="option-item" onclick="selectOption(13, 2)">B. ইলিয়াস শাহ</li><li class="option-item" onclick="selectOption(13, 3)">C. হুসাইন শাহ</li><li class="option-item" onclick="selectOption(13, 4)">D. শিরান খলজি</li></ul>
+            <div class="explanation">✅ সঠিক উত্তর: A. বখতিয়ার খলজি</div>
+        </div>
+
+        <div class="mcq-box" id="q14" data-correct="3">
+            <p class="question">১৪. মুহাম্মদ বখতিয়ার খলজি কোন শতাব্দীতে বাংলাদেশে আসেন?</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(14, 1)">A. একাদশ</li><li class="option-item" onclick="selectOption(14, 2)">B. দ্বাদশ</li><li class="option-item" onclick="selectOption(14, 3)">C. ত্রয়োদশ</li><li class="option-item" onclick="selectOption(14, 4)">D. পঞ্চদশ</li></ul>
+            <div class="explanation">✅ সঠিক উত্তর: C. ত্রয়োদশ</div>
+        </div>
+
+        <div class="mcq-box" id="q15" data-correct="3">
+            <p class="question">১৫. ’রক্তপাত ও কঠোর নীতি’ কার শাসনের বৈশিষ্ট্য ছিল?</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(15, 1)">A. সুলতানা রাজিয়া</li><li class="option-item" onclick="selectOption(15, 2)">B. নাসিরউদ্দিন মাহমুদ</li><li class="option-item" onclick="selectOption(15, 3)">C. গিয়াসউদ্দিন বলবন</li><li class="option-item" onclick="selectOption(15, 4)">D. আলাউদ্দিন খলজি</li></ul>
+            <div class="explanation">✅ সঠিক উত্তর: C. গিয়াসউদ্দিন বলবন</div>
+        </div>
+
+        <div class="mcq-box" id="q16" data-correct="2">
+            <p class="question">১৬. আলাউদ্দিন খলজির প্রধান সেনাপতি কে ছিলেন?</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(16, 1)">A. উলুঘ খাঁ</li><li class="option-item" onclick="selectOption(16, 2)">B. মালিক কাফুর</li><li class="option-item" onclick="selectOption(16, 3)">C. নসরত খান</li><li class="option-item" onclick="selectOption(16, 4)">D. জাফর খান</li></ul>
+            <div class="explanation">✅ সঠিক উত্তর: B. মালিক কাফুর</div>
+        </div>
+
+        <div class="mcq-box" id="q17" data-correct="3">
+            <p class="question">১৭. সোনা ও রুপার পরিবর্তে প্রতীক তামার মুদ্রা প্রচলন করেন-</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(17, 1)">A. আলাউদ্দিন খলজি</li><li class="option-item" onclick="selectOption(17, 2)">B. মাহমুদ শাহ</li><li class="option-item" onclick="selectOption(17, 3)">C. মুহাম্মদ বিন তুঘলক</li><li class="option-item" onclick="selectOption(17, 4)">D. ইব্রাহীম লোদী</li></ul>
+            <div class="explanation">✅ সঠিক উত্তর: C. মুহাম্মদ বিন তুঘলক</div>
+        </div>
+
+        <div class="mcq-box" id="q18" data-correct="4">
+            <p class="question">১৮. কোন শাসকদের আমলে বাংলাভাষী অঞ্চল ‘বাঙ্গালা’ নামে পরিচিত হয়ে উঠে?</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(18, 1)">A. মৌর্য</li><li class="option-item" onclick="selectOption(18, 2)">B. গুপ্ত</li><li class="option-item" onclick="selectOption(18, 3)">C. পাল</li><li class="option-item" onclick="selectOption(18, 4)">D. মুসলিম</li></ul>
+            <div class="explanation">✅ সঠিক উত্তর: D. মুসলিম</div>
+        </div>
+
+        <div class="mcq-box" id="q19" data-correct="4">
+            <p class="question">১৯. সুলতান ফখরুদ্দিন মোবারক শাহের শাসনকাল ছিল-</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(19, 1)">A. ১২৮২-১২৯১</li><li class="option-item" onclick="selectOption(19, 2)">B. ১২৯১-১৩০০</li><li class="option-item" onclick="selectOption(19, 3)">C. ১৩২৪-১৩২৮</li><li class="option-item" onclick="selectOption(19, 4)">D. ১৩৩৮-১৩৪৯</li></ul>
+            <div class="explanation">✅ সঠিক উত্তর: D. ১৩৩৮-১৩৪৯</div>
+        </div>
+
+        <div class="mcq-box" id="q20" data-correct="1">
+            <p class="question">২০. চৈনিক পরিব্রাজক ফা-হিয়েন বাংলায় আসেন যার সময়ে-</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(20, 1)">A. দ্বিতীয় চন্দ্রগুপ্ত</li><li class="option-item" onclick="selectOption(20, 2)">B. আলাউদ্দীন হোসেন শাহ</li><li class="option-item" onclick="selectOption(20, 3)">C. প্রথম চন্দ্রগুপ্ত</li><li class="option-item" onclick="selectOption(20, 4)">D. হর্ষবর্ধন</li></ul>
+            <div class="explanation">✅ সঠিক উত্তর: A. দ্বিতীয় চন্দ্রগুপ্ত</div>
+        </div>
+
+        <div class="mcq-box" id="q21" data-correct="1">
+            <p class="question">২১. চৈনিক পরিব্রাজক ফা-হিয়েন কার শাসনামলে বাংলায় আসেন?</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(21, 1)">A. দ্বিতীয় চন্দ্রগুপ্ত</li><li class="option-item" onclick="selectOption(21, 2)">B. আলাউদ্দিন হোসেন শাহ</li><li class="option-item" onclick="selectOption(21, 3)">C. প্রথম চন্দ্রগুপ্ত</li><li class="option-item" onclick="selectOption(21, 4)">D. হর্ষবর্ধন</li></ul>
+            <div class="explanation">✅ সঠিক উত্তর: A. দ্বিতীয় চন্দ্রগুপ্ত</div>
+        </div>
+
+        <div class="mcq-box" id="q22" data-correct="3">
+            <p class="question">২২. ইবনে বতুতা কোন দেশের পর্যটক?</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(22, 1)">A. ইতালি</li><li class="option-item" onclick="selectOption(22, 2)">B. তিব্বত</li><li class="option-item" onclick="selectOption(22, 3)">C. মরক্কো</li><li class="option-item" onclick="selectOption(22, 4)">D. গ্রীস</li></ul>
+            <div class="explanation">✅ সঠিক উত্তর: C. মরক্কো</div>
+        </div>
+
+        <div class="mcq-box" id="q23" data-correct="1">
+            <p class="question">২৩. ইবনে বতুতা কোন শতকে বাংলাদেশে আসেন?</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(23, 1)">A. চতুর্দশ</li><li class="option-item" onclick="selectOption(23, 2)">B. সপ্তদশ</li><li class="option-item" onclick="selectOption(23, 3)">C. অষ্টাদশ</li><li class="option-item" onclick="selectOption(23, 4)">D. ত্রয়োদশ</li></ul>
+            <div class="explanation">✅ সঠিক উত্তর: A. চতুর্দশ</div>
+        </div>
+
+        <div class="mcq-box" id="q24" data-correct="2">
+            <p class="question">২৪. বাংলাদেশ এশিয়ার কোন অঞ্চলে অবস্থিত?</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(24, 1)">A. দক্ষিণ পূর্ব এশিয়া</li><li class="option-item" onclick="selectOption(24, 2)">B. দক্ষিণ এশিয়া</li><li class="option-item" onclick="selectOption(24, 3)">C. মধ্য এশিয়া</li><li class="option-item" onclick="selectOption(24, 4)">D. দক্ষিণ-দক্ষিণ পূর্ব এশিয়া</li></ul>
+            <div class="explanation">✅ সঠিক উত্তর: B. দক্ষিণ এশিয়া</div>
+        </div>
+
+        <div class="mcq-box" id="q25" data-correct="2">
+            <p class="question">২৫. নিম্নলিখিত কোনটির উপর বাংলাদেশ অবস্থিত?</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(25, 1)">A. ট্রপিক অব ক্যাপ্রিকন</li><li class="option-item" onclick="selectOption(25, 2)">B. ট্রপিক অব ক্যান্সার</li><li class="option-item" onclick="selectOption(25, 3)">C. ইকুয়েটর</li><li class="option-item" onclick="selectOption(25, 4)">D. আর্কটিক সার্কেল</li></ul>
+            <div class="explanation">✅ সঠিক উত্তর: B. ট্রপিক অব ক্যান্সার</div>
+        </div>
+
+        <div class="mcq-box" id="q26" data-correct="4">
+            <p class="question">২৬. ভৌগোলিকভাবে বাংলাদেশের কোন জেলার উপর দিয়ে কর্কটক্রান্তি রেখা অতিক্রম করেছে?</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(26, 1)">A. শেরপুর</li><li class="option-item" onclick="selectOption(26, 2)">B. টাঙ্গাইল</li><li class="option-item" onclick="selectOption(26, 3)">C. গোপালগঞ্জ</li><li class="option-item" onclick="selectOption(26, 4)">D. মুন্সিগঞ্জ</li></ul>
+            <div class="explanation">✅ সঠিক উত্তর: D. মুন্সিগঞ্জ</div>
+        </div>
+
+        <div class="mcq-box" id="q27" data-correct="4">
+            <p class="question">২৭. বাংলাদেশের সবচেয়ে উত্তরের জেলা কোনটি?</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(27, 1)">A. দিনাজপুর</li><li class="option-item" onclick="selectOption(27, 2)">B. ঠাকুরগাঁও</li><li class="option-item" onclick="selectOption(27, 3)">C. লালমনিরহাট</li><li class="option-item" onclick="selectOption(27, 4)">D. পঞ্চগড়</li></ul>
+            <div class="explanation">✅ সঠিক উত্তর: D. পঞ্চগড়</div>
+        </div>
+
+        <div class="mcq-box" id="q28" data-correct="3">
+            <p class="question">২৮. কোন জেলাকে ‘হিমালয়ের কন্যা’ বলা হয়?</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(28, 1)">A. কুয়াকাটা</li><li class="option-item" onclick="selectOption(28, 2)">B. চাঁপাইনবাবগঞ্জ</li><li class="option-item" onclick="selectOption(28, 3)">C. পঞ্চগড়</li><li class="option-item" onclick="selectOption(28, 4)">D. ভোলা</li></ul>
+            <div class="explanation">✅ সঠিক উত্তর: C. পঞ্চগড়</div>
+        </div>
+
+        <div class="mcq-box" id="q29" data-correct="3">
+            <p class="question">২৯. বাংলাবান্ধা কোন জেলায় অবস্থিত?</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(29, 1)">A. কুড়িগ্রাম</li><li class="option-item" onclick="selectOption(29, 2)">B. ঠাকুরগাঁও</li><li class="option-item" onclick="selectOption(29, 3)">C. পঞ্চগড়</li><li class="option-item" onclick="selectOption(29, 4)">D. জয়পুরহাট</li></ul>
+            <div class="explanation">✅ সঠিক উত্তর: C. পঞ্চগড়</div>
+        </div>
+
+        <div class="mcq-box" id="q30" data-correct="3">
+            <p class="question">৩০. বাংলাদেশের কোন জেলা দুই দেশের সীমানা দ্বারা বেষ্টিত?</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(30, 1)">A. খাগড়াছড়ি</li><li class="option-item" onclick="selectOption(30, 2)">B. বান্দরবান</li><li class="option-item" onclick="selectOption(30, 3)">C. রাঙ্গামাটি</li><li class="option-item" onclick="selectOption(30, 4)">D. কুমিল্লা</li></ul>
+            <div class="explanation">✅ সঠিক উত্তর: C. রাঙ্গামাটি</div>
+        </div>
+
+        <div class="mcq-box" id="q31" data-correct="4">
+            <p class="question">৩১. ভারতীয় কোন রাজ্যের সাথে বাংলাদেশের কোনো সীমান্ত নেই?</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(31, 1)">A. মেঘালয়</li><li class="option-item" onclick="selectOption(31, 2)">B. ত্রিপুরা</li><li class="option-item" onclick="selectOption(31, 3)">C. আসাম</li><li class="option-item" onclick="selectOption(31, 4)">D. নাগাল্যান্ড</li></ul>
+            <div class="explanation">✅ সঠিক উত্তর: D. নাগাল্যান্ড</div>
+        </div>
+
+        <div class="mcq-box" id="q32" data-correct="4">
+            <p class="question">৩২. বাংলাদেশের পূর্বসীমা রেখায় অবস্থিত?</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(32, 1)">A. ভারত</li><li class="option-item" onclick="selectOption(32, 2)">B. মিয়ানমার</li><li class="option-item" onclick="selectOption(32, 3)">C. বঙ্গোপসাগর</li><li class="option-item" onclick="selectOption(32, 4)">D. ভারত ও মিয়ানমার</li></ul>
+            <div class="explanation">✅ সঠিক উত্তর: D. ভারত ও মিয়ানমার</div>
+        </div>
+
+        <div class="mcq-box" id="q33" data-correct="3">
+            <p class="question">৩৩. ময়মনসিংহ জেলার পূর্ব নাম-</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(33, 1)">A. জালালাবাদ</li><li class="option-item" onclick="selectOption(33, 2)">B. ইসলামাবাদ</li><li class="option-item" onclick="selectOption(33, 3)">C. নাসিরাবাদ</li><li class="option-item" onclick="selectOption(33, 4)">D. সিংহগ্রাম</li></ul>
+            <div class="explanation">✅ সঠিক উত্তর: C. নাসিরাবাদ</div>
+        </div>
+
+        <div class="mcq-box" id="q34" data-correct="1">
+            <p class="question">৩৪. নোয়াখালীর পূর্বনাম কী ছিল?</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(34, 1)">A. ত্রিপুরা</li><li class="option-item" onclick="selectOption(34, 2)">B. জাহাঙ্গীরনগর</li><li class="option-item" onclick="selectOption(34, 3)">C. নাসিরাবাদ</li><li class="option-item" onclick="selectOption(34, 4)">D. ইসলামপুর</li></ul>
+            <div class="explanation">✅ সঠিক উত্তর: A. ত্রিপুরা</div>
+        </div>
+
+        <div class="mcq-box" id="q35" data-correct="2">
+            <p class="question">৩৫. কোন জেলার প্রাচীন নাম পালংকি?</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(35, 1)">A. চট্টগ্রাম</li><li class="option-item" onclick="selectOption(35, 2)">B. কক্সবাজার</li><li class="option-item" onclick="selectOption(35, 3)">C. খাগড়াছড়ি</li><li class="option-item" onclick="selectOption(35, 4)">D. রাঙ্গামাটি</li></ul>
+            <div class="explanation">✅ সঠিক উত্তর: B. কক্সবাজার</div>
+        </div>
+
+        <div class="mcq-box" id="q36" data-correct="1">
+            <p class="question">৩৬. ‘গন্ডোয়ানাল্যান্ড’ কোন স্থানের পূর্ব নাম?</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(36, 1)">A. দিনাজপুর</li><li class="option-item" onclick="selectOption(36, 2)">B. বাগেরহাট</li><li class="option-item" onclick="selectOption(36, 3)">C. কক্সবাজার</li><li class="option-item" onclick="selectOption(36, 4)">D. নোয়াখালী</li></ul>
+            <div class="explanation">✅ সঠিক উত্তর: A. দিনাজপুর</div>
+        </div>
+
+        <div class="mcq-box" id="q37" data-correct="4">
+            <p class="question">৩৭. বাংলার ভেনিস বলা হয় যে শহরকে-</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(37, 1)">A. পটুয়াখালী</li><li class="option-item" onclick="selectOption(37, 2)">B. ভোলা</li><li class="option-item" onclick="selectOption(37, 3)">C. খুলনা</li><li class="option-item" onclick="selectOption(37, 4)">D. বরিশাল</li></ul>
+            <div class="explanation">✅ সঠিক উত্তর: D. বরিশাল</div>
+        </div>
+
+        <div class="mcq-box" id="q38" data-correct="2">
+            <p class="question">৩৮. সমুদ্র আইন বিষয়ক আন্তর্জাতিক আদালত (International Tribunal for the Law of the Sea) নিম্নের কোন দেশে অবস্থিত?</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(38, 1)">A. হেগ, নেদারল্যান্ড</li><li class="option-item" onclick="selectOption(38, 2)">B. হামবুর্গ, জার্মানি</li><li class="option-item" onclick="selectOption(38, 3)">C. মাদ্রিদ, স্পেন</li><li class="option-item" onclick="selectOption(38, 4)">D. জেনেভা, সুইজারল্যান্ড</li></ul>
+            <div class="explanation">✅ সঠিক উত্তর: B. হামবুর্গ, জার্মানি</div>
+        </div>
+
+        <div class="mcq-box" id="q39" data-correct="4">
+            <p class="question">৩৯. কোনটি নদ নয়?</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(39, 1)">A. ব্রহ্মপুত্র</li><li class="option-item" onclick="selectOption(39, 2)">B. কপোতাক্ষ</li><li class="option-item" onclick="selectOption(39, 3)">C. সিন্ধু</li><li class="option-item" onclick="selectOption(39, 4)">D. মেঘনা</li></ul>
+            <div class="explanation">✅ সঠিক উত্তর: D. মেঘনা</div>
+        </div>
+
+        <div class="mcq-box" id="q40" data-correct="2">
+            <p class="question">৪০. বাংলাদেশের সবচেয়ে নাব্য নদী কোনটি?</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(40, 1)">A. পদ্মা</li><li class="option-item" onclick="selectOption(40, 2)">B. মেঘনা</li><li class="option-item" onclick="selectOption(40, 3)">C. যমুনা</li><li class="option-item" onclick="selectOption(40, 4)">D. কর্ণফুলী</li></ul>
+            <div class="explanation">✅ সঠিক উত্তর: B. মেঘনা</div>
+        </div>
+
+        <div class="mcq-box" id="q41" data-correct="4">
+            <p class="question">৪১. গঙ্গা-ব্রহ্মপুত্র-মেঘনার সম্মিলিত নদী অববাহিকার কত শতাংশ বাংলাদেশের অন্তর্ভুক্ত?</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(41, 1)">A. ৪</li><li class="option-item" onclick="selectOption(41, 2)">B. ১৪</li><li class="option-item" onclick="selectOption(41, 3)">C. ৭</li><li class="option-item" onclick="selectOption(41, 4)">D. ৩৩</li></ul>
+            <div class="explanation">✅ সঠিক উত্তর: D. ৩৩</div>
+        </div>
+
+        <div class="mcq-box" id="q42" data-correct="2">
+            <p class="question">৪২. আরাকান পাহাড় হতে উৎপন্ন নদী কোনটি?</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(42, 1)">A. ফেনী নদী</li><li class="option-item" onclick="selectOption(42, 2)">B. সাঙ্গু নদী</li><li class="option-item" onclick="selectOption(42, 3)">C. কর্ণফুলী নদী</li><li class="option-item" onclick="selectOption(42, 4)">D. কোনটিই নয়</li></ul>
+            <div class="explanation">✅ সঠিক উত্তর: B. সাঙ্গু নদী</div>
+        </div>
+
+        <div class="mcq-box" id="q43" data-correct="1">
+            <p class="question">৪৩. যে নদীটির উৎস ও সমাপ্তি বাংলাদেশের অভ্যন্তরে-</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(43, 1)">A. মাতামুহুরী</li><li class="option-item" onclick="selectOption(43, 2)">B. নাফ</li><li class="option-item" onclick="selectOption(43, 3)">C. কর্ণফুলী</li><li class="option-item" onclick="selectOption(43, 4)">D. সাঙ্গু</li></ul>
+            <div class="explanation">✅ সঠিক উত্তর: A. মাতামুহুরী</div>
+        </div>
+
+        <div class="mcq-box" id="q44" data-correct="1">
+            <p class="question">৪৪. ‘হালদা’ নদীর উৎপত্তি স্থল-</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(44, 1)">A. খাগড়াছড়ির বাদনাবতলী পর্বতশৃঙ্গ</li><li class="option-item" onclick="selectOption(44, 2)">B. রাঙ্গামাটির শুভলং</li><li class="option-item" onclick="selectOption(44, 3)">C. কাপ্তাই হ্রদ</li><li class="option-item" onclick="selectOption(44, 4)">D. ব্রহ্মপুত্র নদ</li></ul>
+            <div class="explanation">✅ সঠিক উত্তর: A. খাগড়াছড়ির বাদনাবতলী পর্বতশৃঙ্গ</div>
+        </div>
+
+        <div class="mcq-box" id="q45" data-correct="1">
+            <p class="question">৪৫. মাতামুহুরী নদী নিম্নের কোথা হতে উৎপন্ন হয়েছে?</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(45, 1)">A. লামার মইভার পর্বত</li><li class="option-item" onclick="selectOption(45, 2)">B. খাগড়াছড়ির বাদনাতলী পর্বত</li><li class="option-item" onclick="selectOption(45, 3)">C. আসামের লুসাই পর্বত</li><li class="option-item" onclick="selectOption(45, 4)">D. কোনটিই নয়</li></ul>
+            <div class="explanation">✅ সঠিক উত্তর: A. লামার মইভার পর্বত</div>
+        </div>
+
+        <div class="mcq-box" id="q46" data-correct="2">
+            <p class="question">৪৬. ব্রহ্মপুত্র নদ হিমালয়ের কোন শৃঙ্গ থেকে উৎপন্ন হয়েছে?</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(46, 1)">A. বরাইল</li><li class="option-item" onclick="selectOption(46, 2)">B. কৈলাস</li><li class="option-item" onclick="selectOption(46, 3)">C. কাঞ্চনজঙঘা</li><li class="option-item" onclick="selectOption(46, 4)">D. গডউইন অস্টিন</li></ul>
+            <div class="explanation">✅ সঠিক উত্তর: B. কৈলাস</div>
+        </div>
+
+        <div class="mcq-box" id="q47" data-correct="1">
+            <p class="question">৪৭. পদ্মা নদীর উৎপত্তি-</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(47, 1)">A. হিমালয় পর্বতে</li><li class="option-item" onclick="selectOption(47, 2)">B. লুসাই পাহাড়ে</li><li class="option-item" onclick="selectOption(47, 3)">C. হিমালয়ের মানস সরোবরে</li><li class="option-item" onclick="selectOption(47, 4)">D. কোনোটিই নয়</li></ul>
+            <div class="explanation">✅ সঠিক উত্তর: A. হিমালয় পর্বতে</div>
+        </div>
+
+        <div class="mcq-box" id="q48" data-correct="1">
+            <p class="question">৪৮. কোনটি পদ্মার শাখা নদী?</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(48, 1)">A. আড়িয়াল খাঁ</li><li class="option-item" onclick="selectOption(48, 2)">B. করতোয়া</li><li class="option-item" onclick="selectOption(48, 3)">C. কর্ণফুলী</li><li class="option-item" onclick="selectOption(48, 4)">D. কোনোটিই নয়</li></ul>
+            <div class="explanation">✅ সঠিক উত্তর: A. আড়িয়াল খাঁ</div>
+        </div>
+
+        <div class="mcq-box" id="q49" data-correct="2">
+            <p class="question">৪৯. বাংলাদেশের পদ্মা নদী কোথায় যমুনা নদীর সাথে মিলিত হয়েছে?</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(49, 1)">A. চাঁদপুর</li><li class="option-item" onclick="selectOption(49, 2)">B. আরিচা</li><li class="option-item" onclick="selectOption(49, 3)">C. ভোলা</li><li class="option-item" onclick="selectOption(49, 4)">D. বরিশাল</li></ul>
+            <div class="explanation">✅ সঠিক উত্তর: B. আরিচা</div>
+        </div>
+
+        <div class="mcq-box" id="q50" data-correct="1">
+            <p class="question">৫০. কোন নদীর অপর নাম কীর্তিনাশা?</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(50, 1)">A. পদ্মা</li><li class="option-item" onclick="selectOption(50, 2)">B. যমুনা</li><li class="option-item" onclick="selectOption(50, 3)">C. মেঘনা</li><li class="option-item" onclick="selectOption(50, 4)">D. ব্রহ্মপুত্র</li></ul>
+            <div class="explanation">✅ সঠিক উত্তর: A. পদ্মা</div>
+        </div>
+
+        <div class="submit-container" id="submitContainer">
+            <button class="big-submit-btn" onclick="submitExam()">পরীক্ষা শেষ করুন</button>
+        </div>
+
+    </div>
+
+    <div class="dark-toggle-btn" onclick="toggleDarkMode()">
+        <i class="fas fa-moon" id="darkIcon"></i>
+    </div>
+
+    <script>
+        let timeLeft = 30 * 60;
+        const timerDisplay = document.getElementById('timer');
+        let countdown;
+
+        // Start Timer
+        countdown = setInterval(() => {
+            let minutes = Math.floor(timeLeft / 60);
+            let seconds = timeLeft % 60;
+            seconds = seconds < 10 ? '0' + seconds : seconds;
+            timerDisplay.innerText = `${minutes}:${seconds}`;
+            
+            if (timeLeft <= 0) {
+                clearInterval(countdown);
+                submitExam();
+            }
+            timeLeft--;
+        }, 1000);
+
+        let userAnswers = {};
+
+        function selectOption(qId, optionIdx) {
+            const questionBox = document.getElementById(`q${qId}`);
+            if (questionBox.classList.contains('submitted')) return;
+
+            const options = questionBox.querySelectorAll('.option-item');
+            options.forEach(opt => opt.classList.remove('selected'));
+
+            options[optionIdx - 1].classList.add('selected');
+            userAnswers[qId] = optionIdx;
+        }
+
+        function submitExam() {
+            clearInterval(countdown);
+            
+            let correctCount = 0;
+            let wrongCount = 0;
+            let skippedCount = 0;
+            
+            const allQuestions = document.querySelectorAll('.mcq-box');
+            
+            allQuestions.forEach((questionBox, index) => {
+                const qId = index + 1;
+                const actualId = parseInt(questionBox.id.replace('q', ''));
+                
+                const correctAns = parseInt(questionBox.getAttribute('data-correct'));
+                const userAns = userAnswers[actualId];
+                const options = questionBox.querySelectorAll('.option-item');
+                const explanation = questionBox.querySelector('.explanation');
+
+                questionBox.classList.add('submitted');
+
+                if (userAns) {
+                    if (userAns === correctAns) {
+                        correctCount++;
+                        options[userAns - 1].classList.add('correct');
+                        questionBox.classList.add('status-correct');
+                    } else {
+                        wrongCount++;
+                        options[userAns - 1].classList.add('wrong');
+                        options[correctAns - 1].classList.add('correct');
+                        questionBox.classList.add('status-wrong');
+                    }
+                } else {
+                    skippedCount++;
+                    options[correctAns - 1].classList.add('correct');
+                    questionBox.classList.add('status-skipped');
+                }
+                
+                explanation.style.display = 'block';
+            });
+
+            // Calculate Score with 0.50 negative marking
+            const negativeMarks = wrongCount * 0.50;
+            const finalScore = correctCount - negativeMarks;
+
+            // UI Changes
+            document.getElementById('introHeader').style.display = 'none';
+            document.getElementById('submitContainer').style.display = 'none';
+            document.getElementById('stickyHeader').style.display = 'none';
+            document.getElementById('resultDashboard').style.display = 'block';
+
+            // Set Scores
+            document.getElementById('finalScoreDisplay').innerText = finalScore.toFixed(2);
+            document.getElementById('negativeInfo').innerText = `(-${negativeMarks.toFixed(2)} ভুল উত্তরের জন্য)`;
+            
+            document.getElementById('countCorrect').innerText = correctCount;
+            document.getElementById('countWrong').innerText = wrongCount;
+            document.getElementById('countSkipped').innerText = skippedCount;
+
+            // Scroll to Top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Filter Logic
+        function filterQuestions(filterType, btnElement) {
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            btnElement.classList.add('active');
+
+            const allQuestions = document.querySelectorAll('.mcq-box');
+
+            allQuestions.forEach(box => {
+                box.style.display = 'none';
+
+                if (filterType === 'all') {
+                    box.style.display = 'block';
+                } else if (filterType === 'correct' && box.classList.contains('status-correct')) {
+                    box.style.display = 'block';
+                } else if (filterType === 'wrong' && box.classList.contains('status-wrong')) {
+                    box.style.display = 'block';
+                } else if (filterType === 'skipped' && box.classList.contains('status-skipped')) {
+                    box.style.display = 'block';
+                }
+            });
+        }
+
+        // Dark Mode Logic
+        function toggleDarkMode() {
+            const body = document.body;
+            const icon = document.getElementById('darkIcon');
+            body.classList.toggle('dark-mode');
+            if (body.classList.contains('dark-mode')) {
+                icon.classList.remove('fa-moon');
+                icon.classList.add('fa-sun');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                icon.classList.remove('fa-sun');
+                icon.classList.add('fa-moon');
+                localStorage.setItem('theme', 'light');
+            }
+        }
+
+        window.onload = function() {
+            if (localStorage.getItem('theme') === 'dark') {
+                document.body.classList.add('dark-mode');
+                document.getElementById('darkIcon').classList.remove('fa-moon');
+                document.getElementById('darkIcon').classList.add('fa-sun');
+            }
+        }
+    </script>
+
+</body>
+</html>
