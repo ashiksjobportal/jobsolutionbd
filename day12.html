@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Day 12 - English Model Test</title>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Hind Siliguri', sans-serif; }
+        body { background-color: #f4f6f9; color: #333; padding-bottom: 50px; }
+
+        /* Sticky Timer */
+        .sticky-header {
+            background: #fff;
+            padding: 10px 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            text-align: center;
+        }
+        
+        .timer-badge {
+            font-size: 18px;
+            font-weight: 700;
+            color: #e74c3c;
+            background: #fdecec;
+            padding: 5px 20px;
+            border-radius: 50px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .container { max-width: 800px; margin: 20px auto; padding: 0 20px; }
+
+        /* Header Card */
+        .header-card {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white; padding: 30px; border-radius: 10px; text-align: center; margin-bottom: 25px;
+        }
+        .header-card h2 { font-size: 26px; margin-bottom: 10px; }
+        .exam-info { font-size: 14px; background: rgba(255,255,255,0.2); padding: 5px 15px; border-radius: 50px; display: inline-block; margin-top: 5px; }
+
+        /* Result Dashboard */
+        .result-dashboard {
+            display: none;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin-bottom: 25px;
+            border-top: 5px solid #3498db;
+        }
+
+        .score-box {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: inline-block;
+            min-width: 200px;
+        }
+
+        .final-score {
+            font-size: 42px;
+            font-weight: 700;
+            color: #3498db;
+            display: block;
+        }
+        
+        .score-label { font-size: 16px; color: #555; }
+        .negative-alert { font-size: 13px; color: #c0392b; margin-top: 5px; font-weight: 600; }
+
+        /* Filter Buttons */
+        .filter-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .filter-btn {
+            padding: 8px 16px;
+            border-radius: 8px;
+            border: 2px solid transparent;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: 0.2s;
+            font-size: 14px;
+        }
+
+        .btn-correct { background: #eafaf1; color: #27ae60; border-color: #27ae60; }
+        .btn-correct:hover, .btn-correct.active { background: #27ae60; color: white; }
+
+        .btn-wrong { background: #fdecec; color: #c0392b; border-color: #c0392b; }
+        .btn-wrong:hover, .btn-wrong.active { background: #c0392b; color: white; }
+
+        .btn-skipped { background: #fef9e7; color: #f39c12; border-color: #f39c12; }
+        .btn-skipped:hover, .btn-skipped.active { background: #f39c12; color: white; }
+
+        .btn-all { background: #eaf6ff; color: #3498db; border-color: #3498db; }
+        .btn-all:hover, .btn-all.active { background: #3498db; color: white; }
+
+        /* Question Box */
+        .mcq-box { 
+            background: white; 
+            padding: 20px; 
+            border-radius: 8px; 
+            margin-bottom: 15px; 
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        
+        .question { font-size: 18px; font-weight: 600; margin-bottom: 15px; color: #2c3e50; }
+        
+        .options { list-style: none; }
+        .option-item { 
+            padding: 12px 15px; 
+            border: 1px solid #eee; 
+            margin-bottom: 10px; 
+            border-radius: 6px; 
+            cursor: pointer; 
+            transition: 0.2s; 
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 16px;
+        }
+        
+        .option-item:hover { background: #f8f9fa; border-color: #bdc3c7; }
+        .option-item.selected { background: #eaf6ff; border-color: #3498db; color: #2980b9; font-weight: 600; }
+
+        .option-item.correct { background: #d4edda; border-color: #28a745; color: #155724; }
+        .option-item.wrong { background: #f8d7da; border-color: #dc3545; color: #721c24; }
+        
+        .explanation {
+            display: none;
+            margin-top: 15px;
+            padding: 12px;
+            background: #fff3cd;
+            border-radius: 6px;
+            color: #856404;
+            font-size: 15px;
+            border-left: 4px solid #ffeeba;
+        }
+
+        /* Submit Button */
+        .submit-container { text-align: center; margin-top: 30px; margin-bottom: 50px; }
+        
+        .big-submit-btn {
+            background: #27ae60;
+            color: white;
+            border: none;
+            padding: 15px 50px;
+            border-radius: 50px;
+            font-size: 20px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(39, 174, 96, 0.4);
+            transition: 0.3s;
+            width: 100%;
+            max-width: 300px;
+        }
+        .big-submit-btn:hover { background: #219150; transform: translateY(-3px); }
+
+        /* Dark Mode */
+        .dark-toggle-btn {
+            position: fixed; bottom: 20px; right: 20px; background: #2c3e50; color: white;
+            width: 50px; height: 50px; border-radius: 50%; display: flex; justify-content: center;
+            align-items: center; font-size: 24px; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            z-index: 9999; transition: 0.3s; border: 2px solid white;
+        }
+        .dark-toggle-btn:hover { transform: scale(1.1); background: #1a252f; }
+
+        body.dark-mode { background-color: #121212 !important; color: #e0e0e0 !important; }
+        body.dark-mode .mcq-box, body.dark-mode .sticky-header, body.dark-mode .result-dashboard, 
+        body.dark-mode .header-card { background: #1e1e1e !important; color: #e0e0e0 !important; border-color: #333 !important; box-shadow: none !important; }
+        body.dark-mode .header-card { background: linear-gradient(135deg, #2c3e50, #000000) !important; }
+        body.dark-mode .question, body.dark-mode h2, body.dark-mode h3 { color: #ffffff !important; }
+        body.dark-mode .option-item { background-color: #2d2d2d !important; border-color: #444 !important; color: #ddd !important; }
+        body.dark-mode .option-item:hover { background-color: #3d3d3d !important; }
+        body.dark-mode .option-item.selected { background-color: #2c3e50 !important; border-color: #3498db !important; color: #3498db !important; }
+        body.dark-mode .timer-badge { background: #3e2723 !important; color: #ffab91 !important; }
+        body.dark-mode .score-box { background: #2d2d2d !important; }
+        body.dark-mode a { color: #64b5f6 !important; }
+
+    </style>
+</head>
+<body>
+
+    <div class="sticky-header" id="stickyHeader">
+        <div class="timer-badge"><i class="fas fa-clock"></i> <span id="timer">30:00</span></div>
+    </div>
+
+    <div class="container">
+        
+        <div class="header-card" id="introHeader">
+            <h2>Day 12: English Grammar</h2>
+            <p>50 Questions | Time: 30 Minutes</p>
+            <span class="exam-info">⚠️ প্রতিটি ভুল উত্তরের জন্য ০.৫০ নম্বর কাটা যাবে</span>
+        </div>
+
+        <div class="result-dashboard" id="resultDashboard">
+            <div class="score-box">
+                <span class="score-label">Final Score</span>
+                <span class="final-score" id="finalScoreDisplay">0.00</span>
+                <div class="negative-alert" id="negativeInfo">(-0.00 for wrong answers)</div>
+            </div>
+            
+            <p>ফলাফল ফিল্টার করুন:</p>
+            
+            <div class="filter-buttons">
+                <button class="filter-btn btn-all active" onclick="filterQuestions('all', this)">Show All</button>
+                <button class="filter-btn btn-correct" onclick="filterQuestions('correct', this)">Correct (<span id="countCorrect">0</span>)</button>
+                <button class="filter-btn btn-wrong" onclick="filterQuestions('wrong', this)">Wrong (<span id="countWrong">0</span>)</button>
+                <button class="filter-btn btn-skipped" onclick="filterQuestions('skipped', this)">Skipped (<span id="countSkipped">0</span>)</button>
+            </div>
+            
+            <br>
+            <a href="primary-teacher.html" style="color: #3498db; text-decoration: none; font-weight: 600;">Back to Menu</a>
+        </div>
+
+        <div class="mcq-box" id="q1" data-correct="1">
+            <p class="question">1. The article "the" is used -</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(1, 1)">A. to make something specific</li><li class="option-item" onclick="selectOption(1, 2)">B. to make things general</li><li class="option-item" onclick="selectOption(1, 3)">C. has no use or meaning</li><li class="option-item" onclick="selectOption(1, 4)">D. to make a thing real</li></ul>
+            <div class="explanation">✅ Correct Answer: A. to make something specific</div>
+        </div>
+
+        <div class="mcq-box" id="q2" data-correct="2">
+            <p class="question">2. England is ______ European country.</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(2, 1)">A. an</li><li class="option-item" onclick="selectOption(2, 2)">B. a</li><li class="option-item" onclick="selectOption(2, 3)">C. the</li><li class="option-item" onclick="selectOption(2, 4)">D. no article</li></ul>
+            <div class="explanation">✅ Correct Answer: B. a</div>
+        </div>
+
+        <div class="mcq-box" id="q3" data-correct="2">
+            <p class="question">3. A needle is ______ useful thing.</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(3, 1)">A. on</li><li class="option-item" onclick="selectOption(3, 2)">B. a</li><li class="option-item" onclick="selectOption(3, 3)">C. an</li><li class="option-item" onclick="selectOption(3, 4)">D. the</li></ul>
+            <div class="explanation">✅ Correct Answer: B. a</div>
+        </div>
+
+        <div class="mcq-box" id="q4" data-correct="1">
+            <p class="question">4. Benares is ______ holy city.</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(4, 1)">A. a</li><li class="option-item" onclick="selectOption(4, 2)">B. an</li><li class="option-item" onclick="selectOption(4, 3)">C. the</li><li class="option-item" onclick="selectOption(4, 4)">D. no article</li></ul>
+            <div class="explanation">✅ Correct Answer: A. a</div>
+        </div>
+
+        <div class="mcq-box" id="q5" data-correct="2">
+            <p class="question">5. ______ child needs love.</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(5, 1)">A. The</li><li class="option-item" onclick="selectOption(5, 2)">B. A</li><li class="option-item" onclick="selectOption(5, 3)">C. One</li><li class="option-item" onclick="selectOption(5, 4)">D. All</li></ul>
+            <div class="explanation">✅ Correct Answer: B. A</div>
+        </div>
+
+        <div class="mcq-box" id="q6" data-correct="2">
+            <p class="question">6. He has said to me, "I shall go out but will stay". Make it indirect speech.</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(6, 1)">A. He has told me that he would go out but I should stay.</li><li class="option-item" onclick="selectOption(6, 2)">B. He has told me that he will go out but I shall stay.</li><li class="option-item" onclick="selectOption(6, 3)">C. He told me that he will go out but I shall stay.</li><li class="option-item" onclick="selectOption(6, 4)">D. He has said me that he would go out but I would stay.</li></ul>
+            <div class="explanation">✅ Correct Answer: B. He has told me that he will go out but I shall stay.</div>
+        </div>
+
+        <div class="mcq-box" id="q7" data-correct="4">
+            <p class="question">7. Rahim said, "I am ill".</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(7, 1)">A. Rahim said that he is ill.</li><li class="option-item" onclick="selectOption(7, 2)">B. Rahim told about his illness.</li><li class="option-item" onclick="selectOption(7, 3)">C. Rahim described that his state of health.</li><li class="option-item" onclick="selectOption(7, 4)">D. Rahim said that he was ill.</li></ul>
+            <div class="explanation">✅ Correct Answer: D. Rahim said that he was ill.</div>
+        </div>
+
+        <div class="mcq-box" id="q8" data-correct="3">
+            <p class="question">8. Dhaka is ______ largest city In Bangladesh.</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(8, 1)">A. a</li><li class="option-item" onclick="selectOption(8, 2)">B. an</li><li class="option-item" onclick="selectOption(8, 3)">C. the</li><li class="option-item" onclick="selectOption(8, 4)">D. to</li></ul>
+            <div class="explanation">✅ Correct Answer: C. the</div>
+        </div>
+
+        <div class="mcq-box" id="q9" data-correct="3">
+            <p class="question">9. You said to me, "You are right"? Indirect from is-</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(9, 1)">A. You told that you are right</li><li class="option-item" onclick="selectOption(9, 2)">B. You told me that I am right.</li><li class="option-item" onclick="selectOption(9, 3)">C. You told me that I was right.</li><li class="option-item" onclick="selectOption(9, 4)">D. You told me that you were right.</li></ul>
+            <div class="explanation">✅ Correct Answer: C. You told me that I was right.</div>
+        </div>
+
+        <div class="mcq-box" id="q10" data-correct="4">
+            <p class="question">10. He joined ______ army.</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(10, 1)">A. in</li><li class="option-item" onclick="selectOption(10, 2)">B. of</li><li class="option-item" onclick="selectOption(10, 3)">C. in the</li><li class="option-item" onclick="selectOption(10, 4)">D. the</li></ul>
+            <div class="explanation">✅ Correct Answer: D. the</div>
+        </div>
+
+        <div class="mcq-box" id="q11" data-correct="3">
+            <p class="question">11. This is ______ better of ______ two.</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(11, 1)">A. a, an</li><li class="option-item" onclick="selectOption(11, 2)">B. a, a</li><li class="option-item" onclick="selectOption(11, 3)">C. the, the</li><li class="option-item" onclick="selectOption(11, 4)">D. x, the</li></ul>
+            <div class="explanation">✅ Correct Answer: C. the, the</div>
+        </div>
+
+        <div class="mcq-box" id="q12" data-correct="3">
+            <p class="question">12. He is ______ man of the match/series.</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(12, 1)">A. an</li><li class="option-item" onclick="selectOption(12, 2)">B. a</li><li class="option-item" onclick="selectOption(12, 3)">C. the</li><li class="option-item" onclick="selectOption(12, 4)">D. None</li></ul>
+            <div class="explanation">✅ Correct Answer: C. the</div>
+        </div>
+
+        <div class="mcq-box" id="q13" data-correct="1">
+            <p class="question">13. ______ Andamans are in ______ Indian ocean.</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(13, 1)">A. The, the</li><li class="option-item" onclick="selectOption(13, 2)">B. The, a</li><li class="option-item" onclick="selectOption(13, 3)">C. The, an</li><li class="option-item" onclick="selectOption(13, 4)">D. A, a</li></ul>
+            <div class="explanation">✅ Correct Answer: A. The, the</div>
+        </div>
+
+        <div class="mcq-box" id="q14" data-correct="1">
+            <p class="question">14. " All his pupils like him".</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(14, 1)">A. He is liked by all his pupils</li><li class="option-item" onclick="selectOption(14, 2)">B. He was liked by all his pupils</li><li class="option-item" onclick="selectOption(14, 3)">C. He is likes by all his pupils</li><li class="option-item" onclick="selectOption(14, 4)">D. He is being liked by all his pupils</li></ul>
+            <div class="explanation">✅ Correct Answer: A. He is liked by all his pupils</div>
+        </div>
+
+        <div class="mcq-box" id="q15" data-correct="3">
+            <p class="question">15. The best passive form of the sentence: "We don't like idle people."</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(15, 1)">A. We are not liked by idle people.</li><li class="option-item" onclick="selectOption(15, 2)">B. Idle people are not like us</li><li class="option-item" onclick="selectOption(15, 3)">C. Idle people are not liked by us</li><li class="option-item" onclick="selectOption(15, 4)">D. Idle people are not of our liking</li></ul>
+            <div class="explanation">✅ Correct Answer: C. Idle people are not liked by us</div>
+        </div>
+
+        <div class="mcq-box" id="q16" data-correct="2">
+            <p class="question">16. Cats kill mice. Make it passive voice.</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(16, 1)">A. Mice is killed by cats</li><li class="option-item" onclick="selectOption(16, 2)">B. Mice are killed by cats</li><li class="option-item" onclick="selectOption(16, 3)">C. Mice have been killed by cats</li><li class="option-item" onclick="selectOption(16, 4)">D. Mice are being killed by cats</li></ul>
+            <div class="explanation">✅ Correct Answer: B. Mice are killed by cats</div>
+        </div>
+
+        <div class="mcq-box" id="q17" data-correct="3">
+            <p class="question">17. "You will be helped by me." বাক্যটির Active form হবে -</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(17, 1)">A. I shall have helped you</li><li class="option-item" onclick="selectOption(17, 2)">B. I should help you</li><li class="option-item" onclick="selectOption(17, 3)">C. I shall help you</li><li class="option-item" onclick="selectOption(17, 4)">D. I shall have helped you</li></ul>
+            <div class="explanation">✅ Correct Answer: C. I shall help you</div>
+        </div>
+
+        <div class="mcq-box" id="q18" data-correct="2">
+            <p class="question">18. He has given me a book ( into passive voice ).</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(18, 1)">A. A book was given to me by him</li><li class="option-item" onclick="selectOption(18, 2)">B. A book has been given to me by him</li><li class="option-item" onclick="selectOption(18, 3)">C. A book has given to me by him</li><li class="option-item" onclick="selectOption(18, 4)">D. A book had been given to me by him</li></ul>
+            <div class="explanation">✅ Correct Answer: B. A book has been given to me by him</div>
+        </div>
+
+        <div class="mcq-box" id="q19" data-correct="3">
+            <p class="question">19. "The cow gives us milk". The correct passive form is -</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(19, 1)">A. We are being given milk by the cow</li><li class="option-item" onclick="selectOption(19, 2)">B. We were given milk by the cow</li><li class="option-item" onclick="selectOption(19, 3)">C. Milk is given to us by the cow</li><li class="option-item" onclick="selectOption(19, 4)">D. Milk is being given to us by the cow</li></ul>
+            <div class="explanation">✅ Correct Answer: C. Milk is given to us by the cow</div>
+        </div>
+
+        <div class="mcq-box" id="q20" data-correct="1">
+            <p class="question">20. Arif told us that he had waited an hour. বাক্যটির direct speech হবে-</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(20, 1)">A. Arif said to us, I waited an hour.'</li><li class="option-item" onclick="selectOption(20, 2)">B. Arif said to us, 'I have been waiting an hour,'</li><li class="option-item" onclick="selectOption(20, 3)">C. Arif said to us, 'I had to wait an hour.</li><li class="option-item" onclick="selectOption(20, 4)">D. Arif told to us, 'I have waited an hour.'</li></ul>
+            <div class="explanation">✅ Correct Answer: A. Arif said to us, I waited an hour.'</div>
+        </div>
+
+        <div class="mcq-box" id="q21" data-correct="1">
+            <p class="question">21. He said to me, "Regular exercise is good for health." Make it indirect speech.</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(21, 1)">A. He told me that regular exercise is good for health.</li><li class="option-item" onclick="selectOption(21, 2)">B. He told me that regular exercise is to be good for health.</li><li class="option-item" onclick="selectOption(21, 3)">C. He told me that regular exercise was good for health.</li><li class="option-item" onclick="selectOption(21, 4)">D. He told me that regular exercise is best for health.</li></ul>
+            <div class="explanation">✅ Correct Answer: A. He told me that regular exercise is good for health.</div>
+        </div>
+
+        <div class="mcq-box" id="q22" data-correct="1">
+            <p class="question">22. The Feminine of 'Ram' is-</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(22, 1)">A. Ewe</li><li class="option-item" onclick="selectOption(22, 2)">B. Hind</li><li class="option-item" onclick="selectOption(22, 3)">C. Mare</li><li class="option-item" onclick="selectOption(22, 4)">D. Sow</li></ul>
+            <div class="explanation">✅ Correct Answer: A. Ewe</div>
+        </div>
+
+        <div class="mcq-box" id="q23" data-correct="4">
+            <p class="question">23. Select the masculine gender.</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(23, 1)">A. Bitch</li><li class="option-item" onclick="selectOption(23, 2)">B. Witch</li><li class="option-item" onclick="selectOption(23, 3)">C. Doe</li><li class="option-item" onclick="selectOption(23, 4)">D. Drake</li></ul>
+            <div class="explanation">✅ Correct Answer: D. Drake</div>
+        </div>
+
+        <div class="mcq-box" id="q24" data-correct="2">
+            <p class="question">24. Feminine gender of 'Wizard' is-</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(24, 1)">A. Wizardess</li><li class="option-item" onclick="selectOption(24, 2)">B. Witch</li><li class="option-item" onclick="selectOption(24, 3)">C. Acrobat</li><li class="option-item" onclick="selectOption(24, 4)">D. Female wizard</li></ul>
+            <div class="explanation">✅ Correct Answer: B. Witch</div>
+        </div>
+
+        <div class="mcq-box" id="q25" data-correct="2">
+            <p class="question">25. Opposite gender of 'lady' is ______</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(25, 1)">A. baroness</li><li class="option-item" onclick="selectOption(25, 2)">B. lord</li><li class="option-item" onclick="selectOption(25, 3)">C. duchess</li><li class="option-item" onclick="selectOption(25, 4)">D. laddie</li></ul>
+            <div class="explanation">✅ Correct Answer: B. lord</div>
+        </div>
+
+        <div class="mcq-box" id="q26" data-correct="3">
+            <p class="question">26. Which of the following is in feminine gender?</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(26, 1)">A. Host</li><li class="option-item" onclick="selectOption(26, 2)">B. Cock</li><li class="option-item" onclick="selectOption(26, 3)">C. Mare</li><li class="option-item" onclick="selectOption(26, 4)">D. Drake</li></ul>
+            <div class="explanation">✅ Correct Answer: C. Mare</div>
+        </div>
+
+        <div class="mcq-box" id="q27" data-correct="2">
+            <p class="question">27. Feminine gender of 'cock' is:</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(27, 1)">A. cocks</li><li class="option-item" onclick="selectOption(27, 2)">B. hen</li><li class="option-item" onclick="selectOption(27, 3)">C. crow</li><li class="option-item" onclick="selectOption(27, 4)">D. he-cocks</li></ul>
+            <div class="explanation">✅ Correct Answer: B. hen</div>
+        </div>
+
+        <div class="mcq-box" id="q28" data-correct="3">
+            <p class="question">28. The masculine gender of the word 'spinster' is-</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(28, 1)">A. Unattached</li><li class="option-item" onclick="selectOption(28, 2)">B. Single</li><li class="option-item" onclick="selectOption(28, 3)">C. Bachelor</li><li class="option-item" onclick="selectOption(28, 4)">D. Free</li></ul>
+            <div class="explanation">✅ Correct Answer: C. Bachelor</div>
+        </div>
+
+        <div class="mcq-box" id="q29" data-correct="2">
+            <p class="question">29. What is the masculine form of 'Bee'?</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(29, 1)">A. Hart</li><li class="option-item" onclick="selectOption(29, 2)">B. Drone</li><li class="option-item" onclick="selectOption(29, 3)">C. Stag</li><li class="option-item" onclick="selectOption(29, 4)">D. Colt</li></ul>
+            <div class="explanation">✅ Correct Answer: B. Drone</div>
+        </div>
+
+        <div class="mcq-box" id="q30" data-correct="2">
+            <p class="question">30. Which one is in the opposite gender of 'lad'?</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(30, 1)">A. Boy</li><li class="option-item" onclick="selectOption(30, 2)">B. Girl</li><li class="option-item" onclick="selectOption(30, 3)">C. Guy</li><li class="option-item" onclick="selectOption(30, 4)">D. Lady</li></ul>
+            <div class="explanation">✅ Correct Answer: B. Girl</div>
+        </div>
+
+        <div class="mcq-box" id="q31" data-correct="1">
+            <p class="question">31. Gender কত প্রকার?</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(31, 1)">A. চার প্রকার</li><li class="option-item" onclick="selectOption(31, 2)">B. তিন প্রকার</li><li class="option-item" onclick="selectOption(31, 3)">C. দুই প্রকার</li><li class="option-item" onclick="selectOption(31, 4)">D. পাঁচ প্রকার</li></ul>
+            <div class="explanation">✅ Correct Answer: A. চার প্রকার</div>
+        </div>
+
+        <div class="mcq-box" id="q32" data-correct="1">
+            <p class="question">32. The feminine form of the word "Author" is-</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(32, 1)">A. Authoress</li><li class="option-item" onclick="selectOption(32, 2)">B. Authores</li><li class="option-item" onclick="selectOption(32, 3)">C. Authors</li><li class="option-item" onclick="selectOption(32, 4)">D. Authorss</li></ul>
+            <div class="explanation">✅ Correct Answer: A. Authoress</div>
+        </div>
+
+        <div class="mcq-box" id="q33" data-correct="4">
+            <p class="question">33. What is the plural number of 'ovum'?</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(33, 1)">A. ovams</li><li class="option-item" onclick="selectOption(33, 2)">B. ovumes</li><li class="option-item" onclick="selectOption(33, 3)">C. ovums</li><li class="option-item" onclick="selectOption(33, 4)">D. ova</li></ul>
+            <div class="explanation">✅ Correct Answer: D. ova</div>
+        </div>
+
+        <div class="mcq-box" id="q34" data-correct="2">
+            <p class="question">34. The plural of 'referendum' is-</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(34, 1)">A. referendums</li><li class="option-item" onclick="selectOption(34, 2)">B. referenda</li><li class="option-item" onclick="selectOption(34, 3)">C. referendy</li><li class="option-item" onclick="selectOption(34, 4)">D. referendies</li></ul>
+            <div class="explanation">✅ Correct Answer: B. referenda</div>
+        </div>
+
+        <div class="mcq-box" id="q35" data-correct="2">
+            <p class="question">35. What is the plural of 'Spectrum'?</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(35, 1)">A. Spectrums</li><li class="option-item" onclick="selectOption(35, 2)">B. Spectra</li><li class="option-item" onclick="selectOption(35, 3)">C. Specis</li><li class="option-item" onclick="selectOption(35, 4)">D. Imagery</li></ul>
+            <div class="explanation">✅ Correct Answer: B. Spectra</div>
+        </div>
+
+        <div class="mcq-box" id="q36" data-correct="2">
+            <p class="question">36. The singular form of 'phenomena' is-</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(36, 1)">A. Phenomenna</li><li class="option-item" onclick="selectOption(36, 2)">B. phenomenon</li><li class="option-item" onclick="selectOption(36, 3)">C. phenomenoe</li><li class="option-item" onclick="selectOption(36, 4)">D. phenom</li></ul>
+            <div class="explanation">✅ Correct Answer: B. phenomenon</div>
+        </div>
+
+        <div class="mcq-box" id="q37" data-correct="4">
+            <p class="question">37. The plural from of 'Oasis' is-</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(37, 1)">A. oasises</li><li class="option-item" onclick="selectOption(37, 2)">B. oasis</li><li class="option-item" onclick="selectOption(37, 3)">C. oasess</li><li class="option-item" onclick="selectOption(37, 4)">D. oases</li></ul>
+            <div class="explanation">✅ Correct Answer: D. oases</div>
+        </div>
+
+        <div class="mcq-box" id="q38" data-correct="3">
+            <p class="question">38. Find out the right plural form of 'Focus'</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(38, 1)">A. Focu</li><li class="option-item" onclick="selectOption(38, 2)">B. Focuses</li><li class="option-item" onclick="selectOption(38, 3)">C. Foci</li><li class="option-item" onclick="selectOption(38, 4)">D. Focis</li></ul>
+            <div class="explanation">✅ Correct Answer: C. Foci</div>
+        </div>
+
+        <div class="mcq-box" id="q39" data-correct="1">
+            <p class="question">39. The plural of "stimulus" is-</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(39, 1)">A. stimuli</li><li class="option-item" onclick="selectOption(39, 2)">B. stimulusis</li><li class="option-item" onclick="selectOption(39, 3)">C. stimula</li><li class="option-item" onclick="selectOption(39, 4)">D. stimulii</li></ul>
+            <div class="explanation">✅ Correct Answer: A. stimuli</div>
+        </div>
+
+        <div class="mcq-box" id="q40" data-correct="2">
+            <p class="question">40. The plural form of 'dogma' is-</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(40, 1)">A. dogma</li><li class="option-item" onclick="selectOption(40, 2)">B. dogmata</li><li class="option-item" onclick="selectOption(40, 3)">C. dogmum</li><li class="option-item" onclick="selectOption(40, 4)">D. dogmac</li></ul>
+            <div class="explanation">✅ Correct Answer: B. dogmata</div>
+        </div>
+
+        <div class="mcq-box" id="q41" data-correct="4">
+            <p class="question">41. What is the plural form of 'Mr.'?</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(41, 1)">A. Mrs.</li><li class="option-item" onclick="selectOption(41, 2)">B. Midters</li><li class="option-item" onclick="selectOption(41, 3)">C. Ms.</li><li class="option-item" onclick="selectOption(41, 4)">D. Messrs.</li></ul>
+            <div class="explanation">✅ Correct Answer: D. Messrs.</div>
+        </div>
+
+        <div class="mcq-box" id="q42" data-correct="2">
+            <p class="question">42. Which one is singular?</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(42, 1)">A. Agenda</li><li class="option-item" onclick="selectOption(42, 2)">B. Hypothesis</li><li class="option-item" onclick="selectOption(42, 3)">C. Media</li><li class="option-item" onclick="selectOption(42, 4)">D. Syllabi</li></ul>
+            <div class="explanation">✅ Correct Answer: B. Hypothesis</div>
+        </div>
+
+        <div class="mcq-box" id="q43" data-correct="3">
+            <p class="question">43. Which of the words is plural?</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(43, 1)">A. Formula</li><li class="option-item" onclick="selectOption(43, 2)">B. Vertex</li><li class="option-item" onclick="selectOption(43, 3)">C. Memoranda</li><li class="option-item" onclick="selectOption(43, 4)">D. Agendum</li></ul>
+            <div class="explanation">✅ Correct Answer: C. Memoranda</div>
+        </div>
+
+        <div class="mcq-box" id="q44" data-correct="2">
+            <p class="question">44. Which one is in singular number?</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(44, 1)">A. Phenomena</li><li class="option-item" onclick="selectOption(44, 2)">B. Criterion</li><li class="option-item" onclick="selectOption(44, 3)">C. Oases</li><li class="option-item" onclick="selectOption(44, 4)">D. Ultimata</li></ul>
+            <div class="explanation">✅ Correct Answer: B. Criterion</div>
+        </div>
+
+        <div class="mcq-box" id="q45" data-correct="2">
+            <p class="question">45. Which one is plural?</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(45, 1)">A. princess</li><li class="option-item" onclick="selectOption(45, 2)">B. princes</li><li class="option-item" onclick="selectOption(45, 3)">C. mattress</li><li class="option-item" onclick="selectOption(45, 4)">D. news</li></ul>
+            <div class="explanation">✅ Correct Answer: B. princes</div>
+        </div>
+
+        <div class="mcq-box" id="q46" data-correct="1">
+            <p class="question">46. 'He is going to set up a school.' বাক্যটির সঠিক পরিবর্তিত voice হবে-</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(46, 1)">A. A school is going to be set up by him</li><li class="option-item" onclick="selectOption(46, 2)">B. A school is being set up by him</li><li class="option-item" onclick="selectOption(46, 3)">C. A school is gone to be set up by him</li><li class="option-item" onclick="selectOption(46, 4)">D. A school has been going to be set up by him</li></ul>
+            <div class="explanation">✅ Correct Answer: A. A school is going to be set up by him</div>
+        </div>
+
+        <div class="mcq-box" id="q47" data-correct="3">
+            <p class="question">47. You are to colour this picture. The passive form:</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(47, 1)">A. This picture has to be coloured by you</li><li class="option-item" onclick="selectOption(47, 2)">B. This picture is to be colour by you</li><li class="option-item" onclick="selectOption(47, 3)">C. This picture is to be coloured by you</li><li class="option-item" onclick="selectOption(47, 4)">D. This picture is being coloured by you</li></ul>
+            <div class="explanation">✅ Correct Answer: C. This picture is to be coloured by you</div>
+        </div>
+
+        <div class="mcq-box" id="q48" data-correct="4">
+            <p class="question">48. 'Obey your parents' The passive form is -</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(48, 1)">A. Your parents were obeyed.</li><li class="option-item" onclick="selectOption(48, 2)">B. Your parents be obeyed.</li><li class="option-item" onclick="selectOption(48, 3)">C. Your parents are to be obeyed.</li><li class="option-item" onclick="selectOption(48, 4)">D. Let your parents be obeyed</li></ul>
+            <div class="explanation">✅ Correct Answer: D. Let your parents be obeyed</div>
+        </div>
+
+        <div class="mcq-box" id="q49" data-correct="1">
+            <p class="question">49. Let her sing a song. Passive form is-</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(49, 1)">A. Let a song be sung by her</li><li class="option-item" onclick="selectOption(49, 2)">B. Let a song be sang by her</li><li class="option-item" onclick="selectOption(49, 3)">C. Let a song sing by her</li><li class="option-item" onclick="selectOption(49, 4)">D. Let a song sung by her</li></ul>
+            <div class="explanation">✅ Correct Answer: A. Let a song be sung by her</div>
+        </div>
+
+        <div class="mcq-box" id="q50" data-correct="1">
+            <p class="question">50. 'Spread a mat on it' Passive of it is -</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(50, 1)">A. A mat should be spread on it.</li><li class="option-item" onclick="selectOption(50, 2)">B. A mat should have been spread on it by you</li><li class="option-item" onclick="selectOption(50, 3)">C. A mat be spread on it.</li><li class="option-item" onclick="selectOption(50, 4)">D. Have a mat spread on it.</li></ul>
+            <div class="explanation">✅ Correct Answer: A. A mat should be spread on it.</div>
+        </div>
+
+        <div class="submit-container" id="submitContainer">
+            <button class="big-submit-btn" onclick="submitExam()">Submit Exam</button>
+        </div>
+
+    </div>
+
+    <div class="dark-toggle-btn" onclick="toggleDarkMode()">
+        <i class="fas fa-moon" id="darkIcon"></i>
+    </div>
+
+    <script>
+        let timeLeft = 30 * 60;
+        const timerDisplay = document.getElementById('timer');
+        let countdown;
+
+        // Start Timer
+        countdown = setInterval(() => {
+            let minutes = Math.floor(timeLeft / 60);
+            let seconds = timeLeft % 60;
+            seconds = seconds < 10 ? '0' + seconds : seconds;
+            timerDisplay.innerText = `${minutes}:${seconds}`;
+            
+            if (timeLeft <= 0) {
+                clearInterval(countdown);
+                submitExam();
+            }
+            timeLeft--;
+        }, 1000);
+
+        let userAnswers = {};
+
+        function selectOption(qId, optionIdx) {
+            const questionBox = document.getElementById(`q${qId}`);
+            if (questionBox.classList.contains('submitted')) return;
+
+            const options = questionBox.querySelectorAll('.option-item');
+            options.forEach(opt => opt.classList.remove('selected'));
+
+            options[optionIdx - 1].classList.add('selected');
+            userAnswers[qId] = optionIdx;
+        }
+
+        function submitExam() {
+            clearInterval(countdown);
+            
+            let correctCount = 0;
+            let wrongCount = 0;
+            let skippedCount = 0;
+            
+            const allQuestions = document.querySelectorAll('.mcq-box');
+            
+            allQuestions.forEach((questionBox, index) => {
+                const qId = index + 1;
+                const actualId = parseInt(questionBox.id.replace('q', ''));
+                
+                const correctAns = parseInt(questionBox.getAttribute('data-correct'));
+                const userAns = userAnswers[actualId];
+                const options = questionBox.querySelectorAll('.option-item');
+                const explanation = questionBox.querySelector('.explanation');
+
+                questionBox.classList.add('submitted');
+
+                if (userAns) {
+                    if (userAns === correctAns) {
+                        correctCount++;
+                        options[userAns - 1].classList.add('correct');
+                        questionBox.classList.add('status-correct');
+                    } else {
+                        wrongCount++;
+                        options[userAns - 1].classList.add('wrong');
+                        options[correctAns - 1].classList.add('correct');
+                        questionBox.classList.add('status-wrong');
+                    }
+                } else {
+                    skippedCount++;
+                    options[correctAns - 1].classList.add('correct');
+                    questionBox.classList.add('status-skipped');
+                }
+                
+                explanation.style.display = 'block';
+            });
+
+            // Calculate Score with 0.50 negative marking
+            const negativeMarks = wrongCount * 0.50;
+            const finalScore = correctCount - negativeMarks;
+
+            // UI Changes
+            document.getElementById('introHeader').style.display = 'none';
+            document.getElementById('submitContainer').style.display = 'none';
+            document.getElementById('stickyHeader').style.display = 'none';
+            document.getElementById('resultDashboard').style.display = 'block';
+
+            // Set Scores
+            document.getElementById('finalScoreDisplay').innerText = finalScore.toFixed(2);
+            document.getElementById('negativeInfo').innerText = `(-${negativeMarks.toFixed(2)} for wrong answers)`;
+            
+            document.getElementById('countCorrect').innerText = correctCount;
+            document.getElementById('countWrong').innerText = wrongCount;
+            document.getElementById('countSkipped').innerText = skippedCount;
+
+            // Scroll to Top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Filter Logic
+        function filterQuestions(filterType, btnElement) {
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            btnElement.classList.add('active');
+
+            const allQuestions = document.querySelectorAll('.mcq-box');
+
+            allQuestions.forEach(box => {
+                box.style.display = 'none';
+
+                if (filterType === 'all') {
+                    box.style.display = 'block';
+                } else if (filterType === 'correct' && box.classList.contains('status-correct')) {
+                    box.style.display = 'block';
+                } else if (filterType === 'wrong' && box.classList.contains('status-wrong')) {
+                    box.style.display = 'block';
+                } else if (filterType === 'skipped' && box.classList.contains('status-skipped')) {
+                    box.style.display = 'block';
+                }
+            });
+        }
+
+        // Dark Mode Logic
+        function toggleDarkMode() {
+            const body = document.body;
+            const icon = document.getElementById('darkIcon');
+            body.classList.toggle('dark-mode');
+            if (body.classList.contains('dark-mode')) {
+                icon.classList.remove('fa-moon');
+                icon.classList.add('fa-sun');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                icon.classList.remove('fa-sun');
+                icon.classList.add('fa-moon');
+                localStorage.setItem('theme', 'light');
+            }
+        }
+
+        window.onload = function() {
+            if (localStorage.getItem('theme') === 'dark') {
+                document.body.classList.add('dark-mode');
+                document.getElementById('darkIcon').classList.remove('fa-moon');
+                document.getElementById('darkIcon').classList.add('fa-sun');
+            }
+        }
+    </script>
+
+</body>
+</html>
