@@ -9,46 +9,102 @@
     
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Hind Siliguri', sans-serif; }
-        body { background-color: #f4f6f9; color: #333; }
+        body { background-color: #f4f6f9; color: #333; padding-bottom: 50px; }
 
+        /* Header */
         header { background: #fff; padding: 15px 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 1000; }
         .navbar { max-width: 800px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
         .logo { font-size: 20px; font-weight: 700; color: #2c3e50; text-decoration: none; }
         .back-btn { text-decoration: none; color: #3498db; font-weight: 600; }
 
         .container { max-width: 800px; margin: 30px auto; padding: 0 20px; }
-        .page-title { text-align: center; margin-bottom: 30px; color: #2c3e50; }
+        
+        .hero-section {
+            text-align: center;
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            padding: 30px 20px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 20px rgba(52, 152, 219, 0.2);
+        }
+        .hero-section h1 { font-size: 28px; margin-bottom: 10px; }
+        .hero-section p { opacity: 0.9; font-size: 16px; }
 
-        /* গ্রিড লেআউট - ড্যাশবোর্ড বাটন */
+        /* Grid Layout */
         .day-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
             gap: 15px;
         }
 
         .day-box {
             background: white;
-            padding: 20px 10px;
-            border-radius: 10px;
+            padding: 15px 10px;
+            border-radius: 12px;
             text-align: center;
             text-decoration: none;
             color: #2c3e50;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
             transition: 0.3s;
             border: 1px solid #eee;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            height: 120px;
+            position: relative;
+            overflow: hidden;
         }
 
         .day-box:hover {
             transform: translateY(-5px);
-            background: #3498db;
-            color: white;
-            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            border-color: #3498db;
         }
 
-        .day-number { font-size: 24px; font-weight: 700; display: block; margin-bottom: 5px; }
-        .day-topic { font-size: 12px; opacity: 0.8; display: block; }
+        .day-number { 
+            font-size: 18px; 
+            font-weight: 700; 
+            color: #3498db; 
+            background: #eaf6ff;
+            width: 40px;
+            height: 40px;
+            line-height: 40px;
+            border-radius: 50%;
+            margin: 0 auto 10px;
+        }
         
-        .locked { opacity: 0.6; cursor: not-allowed; background: #eee; }
+        .day-topic { 
+            font-size: 13px; 
+            font-weight: 600; 
+            line-height: 1.4;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        /* Active vs Inactive */
+        .active-day { border-bottom: 4px solid #27ae60; }
+        .inactive-day { opacity: 0.7; cursor: not-allowed; border-bottom: 4px solid #bdc3c7; }
+        .model-test { border-bottom: 4px solid #e74c3c; background: #fff5f5; }
+        .model-test .day-number { background: #ffebeb; color: #e74c3c; }
+
+        /* Dark Mode */
+        .dark-toggle-btn {
+            position: fixed; bottom: 20px; right: 20px; background: #2c3e50; color: white;
+            width: 50px; height: 50px; border-radius: 50%; display: flex; justify-content: center;
+            align-items: center; font-size: 24px; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            z-index: 9999; border: 2px solid white;
+        }
+
+        body.dark-mode { background-color: #121212 !important; color: #e0e0e0 !important; }
+        body.dark-mode header, body.dark-mode .day-box { background: #1e1e1e !important; border-color: #333 !important; color: #e0e0e0 !important; }
+        body.dark-mode .logo, body.dark-mode .back-btn { color: #64b5f6 !important; }
+        body.dark-mode .day-number { background: #2c3e50 !important; color: #64b5f6 !important; }
+        body.dark-mode .model-test { background: #2c1e1e !important; }
+        body.dark-mode .hero-section { background: linear-gradient(135deg, #2c3e50, #000000) !important; }
+
     </style>
 </head>
 <body>
@@ -61,158 +117,196 @@
     </header>
 
     <div class="container">
-        <h2 class="page-title">৩০ দিনের স্টাডি প্ল্যান</h2>
+        
+        <div class="hero-section">
+            <h1>৩০ দিনের প্রাইমারি মিশন</h1>
+            <p>প্রতিদিন একটি করে অধ্যায় শেষ করুন এবং নিজেকে প্রস্তুত করুন</p>
+        </div>
         
         <div class="day-grid">
-            <a href="day01.html" class="day-box">
+            
+            <a href="day01.html" class="day-box active-day">
                 <span class="day-number">০১</span>
-                <span class="day-topic">বাংলা ভাষা ব্যাকরন ও সাহিত্য</span>
+                <span class="day-topic">বাংলা সাহিত্য ও ব্যাকরণ</span>
             </a>
 
-            <a href="day02.html" class="day-box">
+            <a href="day02.html" class="day-box active-day">
                 <span class="day-number">০২</span>
-                <span class="day-topic">English Verb & Tense</span>
+                <span class="day-topic">English Grammar & Lit.</span>
             </a>
 
-            <a href="#" class="day-box locked">
+            <a href="#" onclick="alert('শীঘ্রই আসছে...')" class="day-box inactive-day">
                 <span class="day-number">০৩</span>
-                <span class="day-topic">গণিত</span>
-            </a>
-            <a href="day04.html" class="day-box">
-                <span class="day-number">০৪</span>
-                <span class="day-topic">সাধারণ জ্ঞান - বাংলাদেশ বিষয়াবলী</span>
+                <span class="day-topic">গণিত (পাটিগণিত)</span>
             </a>
 
-            <a href="day05.html" class="day-box">
-                <span class="day-number">০৫</span>
-                <span class="day-topic">আন্তর্জাতিক বিষয়াবলী - প্রাচীন সভ্যতা ও সংস্থা</span>
+            <a href="day04.html" class="day-box active-day">
+                <span class="day-number">০৪</span>
+                <span class="day-topic">বাংলাদেশ বিষয়াবলী</span>
             </a>
-            </div>
+
+            <a href="day05.html" class="day-box active-day">
+                <span class="day-number">০৫</span>
+                <span class="day-topic">আন্তর্জাতিক বিষয়াবলী</span>
+            </a>
+
+            <a href="#" onclick="alert('শীঘ্রই আসছে...')" class="day-box inactive-day">
+                <span class="day-number">০৬</span>
+                <span class="day-topic">বাংলা ব্যাকরণ (সন্ধি, কারক)</span>
+            </a>
+
+            <a href="#" onclick="alert('শীঘ্রই আসছে...')" class="day-box inactive-day">
+                <span class="day-number">০৭</span>
+                <span class="day-topic">বাংলা সাহিত্য (পঞ্চপাণ্ডব)</span>
+            </a>
+
+            <a href="#" onclick="alert('শীঘ্রই আসছে...')" class="day-box inactive-day">
+                <span class="day-number">০৮</span>
+                <span class="day-topic">English (Number, Gender)</span>
+            </a>
+
+            <a href="#" onclick="alert('শীঘ্রই আসছে...')" class="day-box inactive-day">
+                <span class="day-number">০৯</span>
+                <span class="day-topic">গণিত (বীজগণিত ও জ্যামিতি)</span>
+            </a>
+
+            <a href="#" onclick="alert('শীঘ্রই আসছে...')" class="day-box inactive-day">
+                <span class="day-number">১০</span>
+                <span class="day-topic">বাংলাদেশ (সাম্প্রতিক ও সরকার)</span>
+            </a>
+
+            <a href="#" onclick="alert('শীঘ্রই আসছে...')" class="day-box inactive-day">
+                <span class="day-number">১১</span>
+                <span class="day-topic">বাংলা ব্যাকরণ ও সাহিত্য</span>
+            </a>
+
+            <a href="day12.html" class="day-box active-day">
+                <span class="day-number">১২</span>
+                <span class="day-topic">English (Synonym, Antonym)</span>
+            </a>
+
+            <a href="#" onclick="alert('শীঘ্রই আসছে...')" class="day-box inactive-day">
+                <span class="day-number">১৩</span>
+                <span class="day-topic">গণিত (সূচক, লগারিদম)</span>
+            </a>
+
+            <a href="#" onclick="alert('শীঘ্রই আসছে...')" class="day-box inactive-day">
+                <span class="day-number">১৪</span>
+                <span class="day-topic">বাংলা ব্যাকরণ (প্রকৃতি-প্রত্যয়)</span>
+            </a>
+
+            <a href="#" onclick="alert('শীঘ্রই আসছে...')" class="day-box inactive-day">
+                <span class="day-number">১৫</span>
+                <span class="day-topic">বাংলা সাহিত্য (আধুনিক যুগ)</span>
+            </a>
+
+            <a href="#" onclick="alert('শীঘ্রই আসছে...')" class="day-box inactive-day">
+                <span class="day-number">১৬</span>
+                <span class="day-topic">বিজ্ঞান (জীব ও ভৌত)</span>
+            </a>
+
+            <a href="#" onclick="alert('শীঘ্রই আসছে...')" class="day-box inactive-day">
+                <span class="day-number">১৭</span>
+                <span class="day-topic">বাংলাদেশ (অর্জন ও অর্থনীতি)</span>
+            </a>
+
+            <a href="#" onclick="alert('শীঘ্রই আসছে...')" class="day-box inactive-day">
+                <span class="day-number">১৮</span>
+                <span class="day-topic">তথ্য ও যোগাযোগ প্রযুক্তি</span>
+            </a>
+
+            <a href="#" onclick="alert('শীঘ্রই আসছে...')" class="day-box inactive-day">
+                <span class="day-number">১৯</span>
+                <span class="day-topic">আন্তর্জাতিক (সংগঠন ও মুদ্রা)</span>
+            </a>
+
+            <a href="#" onclick="alert('শীঘ্রই আসছে...')" class="day-box inactive-day">
+                <span class="day-number">২০</span>
+                <span class="day-topic">বাংলা ব্যাকরণ (সমাস, বাচ্য)</span>
+            </a>
+
+            <a href="#" onclick="alert('শীঘ্রই আসছে...')" class="day-box inactive-day">
+                <span class="day-number">২১</span>
+                <span class="day-topic">বাংলা সাহিত্য (উপন্যাস)</span>
+            </a>
+
+            <a href="#" onclick="alert('শীঘ্রই আসছে...')" class="day-box inactive-day">
+                <span class="day-number">২২</span>
+                <span class="day-topic">English Lit. (Periods)</span>
+            </a>
+
+            <a href="#" onclick="alert('শীঘ্রই আসছে...')" class="day-box inactive-day">
+                <span class="day-number">২৩</span>
+                <span class="day-topic">গণিত (পরিমিতি ও ধারা)</span>
+            </a>
+
+            <a href="#" onclick="alert('শীঘ্রই আসছে...')" class="day-box inactive-day">
+                <span class="day-number">২৪</span>
+                <span class="day-topic">বাংলাদেশ (সংবিধান)</span>
+            </a>
+
+            <a href="#" onclick="alert('শীঘ্রই আসছে...')" class="day-box inactive-day">
+                <span class="day-number">২৫</span>
+                <span class="day-topic">আন্তর্জাতিক (চুক্তি ও দিবস)</span>
+            </a>
+
+            <a href="#" onclick="alert('শীঘ্রই আসছে...')" class="day-box inactive-day">
+                <span class="day-number">২৬</span>
+                <span class="day-topic">ভূগোল ও পরিবেশ</span>
+            </a>
+
+            <a href="#" onclick="alert('শীঘ্রই আসছে...')" class="day-box inactive-day">
+                <span class="day-number">২৭</span>
+                <span class="day-topic">নৈতিকতা ও সুশাসন</span>
+            </a>
+
+            <a href="#" onclick="alert('শীঘ্রই আসছে...')" class="day-box inactive-day">
+                <span class="day-number">২৮</span>
+                <span class="day-topic">রিভিশন টেস্ট - ১</span>
+            </a>
+
+            <a href="#" onclick="alert('শীঘ্রই আসছে...')" class="day-box model-test">
+                <span class="day-number">২৯</span>
+                <span class="day-topic">পূর্ণাঙ্গ মডেল টেস্ট - ০১</span>
+            </a>
+
+            <a href="#" onclick="alert('শীঘ্রই আসছে...')" class="day-box model-test">
+                <span class="day-number">৩০</span>
+                <span class="day-topic">পূর্ণাঙ্গ মডেল টেস্ট - ০২</span>
+            </a>
+
+        </div>
     </div>
 
-    <style>
-    /* ডার্ক মোড বাটন ডিজাইন */
-    .dark-toggle-btn {
-        position: fixed;
-        bottom: 20px;
-        right: 20px;
-        background: #2c3e50;
-        color: white;
-        width: 50px;
-        height: 50px;
-        border-radius: 50%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        font-size: 24px;
-        cursor: pointer;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-        z-index: 9999;
-        transition: 0.3s;
-        border: 2px solid white;
-    }
-    .dark-toggle-btn:hover { transform: scale(1.1); background: #1a252f; }
+    <div class="dark-toggle-btn" onclick="toggleDarkMode()">
+        <i class="fas fa-moon" id="darkIcon"></i>
+    </div>
 
-    /* ডার্ক মোড কালার স্কিম */
-    body.dark-mode { background-color: #121212 !important; color: #e0e0e0 !important; }
-    
-    /* কার্ড এবং বক্সের কালার */
-    body.dark-mode .mcq-box, 
-    body.dark-mode .day-card, 
-    body.dark-mode .day-box,
-    body.dark-mode .header-card,
-    body.dark-mode .sticky-header,
-    body.dark-mode header,
-    body.dark-mode .result-dashboard,
-    body.dark-mode .card,
-    body.dark-mode .day-header { 
-        background: #1e1e1e !important; 
-        color: #e0e0e0 !important; 
-        border-color: #333 !important;
-        box-shadow: none !important;
-    }
-
-    /* হেডার কার্ড স্পেশাল কালার */
-    body.dark-mode .header-card { background: linear-gradient(135deg, #2c3e50, #000000) !important; }
-
-    /* টেক্সট কালার ফিক্স */
-    body.dark-mode .question, 
-    body.dark-mode .logo,
-    body.dark-mode h2, 
-    body.dark-mode h3 { color: #ffffff !important; }
-    
-    body.dark-mode .day-topic { color: #bbb !important; }
-
-    /* অপশন বাটন */
-    body.dark-mode .options li,
-    body.dark-mode .option-item { 
-        background-color: #2d2d2d !important; 
-        border-color: #444 !important; 
-        color: #ddd !important; 
-    }
-    
-    /* হোভার ইফেক্ট */
-    body.dark-mode .options li:hover,
-    body.dark-mode .option-item:hover { background-color: #3d3d3d !important; }
-
-    /* সিলেক্টেড অপশন */
-    body.dark-mode .option-item.selected { 
-        background-color: #2c3e50 !important; 
-        border-color: #3498db !important; 
-        color: #3498db !important;
-    }
-
-    /* বাটন ফিক্স */
-    body.dark-mode .search-box, 
-    body.dark-mode .search-box input { background: #2d2d2d !important; color: white !important; }
-    
-    /* টাইমার */
-    body.dark-mode .timer-badge, 
-    body.dark-mode .timer-box { background: #3e2723 !important; color: #ffab91 !important; }
-
-    /* রেজাল্ট বাটন */
-    body.dark-mode .score-box { background: #2d2d2d !important; color: white !important; }
-    body.dark-mode .score-label { color: #bbb !important; }
-    
-    /* লোগো এবং লিঙ্ক */
-    body.dark-mode a { color: #64b5f6 !important; }
-    body.dark-mode .back-btn { color: #64b5f6 !important; }
-    
-</style>
-
-<div class="dark-toggle-btn" onclick="toggleDarkMode()">
-    <i class="fas fa-moon" id="darkIcon"></i>
-</div>
-
-<script>
-    function toggleDarkMode() {
-        const body = document.body;
-        const icon = document.getElementById('darkIcon');
-        
-        // টগল ক্লাস
-        body.classList.toggle('dark-mode');
-        
-        // আইকন এবং সেভ করা
-        if (body.classList.contains('dark-mode')) {
-            icon.classList.remove('fa-moon');
-            icon.classList.add('fa-sun'); // সূর্যের আইকন দেখাবে
-            localStorage.setItem('theme', 'dark'); // মেমোরিতে সেভ থাকবে
-        } else {
-            icon.classList.remove('fa-sun');
-            icon.classList.add('fa-moon'); // চাঁদের আইকন দেখাবে
-            localStorage.setItem('theme', 'light');
+    <script>
+        function toggleDarkMode() {
+            const body = document.body;
+            const icon = document.getElementById('darkIcon');
+            body.classList.toggle('dark-mode');
+            
+            if (body.classList.contains('dark-mode')) {
+                icon.classList.remove('fa-moon');
+                icon.classList.add('fa-sun');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                icon.classList.remove('fa-sun');
+                icon.classList.add('fa-moon');
+                localStorage.setItem('theme', 'light');
+            }
         }
-    }
 
-    // পেজ লোড হলে চেক করবে আগে ডার্ক মোড ছিল কিনা
-    window.onload = function() {
-        if (localStorage.getItem('theme') === 'dark') {
-            document.body.classList.add('dark-mode');
-            document.getElementById('darkIcon').classList.remove('fa-moon');
-            document.getElementById('darkIcon').classList.add('fa-sun');
+        window.onload = function() {
+            if (localStorage.getItem('theme') === 'dark') {
+                document.body.classList.add('dark-mode');
+                document.getElementById('darkIcon').classList.remove('fa-moon');
+                document.getElementById('darkIcon').classList.add('fa-sun');
+            }
         }
-    }
-</script>
+    </script>
 
 </body>
 </html>
