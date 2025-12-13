@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Day 13 - গণিত মডেল টেস্ট</title>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Hind Siliguri', sans-serif; }
+        body { background-color: #f4f6f9; color: #333; padding-bottom: 50px; }
+
+        /* Sticky Timer */
+        .sticky-header {
+            background: #fff;
+            padding: 10px 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            text-align: center;
+        }
+        
+        .timer-badge {
+            font-size: 18px;
+            font-weight: 700;
+            color: #e74c3c;
+            background: #fdecec;
+            padding: 5px 20px;
+            border-radius: 50px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .container { max-width: 800px; margin: 20px auto; padding: 0 20px; }
+
+        /* Header Card */
+        .header-card {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white; padding: 30px; border-radius: 10px; text-align: center; margin-bottom: 25px;
+        }
+        .header-card h2 { font-size: 26px; margin-bottom: 10px; }
+        .exam-info { font-size: 14px; background: rgba(255,255,255,0.2); padding: 5px 15px; border-radius: 50px; display: inline-block; margin-top: 5px; }
+
+        /* Result Dashboard */
+        .result-dashboard {
+            display: none;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin-bottom: 25px;
+            border-top: 5px solid #3498db;
+        }
+
+        .score-box {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: inline-block;
+            min-width: 200px;
+        }
+
+        .final-score {
+            font-size: 42px;
+            font-weight: 700;
+            color: #3498db;
+            display: block;
+        }
+        
+        .score-label { font-size: 16px; color: #555; }
+        .negative-alert { font-size: 13px; color: #c0392b; margin-top: 5px; font-weight: 600; }
+
+        /* Filter Buttons */
+        .filter-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .filter-btn {
+            padding: 8px 16px;
+            border-radius: 8px;
+            border: 2px solid transparent;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: 0.2s;
+            font-size: 14px;
+        }
+
+        .btn-correct { background: #eafaf1; color: #27ae60; border-color: #27ae60; }
+        .btn-correct:hover, .btn-correct.active { background: #27ae60; color: white; }
+
+        .btn-wrong { background: #fdecec; color: #c0392b; border-color: #c0392b; }
+        .btn-wrong:hover, .btn-wrong.active { background: #c0392b; color: white; }
+
+        .btn-skipped { background: #fef9e7; color: #f39c12; border-color: #f39c12; }
+        .btn-skipped:hover, .btn-skipped.active { background: #f39c12; color: white; }
+
+        .btn-all { background: #eaf6ff; color: #3498db; border-color: #3498db; }
+        .btn-all:hover, .btn-all.active { background: #3498db; color: white; }
+
+        /* Question Box */
+        .mcq-box { 
+            background: white; 
+            padding: 20px; 
+            border-radius: 8px; 
+            margin-bottom: 15px; 
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        
+        .question { font-size: 18px; font-weight: 600; margin-bottom: 15px; color: #2c3e50; }
+        
+        .options { list-style: none; }
+        .option-item { 
+            padding: 12px 15px; 
+            border: 1px solid #eee; 
+            margin-bottom: 10px; 
+            border-radius: 6px; 
+            cursor: pointer; 
+            transition: 0.2s; 
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 16px;
+        }
+        
+        .option-item:hover { background: #f8f9fa; border-color: #bdc3c7; }
+        .option-item.selected { background: #eaf6ff; border-color: #3498db; color: #2980b9; font-weight: 600; }
+
+        .option-item.correct { background: #d4edda; border-color: #28a745; color: #155724; }
+        .option-item.wrong { background: #f8d7da; border-color: #dc3545; color: #721c24; }
+        
+        .explanation {
+            display: none;
+            margin-top: 15px;
+            padding: 12px;
+            background: #fff3cd;
+            border-radius: 6px;
+            color: #856404;
+            font-size: 15px;
+            border-left: 4px solid #ffeeba;
+        }
+
+        /* Submit Button */
+        .submit-container { text-align: center; margin-top: 30px; margin-bottom: 50px; }
+        
+        .big-submit-btn {
+            background: #27ae60;
+            color: white;
+            border: none;
+            padding: 15px 50px;
+            border-radius: 50px;
+            font-size: 20px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(39, 174, 96, 0.4);
+            transition: 0.3s;
+            width: 100%;
+            max-width: 300px;
+        }
+        .big-submit-btn:hover { background: #219150; transform: translateY(-3px); }
+
+        /* Dark Mode */
+        .dark-toggle-btn {
+            position: fixed; bottom: 20px; right: 20px; background: #2c3e50; color: white;
+            width: 50px; height: 50px; border-radius: 50%; display: flex; justify-content: center;
+            align-items: center; font-size: 24px; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            z-index: 9999; transition: 0.3s; border: 2px solid white;
+        }
+        .dark-toggle-btn:hover { transform: scale(1.1); background: #1a252f; }
+
+        body.dark-mode { background-color: #121212 !important; color: #e0e0e0 !important; }
+        body.dark-mode .mcq-box, body.dark-mode .sticky-header, body.dark-mode .result-dashboard, 
+        body.dark-mode .header-card { background: #1e1e1e !important; color: #e0e0e0 !important; border-color: #333 !important; box-shadow: none !important; }
+        body.dark-mode .header-card { background: linear-gradient(135deg, #2c3e50, #000000) !important; }
+        body.dark-mode .question, body.dark-mode h2, body.dark-mode h3 { color: #ffffff !important; }
+        body.dark-mode .option-item { background-color: #2d2d2d !important; border-color: #444 !important; color: #ddd !important; }
+        body.dark-mode .option-item:hover { background-color: #3d3d3d !important; }
+        body.dark-mode .option-item.selected { background-color: #2c3e50 !important; border-color: #3498db !important; color: #3498db !important; }
+        body.dark-mode .timer-badge { background: #3e2723 !important; color: #ffab91 !important; }
+        body.dark-mode .score-box { background: #2d2d2d !important; }
+        body.dark-mode a { color: #64b5f6 !important; }
+
+    </style>
+</head>
+<body>
+
+    <div class="sticky-header" id="stickyHeader">
+        <div class="timer-badge"><i class="fas fa-clock"></i> <span id="timer">30:00</span></div>
+    </div>
+
+    <div class="container">
+        
+        <div class="header-card" id="introHeader">
+            <h2>Day 13: গণিত (পাটিগণিত ও বীজগণিত)</h2>
+            <p>৪০টি প্রশ্ন | সময়: ৩০ মিনিট</p>
+            <span class="exam-info">⚠️ প্রতিটি ভুল উত্তরের জন্য ০.৫০ নম্বর কাটা যাবে</span>
+        </div>
+
+        <div class="result-dashboard" id="resultDashboard">
+            <div class="score-box">
+                <span class="score-label">আপনার ফলাফল</span>
+                <span class="final-score" id="finalScoreDisplay">0.00</span>
+                <div class="negative-alert" id="negativeInfo">(-0.00 ভুল উত্তরের জন্য)</div>
+            </div>
+            
+            <p>ফলাফল ফিল্টার করুন:</p>
+            
+            <div class="filter-buttons">
+                <button class="filter-btn btn-all active" onclick="filterQuestions('all', this)">সব দেখুন</button>
+                <button class="filter-btn btn-correct" onclick="filterQuestions('correct', this)">সঠিক (<span id="countCorrect">0</span>)</button>
+                <button class="filter-btn btn-wrong" onclick="filterQuestions('wrong', this)">ভুল (<span id="countWrong">0</span>)</button>
+                <button class="filter-btn btn-skipped" onclick="filterQuestions('skipped', this)">উত্তর দেননি (<span id="countSkipped">0</span>)</button>
+            </div>
+            
+            <br>
+            <a href="primary-teacher.html" style="color: #3498db; text-decoration: none; font-weight: 600;">মেনুতে ফিরে যান</a>
+        </div>
+
+        <div class="mcq-box" id="q1" data-correct="4">
+            <p class="question">১. একটি চৌবাচ্চায় দুটি নল সংযুক্ত আছে। প্রথম নল দ্বারা চৌবাচ্চাটি ৪ মিনিটে পূর্ণ হয় এবং ২য় নল দ্বারা ১২ মিনিটে পূর্ণ হয়। নল দুটি একত্রে খুলে দিলে খালি চৌবাচ্চাটি কতক্ষণে পূর্ণ হবে?</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(1, 1)">A. ৬</li><li class="option-item" onclick="selectOption(1, 2)">B. ৫</li><li class="option-item" onclick="selectOption(1, 3)">C. ৪</li><li class="option-item" onclick="selectOption(1, 4)">D. ৩</li></ul>
+            <div class="explanation">✅ সঠিক উত্তর: D. ৩ মিনিট</div>
+        </div>
+
+        <div class="mcq-box" id="q2" data-correct="2">
+            <p class="question">২. যদি কোনো একটি কাজ আলাদাভাবে সম্পন্ন করতে আবিরের ৪৫ মিনিট এবং আসিফের ৩০ মিনিট সময় লাগে তবে উভয়ে একত্রে ঐ কাজটি সম্পন্ন করতে কত মিনিট সময় লাগবে?</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(2, 1)">A. ১৯</li><li class="option-item" onclick="selectOption(2, 2)">B. ১৮</li><li class="option-item" onclick="selectOption(2, 3)">C. ১৫</li><li class="option-item" onclick="selectOption(2, 4)">D. ২৯</li></ul>
+            <div class="explanation">✅ সঠিক উত্তর: B. ১৮ মিনিট</div>
+        </div>
+
+        <div class="mcq-box" id="q3" data-correct="4">
+            <p class="question">৩. ক যে কাজ ২০ দিনে করে খ তা ৩০ দিনে করে। তারা একত্রে একদিনে কাজটির করে-</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(3, 1)">A. ১/৬ অংশ</li><li class="option-item" onclick="selectOption(3, 2)">B. ১/১০ অংশ</li><li class="option-item" onclick="selectOption(3, 3)">C. ১/৫ অংশ</li><li class="option-item" onclick="selectOption(3, 4)">D. ১/১২ অংশ</li></ul>
+            <div class="explanation">✅ সঠিক উত্তর: D. ১/১২ অংশ</div>
+        </div>
+
+        <div class="mcq-box" id="q4" data-correct="2">
+            <p class="question">৪. ক ও খ একত্রে একটি কাজ ১২ দিনে করতে পারে। ক একা কাজটি ২০ দিনে করতে পারলে খ একা কাজটি কত দিনে করতে পারবে?</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(4, 1)">A. ২০</li><li class="option-item" onclick="selectOption(4, 2)">B. ৩০</li><li class="option-item" onclick="selectOption(4, 3)">C. ৪৫</li><li class="option-item" onclick="selectOption(4, 4)">D. ৫০</li></ul>
+            <div class="explanation">✅ সঠিক উত্তর: B. ৩০ দিনে</div>
+        </div>
+
+        <div class="mcq-box" id="q5" data-correct="4">
+            <p class="question">৫. একটি পানির ট্যাঙ্কে দুটি নল আছে। প্রথম নলটি খুলে দিলে ট্যাঙ্কটি ১০ ঘণ্টায় পানিতে পূর্ণ হয় এবং ২য় নলটি খুলে দিলে পানিপূর্ণ ট্যাঙ্কটি ১৫ ঘণ্টায় খালি হয়। দুটি নল একসঙ্গে খুলে দিলে খালি ট্যাঙ্কটি কত ঘণ্টায় পূর্ণ হবে?</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(5, 1)">A. ২০ ঘণ্টা</li><li class="option-item" onclick="selectOption(5, 2)">B. ২৫ ঘণ্টা</li><li class="option-item" onclick="selectOption(5, 3)">C. ২৮ ঘণ্টা</li><li class="option-item" onclick="selectOption(5, 4)">D. ৩০ ঘণ্টা</li></ul>
+            <div class="explanation">✅ সঠিক উত্তর: D. ৩০ ঘণ্টা</div>
+        </div>
+
+        <div class="mcq-box" id="q6" data-correct="2">
+            <p class="question">৬. ক যে কাজ ১২ দিনে করতে পারে, খ সে কাজ ১৫ দিনে এবং গ ২০ দিনে করতে পারলে তারা একত্রে কাজটি কতদিনে শেষ করতে পারবে?</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(6, 1)">A. ২</li><li class="option-item" onclick="selectOption(6, 2)">B. ৫</li><li class="option-item" onclick="selectOption(6, 3)">C. ৪</li><li class="option-item" onclick="selectOption(6, 4)">D. ৬</li></ul>
+            <div class="explanation">✅ সঠিক উত্তর: B. ৫ দিনে</div>
+        </div>
+
+        <div class="mcq-box" id="q7" data-correct="4">
+            <p class="question">৭. কয়েকজন শ্রমিক একটি কাজ ১৮ দিনে করে দিবে বলে ঠিক করল। কিন্তু তাদের মধ্যে ৯ জন অনুপস্থিত থাকায় কাজটি ৩৬ দিনে সম্পন্ন হয়। কত জন শ্রমিক নিযুক্ত হলে কাজটি ১৮ দিনে সম্পন্ন হতো?</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(7, 1)">A. ১২</li><li class="option-item" onclick="selectOption(7, 2)">B. ১৬</li><li class="option-item" onclick="selectOption(7, 3)">C. ২৪</li><li class="option-item" onclick="selectOption(7, 4)">D. কোনোটিই নয়</li></ul>
+            <div class="explanation">✅ সঠিক উত্তর: D. কোনোটিই নয় (গাণিতিক উত্তর: ১৮ জন)</div>
+        </div>
+
+        <div class="mcq-box" id="q8" data-correct="4">
+            <p class="question">৮. মনির একটি কাজ ৬ দিনে এবং জহির ১২ দিনে করতে পারে। তারা একত্রে কাজটি শুরু করার কয়েকদিন পর কাজটি অসমাপ্ত রেখে মনির চলে যায়। বাকি কাজ জহির ৩ দিনে শেষ করে। মোট কত দিনে কাজটি সম্পূর্ণ হয়?</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(8, 1)">A. ৯ দিন</li><li class="option-item" onclick="selectOption(8, 2)">B. ১০ দিন</li><li class="option-item" onclick="selectOption(8, 3)">C. ১২ দিন</li><li class="option-item" onclick="selectOption(8, 4)">D. ৮ দিন</li></ul>
+            <div class="explanation">✅ সঠিক উত্তর: অপশনে সঠিক উত্তর নেই (গাণিতিক উত্তর: ৬ দিন)</div>
+        </div>
+
+        <div class="mcq-box" id="q9" data-correct="1">
+            <p class="question">৯. ২টি নল দ্বারা একটি চৌবাচ্চা ২০ ও ৩০ মিনিটে পূর্ণ করা যায়। চৌবাচ্চাটি খালি থাকা অবস্থায় দুটি নলই একসাথে খুলে দেওয়া হলো। প্রথম নলটি কখন বন্ধ করলে মোট ১৮ মিনিটে সম্পূর্ণ চৌবাচ্চাটি পূর্ণ হবে?</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(9, 1)">A. ৮</li><li class="option-item" onclick="selectOption(9, 2)">B. ১০</li><li class="option-item" onclick="selectOption(9, 3)">C. ১২</li><li class="option-item" onclick="selectOption(9, 4)">D. ১৬</li></ul>
+            <div class="explanation">✅ সঠিক উত্তর: A. ৮ মিনিট</div>
+        </div>
+
+        <div class="mcq-box" id="q10" data-correct="1">
+            <p class="question">১০. ক একটি কাজ ১৫ দিনে করতে পারে। যদি খ, ক এর দ্বিগুণ কাজ করে তবে ক এবং খ একত্রে ঐ কাজ শেষ করতে কত দিন লাগবে?</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(10, 1)">A. ৫ দিন</li><li class="option-item" onclick="selectOption(10, 2)">B. ৬ দিন</li><li class="option-item" onclick="selectOption(10, 3)">C. ৭ দিন</li><li class="option-item" onclick="selectOption(10, 4)">D. ৯ দিন</li></ul>
+            <div class="explanation">✅ সঠিক উত্তর: A. ৫ দিন</div>
+        </div>
+
+        <div class="mcq-box" id="q11" data-correct="1">
+            <p class="question">১১. একটি পানির ট্যাংকে দুই-পঞ্চমাংশ পূর্ণ আছে। পাইপ A দ্বারা সম্পূর্ণ ট্যাস্কটি ১০ মিনিটে পূর্ণ হয় আবার পাইপ B দ্বারা সম্পূর্ণ ট্যাস্কটি ৬ মিনিটে খালি হয়। যদি দুই পাইপ-ই একসাথে চালু করা হয়। কত সময় পর সম্পূর্ণ ট্যাস্কটি পূর্ণ হবে অথবা খালি হবে?</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(11, 1)">A. ৬</li><li class="option-item" onclick="selectOption(11, 2)">B. ৭</li><li class="option-item" onclick="selectOption(11, 3)">C. ৫</li><li class="option-item" onclick="selectOption(11, 4)">D. ৮</li></ul>
+            <div class="explanation">✅ সঠিক উত্তর: A. ৬ মিনিট (খালি হবে)</div>
+        </div>
+
+        <div class="mcq-box" id="q12" data-correct="2">
+            <p class="question">১২. ক একটি কাজ ২০ দিনে করতে পারে এবং খ কাজটি ৩০ দিনে করতে পারে। ক ও খ একত্রে ৮ দিনে করার পর ক চলে গেল। বাকি কাজ খ একা কত দিনে সম্পন্ন করতে পারবে?</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(12, 1)">A. ৫</li><li class="option-item" onclick="selectOption(12, 2)">B. ১০</li><li class="option-item" onclick="selectOption(12, 3)">C. ১২</li><li class="option-item" onclick="selectOption(12, 4)">D. ১৫</li></ul>
+            <div class="explanation">✅ সঠিক উত্তর: B. ১০ দিনে</div>
+        </div>
+
+        <div class="mcq-box" id="q13" data-correct="1">
+            <p class="question">১৩. ক ঘণ্টায় ১০ কি.মি. এবং খ ঘণ্টায় ১০ কি.মি. বেগে একই সময় একই স্থান থেকে রাজশাহীর পথে রওনা হয়। ক ১১:১০ মিনিটের সময় এবং খ ৯:৪০ মিনিটের সময় রাজশাহী পৌঁছাল। রওনা হওয়ার স্থান থেকে রাজশাহীর দূরত্ব কত কি.মি.?</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(13, 1)">A. ৩৫ কি.মি.</li><li class="option-item" onclick="selectOption(13, 2)">B. ৩৬ কি.মি.</li><li class="option-item" onclick="selectOption(13, 3)">C. ৪৫ কি.মি.</li><li class="option-item" onclick="selectOption(13, 4)">D. ৪২ কি.মি.</li></ul>
+            <div class="explanation">✅ সঠিক উত্তর: A. ৩৫ কি.মি.</div>
+        </div>
+
+        <div class="mcq-box" id="q14" data-correct="2">
+            <p class="question">১৪. ঘণ্টায় ৪ কি.মি. বেগে চললে কোন স্থানে পৌঁছাতে যে সময় লাগে ঘণ্টায় ৫ কি.মি. বেগে চললে তার ১/২ ঘণ্টা সময় কম লাগে। স্থানটির দূরত্ব কত?</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(14, 1)">A. ৮ কি.মি.</li><li class="option-item" onclick="selectOption(14, 2)">B. ১০ কি.মি.</li><li class="option-item" onclick="selectOption(14, 3)">C. ১২ কি.মি.</li><li class="option-item" onclick="selectOption(14, 4)">D. ১১ কি.মি.</li></ul>
+            <div class="explanation">✅ সঠিক উত্তর: B. ১০ কি.মি.</div>
+        </div>
+
+        <div class="mcq-box" id="q15" data-correct="2">
+            <p class="question">১৫. ১০ মিটার/মিনিট বেগে ৪০ মিটার দীর্ঘ ও ৩০ মিটার প্রস্থ একটি আয়তাকার বাগানের এককোণ থেকে বরাবর হেঁটে অপর প্রান্তে পৌঁছে বাগানের কিনার দিয়ে হেঁটে আগের জায়গায় ফেরত আসতে কত মিনিট সময় লাগবে?</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(15, 1)">A. ১০</li><li class="option-item" onclick="selectOption(15, 2)">B. ১২</li><li class="option-item" onclick="selectOption(15, 3)">C. ১৩</li><li class="option-item" onclick="selectOption(15, 4)">D. ১৪</li></ul>
+            <div class="explanation">✅ সঠিক উত্তর: B. ১২ মিনিট</div>
+        </div>
+
+        <div class="mcq-box" id="q16" data-correct="1">
+            <p class="question">১৬. যদি কোন ব্যক্তি স্রোতের অনুকূলে ৬ কি.মি./ঘণ্টা বেগে এবং প্রতিকূলে ২ কি.মি./ঘণ্টা বেগে সাঁতরাতে পারে, তবে স্থির পানিতে তার বেগ কত কি.মি./ঘণ্টা হবে?</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(16, 1)">A. ৪</li><li class="option-item" onclick="selectOption(16, 2)">B. ২</li><li class="option-item" onclick="selectOption(16, 3)">C. ৩</li><li class="option-item" onclick="selectOption(16, 4)">D. ৬</li></ul>
+            <div class="explanation">✅ সঠিক উত্তর: A. ৪ কি.মি./ঘণ্টা</div>
+        </div>
+
+        <div class="mcq-box" id="q17" data-correct="1">
+            <p class="question">১৭. নৌকা ও স্রোতের বেগ ঘণ্টায় যথাক্রমে ১০ কি.মি. ও ৫ কি.মি.। নদী পথে কোন পথ গিয়ে ফিরে আসতে মোট ২৪ ঘণ্টা সময় লাগে। ঐ পথের দূরত্ব কত?</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(17, 1)">A. ৯০ কি.মি.</li><li class="option-item" onclick="selectOption(17, 2)">B. ৮০ কি.মি.</li><li class="option-item" onclick="selectOption(17, 3)">C. ৮৫ কি.মি.</li><li class="option-item" onclick="selectOption(17, 4)">D. ৯২ কি.মি.</li></ul>
+            <div class="explanation">✅ সঠিক উত্তর: A. ৯০ কি.মি.</div>
+        </div>
+
+        <div class="mcq-box" id="q18" data-correct="4">
+            <p class="question">১৮. এক ব্যক্তি ঘণ্টায় ৫ কি.মি. বেগে চলে কোনো স্থানে গেল এবং ঘণ্টায় ৩ কি.মি. বেগে চলে ফিরে আসল। যাতায়াতে তার গতির গড় কত?</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(18, 1)">A. ৩ ৩/৫ কি.মি./ঘণ্টা</li><li class="option-item" onclick="selectOption(18, 2)">B. ৩ কি.মি./ঘণ্টা</li><li class="option-item" onclick="selectOption(18, 3)">C. ৪ কি.মি./ঘণ্টা</li><li class="option-item" onclick="selectOption(18, 4)">D. ৩ ৩/৪ কি.মি./ঘণ্টা</li></ul>
+            <div class="explanation">✅ সঠিক উত্তর: D. ৩ ৩/৪ কি.মি./ঘণ্টা</div>
+        </div>
+
+        <div class="mcq-box" id="q19" data-correct="2">
+            <p class="question">১৯. ঘণ্টায় x কি.মি বেগে y কি.মি দূরত্ব অতিক্রম করতে কত ঘণ্টা সময় লাগবে?</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(19, 1)">A. y/x ঘণ্টা</li><li class="option-item" onclick="selectOption(19, 2)">B. x/y ঘণ্টা</li><li class="option-item" onclick="selectOption(19, 3)">C. xy ঘণ্টা</li><li class="option-item" onclick="selectOption(19, 4)">D. 100/x ঘণ্টা</li></ul>
+            <div class="explanation">✅ সঠিক উত্তর: B. x/y ঘণ্টা</div>
+        </div>
+
+        <div class="mcq-box" id="q20" data-correct="3">
+            <p class="question">২০. একজন ট্রাক ড্রাইভারকে ৪ ঘণ্টায় ১৮০ মাইল অবশ্যই ভ্রমণ করতে হবে। যদি সে প্রথম ৩ ঘণ্টায় ৫০ মাইল বেগে যায়, তবে শেষ ঘণ্টায় সে কত মাইল বেগে যাবে?</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(20, 1)">A. ৪০</li><li class="option-item" onclick="selectOption(20, 2)">B. ৫০</li><li class="option-item" onclick="selectOption(20, 3)">C. ৩০</li><li class="option-item" onclick="selectOption(20, 4)">D. ৬০</li></ul>
+            <div class="explanation">✅ সঠিক উত্তর: C. ৩০</div>
+        </div>
+
+        <div class="mcq-box" id="q21" data-correct="3">
+            <p class="question">২১. ঘণ্টায় ৪ কি.মি গতি বৃদ্ধি করায় ৩২ কি.মি পথ অতিক্রম করতে ৪ ঘণ্টা সময় কম লাগে। বৃদ্ধির পূর্বে গতি কত ছিল?</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(21, 1)">A. ৮ কি.মি</li><li class="option-item" onclick="selectOption(21, 2)">B. ১২ কি.মি</li><li class="option-item" onclick="selectOption(21, 3)">C. ৪ কি.মি</li><li class="option-item" onclick="selectOption(21, 4)">D. ২ কি.মি</li></ul>
+            <div class="explanation">✅ সঠিক উত্তর: C. ৪ কি.মি</div>
+        </div>
+
+        <div class="mcq-box" id="q22" data-correct="3">
+            <p class="question">২২. জুয়েল ১২ মিনিট ৪৫ সেকেন্ডে এক মাইল পথ অতিক্রম করে। কোয়েল একই পথ ১০ মিনিট ১২ সেকেন্ডে অতিক্রম করে। কোয়েলের গতিবেগ অর্জন করতে চাইলে জুয়েলকে তার গতিবেগ কতটুকু বাড়াতে হবে?</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(22, 1)">A. ১০%</li><li class="option-item" onclick="selectOption(22, 2)">B. ২০%</li><li class="option-item" onclick="selectOption(22, 3)">C. ২৫%</li><li class="option-item" onclick="selectOption(22, 4)">D. ১২%</li></ul>
+            <div class="explanation">✅ সঠিক উত্তর: C. ২৫%</div>
+        </div>
+
+        <div class="mcq-box" id="q23" data-correct="2">
+            <p class="question">২৩. দাঁড় বেয়ে একটি নৌকা স্রোতের অনুকূলে ঘণ্টায় ৮ কিমি এবং প্রতিকূলে ঘণ্টায় ৪ কিমি যায়। নৌকার বেগ কত?</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(23, 1)">A. ৪ কিমি/ঘণ্টা</li><li class="option-item" onclick="selectOption(23, 2)">B. ৬ কিমি/ঘণ্টা</li><li class="option-item" onclick="selectOption(23, 3)">C. ৮ কিমি/ঘণ্টা</li><li class="option-item" onclick="selectOption(23, 4)">D. ১২ কিমি/ঘণ্টা</li></ul>
+            <div class="explanation">✅ সঠিক উত্তর: B. ৬ কিমি/ঘণ্টা</div>
+        </div>
+
+        <div class="mcq-box" id="q24" data-correct="4">
+            <p class="question">২৪. লঞ্চ ও স্রোতের ঘণ্টায় গতিবেগ যথাক্রমে ১৮ ও ৬ কিমি। নদীপথে ৪৮ কিমি পথ অতিক্রম করে ফিরে আসতে কত সময় লাগবে?</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(24, 1)">A. ২ ঘণ্টা</li><li class="option-item" onclick="selectOption(24, 2)">B. ৩ ঘণ্টা</li><li class="option-item" onclick="selectOption(24, 3)">C. ৪ ঘণ্টা</li><li class="option-item" onclick="selectOption(24, 4)">D. ৬ ঘণ্টা</li></ul>
+            <div class="explanation">✅ সঠিক উত্তর: D. ৬ ঘণ্টা</div>
+        </div>
+
+        <div class="mcq-box" id="q25" data-correct="4">
+            <p class="question">২৫. একটি নদীতে স্রোতের গতিবেগ ৩ মাইল/ঘণ্টা। ঐ নদীতে একটি নৌকা স্রোতের অনুকূলে যেতে যে সময় নেয় প্রতিকূলে যেতে তার দ্বিগুণ সময় নেয়। স্থির পানিতে নৌকার গতিবেগ কত?</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(25, 1)">A. ৩ কি.মি/ঘণ্টা</li><li class="option-item" onclick="selectOption(25, 2)">B. ১২ কি.মি/ঘণ্টা</li><li class="option-item" onclick="selectOption(25, 3)">C. ৬ কি.মি/ঘণ্টা</li><li class="option-item" onclick="selectOption(25, 4)">D. ৯ কি.মি/ঘণ্টা</li></ul>
+            <div class="explanation">✅ সঠিক উত্তর: D. ৯ কি.মি/ঘণ্টা</div>
+        </div>
+
+        <div class="mcq-box" id="q26" data-correct="2">
+            <p class="question">২৬. রুবেল ঘণ্টায় ৪০ মাইল বেগে ঢাকা থেকে কুমিল্লায় গিয়ে ঘণ্টায় ৬০ মাইল বেগে আবার ঢাকায় ফিরে আসলে ঘণ্টায় তার গড় গতিবেগ কত মাইল?</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(26, 1)">A. ৪৫</li><li class="option-item" onclick="selectOption(26, 2)">B. ৪৮</li><li class="option-item" onclick="selectOption(26, 3)">C. ৫২</li><li class="option-item" onclick="selectOption(26, 4)">D. ৫৪</li></ul>
+            <div class="explanation">✅ সঠিক উত্তর: B. ৪৮</div>
+        </div>
+
+        <div class="mcq-box" id="q27" data-correct="2">
+            <p class="question">২৭. স্রোতের প্রতিকূলে কোন জাহাজের গড় গতিবেগ ৫০ কি.মি./ঘণ্টা। যদি স্রোতের গতিবেগ ৮ কি.মি. হয় তাহলে স্রোতের অনুকূলে ঐ জাহাজটির গতিবেগ কত ছিল?</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(27, 1)">A. ৪২ কি.মি</li><li class="option-item" onclick="selectOption(27, 2)">B. ৬৬ কি.মি</li><li class="option-item" onclick="selectOption(27, 3)">C. ৭২ কি.মি</li><li class="option-item" onclick="selectOption(27, 4)">D. ৮০ কি.মি</li></ul>
+            <div class="explanation">✅ সঠিক উত্তর: B. ৬৬ কি.মি</div>
+        </div>
+
+        <div class="mcq-box" id="q28" data-correct="1">
+            <p class="question">২৮. এক ব্যক্তি স্রোতের অনুকূলে নৌকা বেয়ে ১৫ কি.মি বেগে চলে কোন স্থানে গেল এবং ঘণ্টায় ১০ কি.মি বেগে স্রোতের প্রতিকূলে যাত্রারম্ভের স্থানে ফিরে এলো। যাতায়াতে তার গড় গতিবেগ কত ছিল?</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(28, 1)">A. ১২ কি.মি./ঘণ্টা</li><li class="option-item" onclick="selectOption(28, 2)">B. ১২.৫ কি.মি./ঘণ্টা</li><li class="option-item" onclick="selectOption(28, 3)">C. ১৩ কি.মি./ঘণ্টা</li><li class="option-item" onclick="selectOption(28, 4)">D. ১৪ কি.মি./ঘণ্টা</li></ul>
+            <div class="explanation">✅ সঠিক উত্তর: A. ১২ কি.মি./ঘণ্টা</div>
+        </div>
+
+        <div class="mcq-box" id="q29" data-correct="1">
+            <p class="question">২৯. নিচের কোন ভগ্নাংশটি বৃহত্তম?</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(29, 1)">A. ১৪/১৫</li><li class="option-item" onclick="selectOption(29, 2)">B. ১০/১১</li><li class="option-item" onclick="selectOption(29, 3)">C. ১১/১৪</li><li class="option-item" onclick="selectOption(29, 4)">D. ১২/১৩</li></ul>
+            <div class="explanation">✅ সঠিক উত্তর: A. ১৪/১৫</div>
+        </div>
+
+        <div class="mcq-box" id="q30" data-correct="4">
+            <p class="question">৩০. ২০ ফুট লম্বা একটি বাঁশকে এমনভাবে কেটে দু'ভাগ করা হলো যেন ছোট অংশটি বড় অংশের দুই তৃতীয়াংশ হয়, ছোট অংশের দৈর্ঘ্য কত ফুট?</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(30, 1)">A. ৪ ফুট</li><li class="option-item" onclick="selectOption(30, 2)">B. ৬ ফুট</li><li class="option-item" onclick="selectOption(30, 3)">C. ৭ ফুট</li><li class="option-item" onclick="selectOption(30, 4)">D. ৮ ফুট</li></ul>
+            <div class="explanation">✅ সঠিক উত্তর: D. ৮ ফুট</div>
+        </div>
+
+        <div class="mcq-box" id="q31" data-correct="2">
+            <p class="question">৩১. কোন সম্পত্তির ৭/৮ অংশের মূল্য ৯৮০০০ টাকা হলে ১/৮ অংশের মূল্য কত?</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(31, 1)">A. ১৬০০০ টাকা</li><li class="option-item" onclick="selectOption(31, 2)">B. ১৪০০০ টাকা</li><li class="option-item" onclick="selectOption(31, 3)">C. ১২৫০০ টাকা</li><li class="option-item" onclick="selectOption(31, 4)">D. ১৫০০০ টাকা</li></ul>
+            <div class="explanation">✅ সঠিক উত্তর: B. ১৪০০০ টাকা</div>
+        </div>
+
+        <div class="mcq-box" id="q32" data-correct="2">
+            <p class="question">৩২. একটি পানি পূর্ণ ট্যাংকের ১/৫ অংশের পানি খরচ হলে ৩২৫ লিটার খরচ হল। তারপর দেখা গেল ট্যাংকের ৪/৫ অংশ তখনও পূর্ণ রয়েছে। ট্যাংকের ধারণ ক্ষমতা কত লিটার?</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(32, 1)">A. ১৭৫০</li><li class="option-item" onclick="selectOption(32, 2)">B. ১৬২৫</li><li class="option-item" onclick="selectOption(32, 3)">C. ২০৪৮</li><li class="option-item" onclick="selectOption(32, 4)">D. ৩০৪৮</li></ul>
+            <div class="explanation">✅ সঠিক উত্তর: B. ১৬২৫</div>
+        </div>
+
+        <div class="mcq-box" id="q33" data-correct="3">
+            <p class="question">৩৩. কোন ব্যক্তি সম্পত্তির ২/৩ অংশ পুত্রকে এবং ১/৩ অংশ কন্যাকে দিলেন। কন্যা ১৫০০ টাকা কম পেলে সম্পত্তির মূল্য কত?</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(33, 1)">A. ৩০০০</li><li class="option-item" onclick="selectOption(33, 2)">B. ২০০০</li><li class="option-item" onclick="selectOption(33, 3)">C. ৪৫০০</li><li class="option-item" onclick="selectOption(33, 4)">D. ৭৫০০</li></ul>
+            <div class="explanation">✅ সঠিক উত্তর: C. ৪৫০০</div>
+        </div>
+
+        <div class="mcq-box" id="q34" data-correct="1">
+            <p class="question">৩৪. কোন ভগ্নাংশের লবের সাথে ৭ যোগ করলে ভগ্নাংশটির মান ২ হয় এবং হর থেকে ২ বিয়োগ করলে ভগ্নাংশটির মান ১। ভগ্নাংশটি নির্ণয় কর।</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(34, 1)">A. ৩/৫</li><li class="option-item" onclick="selectOption(34, 2)">B. ৪/৫</li><li class="option-item" onclick="selectOption(34, 3)">C. ১/২</li><li class="option-item" onclick="selectOption(34, 4)">D. ২/৩</li></ul>
+            <div class="explanation">✅ সঠিক উত্তর: A. ৩/৫</div>
+        </div>
+
+        <div class="mcq-box" id="q35" data-correct="2">
+            <p class="question">৩৫. সবচেয়ে বড় সংখ্যা কোনটি?</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(35, 1)">A. ৭/১২</li><li class="option-item" onclick="selectOption(35, 2)">B. ১৩/১৬</li><li class="option-item" onclick="selectOption(35, 3)">C. ৫/৮</li><li class="option-item" onclick="selectOption(35, 4)">D. ১১/২৩</li></ul>
+            <div class="explanation">✅ সঠিক উত্তর: B. ১৩/১৬</div>
+        </div>
+
+        <div class="mcq-box" id="q36" data-correct="4">
+            <p class="question">৩৬. কোন সংখ্যাটি ক্ষুদ্রতম?</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(36, 1)">A. ১/১১</li><li class="option-item" onclick="selectOption(36, 2)">B. ৩/৩১</li><li class="option-item" onclick="selectOption(36, 3)">C. ২/২১</li><li class="option-item" onclick="selectOption(36, 4)">D. ০.০২</li></ul>
+            <div class="explanation">✅ সঠিক উত্তর: D. ০.০২</div>
+        </div>
+
+        <div class="mcq-box" id="q37" data-correct="3">
+            <p class="question">৩৭. সুলেমান তার সঞ্চয়ের তিন-সপ্তমাংশ দিয়ে একটি জমি কিনে এবং জমির মূল্যের এক-তৃতীয়াংশ দিয়ে একটি বাড়ি কিনে। জমি ও বাড়ি কেনার পর তার মোট সঞ্চয়ের কত অংশ অবশিষ্ট রইল?</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(37, 1)">A. ৩/৫</li><li class="option-item" onclick="selectOption(37, 2)">B. ৫/৭</li><li class="option-item" onclick="selectOption(37, 3)">C. ৩/৭</li><li class="option-item" onclick="selectOption(37, 4)">D. কোনোটিই নয়</li></ul>
+            <div class="explanation">✅ সঠিক উত্তর: C. ৩/৭</div>
+        </div>
+
+        <div class="mcq-box" id="q38" data-correct="2">
+            <p class="question">৩৮. চিত্রাঙ্কন প্রতিযোগিতায় অংশ গ্রহণকারী সকল মহিলাদের ২/৩ অংশ অনুষ্ঠানে উপস্থিত পুরুষদের ১/২ অংশের সমান হলে ঐ প্রতিযোগিতায় অংশগ্রহণকারী মোট প্রতিযোগীর কত অংশ নারী?</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(38, 1)">A. ২/৭</li><li class="option-item" onclick="selectOption(38, 2)">B. ৩/৭</li><li class="option-item" onclick="selectOption(38, 3)">C. ১/২</li><li class="option-item" onclick="selectOption(38, 4)">D. ৩/৮</li></ul>
+            <div class="explanation">✅ সঠিক উত্তর: B. ৩/৭</div>
+        </div>
+
+        <div class="mcq-box" id="q39" data-correct="4">
+            <p class="question">৩৯. একটি ট্যাংকের ১/৫ অংশ পানি দ্বারা পূর্ণ এবং ট্যাংকটির ৩/৫ অংশ পূর্ণ করতে আরও ২০ লিটার পানি প্রয়োজন। ট্যাংকটির ধারণক্ষমতা কত?</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(39, 1)">A. ৩০</li><li class="option-item" onclick="selectOption(39, 2)">B. ৩৫</li><li class="option-item" onclick="selectOption(39, 3)">C. ৪৫</li><li class="option-item" onclick="selectOption(39, 4)">D. ৫০</li></ul>
+            <div class="explanation">✅ সঠিক উত্তর: D. ৫০</div>
+        </div>
+
+        <div class="mcq-box" id="q40" data-correct="2">
+            <p class="question">৪০. একটি তেলপূর্ণ পাত্রের ওজন ৩০ কেজি। অর্ধেক তেলসহ পাত্রের ওজন ২০ কেজি হলে পাত্রটির ওজন কত কেজি?</p>
+            <ul class="options"><li class="option-item" onclick="selectOption(40, 1)">A. ৫</li><li class="option-item" onclick="selectOption(40, 2)">B. ১০</li><li class="option-item" onclick="selectOption(40, 3)">C. ১২</li><li class="option-item" onclick="selectOption(40, 4)">D. ১৫</li></ul>
+            <div class="explanation">✅ সঠিক উত্তর: B. ১০</div>
+        </div>
+
+        <div class="submit-container" id="submitContainer">
+            <button class="big-submit-btn" onclick="submitExam()">পরীক্ষা শেষ করুন</button>
+        </div>
+
+    </div>
+
+    <div class="dark-toggle-btn" onclick="toggleDarkMode()">
+        <i class="fas fa-moon" id="darkIcon"></i>
+    </div>
+
+    <script>
+        let timeLeft = 30 * 60;
+        const timerDisplay = document.getElementById('timer');
+        let countdown;
+
+        // Start Timer
+        countdown = setInterval(() => {
+            let minutes = Math.floor(timeLeft / 60);
+            let seconds = timeLeft % 60;
+            seconds = seconds < 10 ? '0' + seconds : seconds;
+            timerDisplay.innerText = `${minutes}:${seconds}`;
+            
+            if (timeLeft <= 0) {
+                clearInterval(countdown);
+                submitExam();
+            }
+            timeLeft--;
+        }, 1000);
+
+        let userAnswers = {};
+
+        function selectOption(qId, optionIdx) {
+            const questionBox = document.getElementById(`q${qId}`);
+            if (questionBox.classList.contains('submitted')) return;
+
+            const options = questionBox.querySelectorAll('.option-item');
+            options.forEach(opt => opt.classList.remove('selected'));
+
+            options[optionIdx - 1].classList.add('selected');
+            userAnswers[qId] = optionIdx;
+        }
+
+        function submitExam() {
+            clearInterval(countdown);
+            
+            let correctCount = 0;
+            let wrongCount = 0;
+            let skippedCount = 0;
+            
+            const allQuestions = document.querySelectorAll('.mcq-box');
+            
+            allQuestions.forEach((questionBox, index) => {
+                const qId = index + 1;
+                const actualId = parseInt(questionBox.id.replace('q', ''));
+                
+                const correctAns = parseInt(questionBox.getAttribute('data-correct'));
+                const userAns = userAnswers[actualId];
+                const options = questionBox.querySelectorAll('.option-item');
+                const explanation = questionBox.querySelector('.explanation');
+
+                questionBox.classList.add('submitted');
+
+                if (userAns) {
+                    if (userAns === correctAns) {
+                        correctCount++;
+                        options[userAns - 1].classList.add('correct');
+                        questionBox.classList.add('status-correct');
+                    } else {
+                        wrongCount++;
+                        options[userAns - 1].classList.add('wrong');
+                        options[correctAns - 1].classList.add('correct');
+                        questionBox.classList.add('status-wrong');
+                    }
+                } else {
+                    skippedCount++;
+                    options[correctAns - 1].classList.add('correct');
+                    questionBox.classList.add('status-skipped');
+                }
+                
+                explanation.style.display = 'block';
+            });
+
+            // Calculate Score with 0.50 negative marking
+            const negativeMarks = wrongCount * 0.50;
+            const finalScore = correctCount - negativeMarks;
+
+            // UI Changes
+            document.getElementById('introHeader').style.display = 'none';
+            document.getElementById('submitContainer').style.display = 'none';
+            document.getElementById('stickyHeader').style.display = 'none';
+            document.getElementById('resultDashboard').style.display = 'block';
+
+            // Set Scores
+            document.getElementById('finalScoreDisplay').innerText = finalScore.toFixed(2);
+            document.getElementById('negativeInfo').innerText = `(-${negativeMarks.toFixed(2)} ভুল উত্তরের জন্য)`;
+            
+            document.getElementById('countCorrect').innerText = correctCount;
+            document.getElementById('countWrong').innerText = wrongCount;
+            document.getElementById('countSkipped').innerText = skippedCount;
+
+            // Scroll to Top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Filter Logic
+        function filterQuestions(filterType, btnElement) {
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            btnElement.classList.add('active');
+
+            const allQuestions = document.querySelectorAll('.mcq-box');
+
+            allQuestions.forEach(box => {
+                box.style.display = 'none';
+
+                if (filterType === 'all') {
+                    box.style.display = 'block';
+                } else if (filterType === 'correct' && box.classList.contains('status-correct')) {
+                    box.style.display = 'block';
+                } else if (filterType === 'wrong' && box.classList.contains('status-wrong')) {
+                    box.style.display = 'block';
+                } else if (filterType === 'skipped' && box.classList.contains('status-skipped')) {
+                    box.style.display = 'block';
+                }
+            });
+        }
+
+        // Dark Mode Logic
+        function toggleDarkMode() {
+            const body = document.body;
+            const icon = document.getElementById('darkIcon');
+            body.classList.toggle('dark-mode');
+            if (body.classList.contains('dark-mode')) {
+                icon.classList.remove('fa-moon');
+                icon.classList.add('fa-sun');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                icon.classList.remove('fa-sun');
+                icon.classList.add('fa-moon');
+                localStorage.setItem('theme', 'light');
+            }
+        }
+
+        window.onload = function() {
+            if (localStorage.getItem('theme') === 'dark') {
+                document.body.classList.add('dark-mode');
+                document.getElementById('darkIcon').classList.remove('fa-moon');
+                document.getElementById('darkIcon').classList.add('fa-sun');
+            }
+        }
+    </script>
+
+</body>
+</html>
