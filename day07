@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Day 07 - English Model Test (Preposition)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Hind Siliguri', sans-serif; }
+        body { background-color: #f4f6f9; color: #333; padding-bottom: 50px; }
+
+        /* Sticky Timer */
+        .sticky-header {
+            background: #fff;
+            padding: 10px 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            text-align: center;
+        }
+        
+        .timer-badge {
+            font-size: 18px;
+            font-weight: 700;
+            color: #e74c3c;
+            background: #fdecec;
+            padding: 5px 20px;
+            border-radius: 50px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .container { max-width: 800px; margin: 20px auto; padding: 0 20px; }
+
+        /* Header Card */
+        .header-card {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white; padding: 30px; border-radius: 10px; text-align: center; margin-bottom: 25px;
+        }
+        .header-card h2 { font-size: 26px; margin-bottom: 10px; }
+        .exam-info { font-size: 14px; background: rgba(255,255,255,0.2); padding: 5px 15px; border-radius: 50px; display: inline-block; margin-top: 5px; }
+
+        /* Result Dashboard */
+        .result-dashboard {
+            display: none;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin-bottom: 25px;
+            border-top: 5px solid #3498db;
+        }
+
+        .score-box {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: inline-block;
+            min-width: 200px;
+        }
+
+        .final-score {
+            font-size: 42px;
+            font-weight: 700;
+            color: #3498db;
+            display: block;
+        }
+        
+        .score-label { font-size: 16px; color: #555; }
+        .negative-alert { font-size: 13px; color: #c0392b; margin-top: 5px; font-weight: 600; }
+
+        /* Filter Buttons */
+        .filter-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .filter-btn {
+            padding: 8px 16px;
+            border-radius: 8px;
+            border: 2px solid transparent;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: 0.2s;
+            font-size: 14px;
+        }
+
+        .btn-correct { background: #eafaf1; color: #27ae60; border-color: #27ae60; }
+        .btn-correct:hover, .btn-correct.active { background: #27ae60; color: white; }
+
+        .btn-wrong { background: #fdecec; color: #c0392b; border-color: #c0392b; }
+        .btn-wrong:hover, .btn-wrong.active { background: #c0392b; color: white; }
+
+        .btn-skipped { background: #fef9e7; color: #f39c12; border-color: #f39c12; }
+        .btn-skipped:hover, .btn-skipped.active { background: #f39c12; color: white; }
+
+        .btn-all { background: #eaf6ff; color: #3498db; border-color: #3498db; }
+        .btn-all:hover, .btn-all.active { background: #3498db; color: white; }
+
+        /* Question Box */
+        .mcq-box { 
+            background: white; 
+            padding: 20px; 
+            border-radius: 8px; 
+            margin-bottom: 15px; 
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        
+        .question { font-size: 18px; font-weight: 600; margin-bottom: 15px; color: #2c3e50; }
+        
+        .options { list-style: none; }
+        .option-item { 
+            padding: 12px 15px; 
+            border: 1px solid #eee; 
+            margin-bottom: 10px; 
+            border-radius: 6px; 
+            cursor: pointer; 
+            transition: 0.2s; 
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 16px;
+        }
+        
+        .option-item:hover { background: #f8f9fa; border-color: #bdc3c7; }
+        .option-item.selected { background: #eaf6ff; border-color: #3498db; color: #2980b9; font-weight: 600; }
+
+        .option-item.correct { background: #d4edda; border-color: #28a745; color: #155724; }
+        .option-item.wrong { background: #f8d7da; border-color: #dc3545; color: #721c24; }
+        
+        .explanation {
+            display: none;
+            margin-top: 15px;
+            padding: 12px;
+            background: #fff3cd;
+            border-radius: 6px;
+            color: #856404;
+            font-size: 15px;
+            border-left: 4px solid #ffeeba;
+        }
+
+        /* Submit Button */
+        .submit-container { text-align: center; margin-top: 30px; margin-bottom: 50px; }
+        
+        .big-submit-btn {
+            background: #27ae60;
+            color: white;
+            border: none;
+            padding: 15px 50px;
+            border-radius: 50px;
+            font-size: 20px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(39, 174, 96, 0.4);
+            transition: 0.3s;
+            width: 100%;
+            max-width: 300px;
+        }
+        .big-submit-btn:hover { background: #219150; transform: translateY(-3px); }
+
+        /* Dark Mode */
+        .dark-toggle-btn {
+            position: fixed; bottom: 20px; right: 20px; background: #2c3e50; color: white;
+            width: 50px; height: 50px; border-radius: 50%; display: flex; justify-content: center;
+            align-items: center; font-size: 24px; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            z-index: 9999; transition: 0.3s; border: 2px solid white;
+        }
+        .dark-toggle-btn:hover { transform: scale(1.1); background: #1a252f; }
+
+        body.dark-mode { background-color: #121212 !important; color: #e0e0e0 !important; }
+        body.dark-mode .mcq-box, body.dark-mode .sticky-header, body.dark-mode .result-dashboard, 
+        body.dark-mode .header-card { background: #1e1e1e !important; color: #e0e0e0 !important; border-color: #333 !important; box-shadow: none !important; }
+        body.dark-mode .header-card { background: linear-gradient(135deg, #2c3e50, #000000) !important; }
+        body.dark-mode .question, body.dark-mode h2, body.dark-mode h3 { color: #ffffff !important; }
+        body.dark-mode .option-item { background-color: #2d2d2d !important; border-color: #444 !important; color: #ddd !important; }
+        body.dark-mode .option-item:hover { background-color: #3d3d3d !important; }
+        body.dark-mode .option-item.selected { background-color: #2c3e50 !important; border-color: #3498db !important; color: #3498db !important; }
+        body.dark-mode .timer-badge { background: #3e2723 !important; color: #ffab91 !important; }
+        body.dark-mode .score-box { background: #2d2d2d !important; }
+        body.dark-mode a { color: #64b5f6 !important; }
+
+    </style>
+</head>
+<body>
+
+    <div class="sticky-header" id="stickyHeader">
+        <div class="timer-badge"><i class="fas fa-clock"></i> <span id="timer">100:00</span></div>
+    </div>
+
+    <div class="container">
+        
+        <div class="header-card" id="introHeader">
+            <h2>Day 07: English Grammar (Preposition)</h2>
+            <p>১৭৪টি প্রশ্ন | সময়: ১০০ মিনিট</p>
+            <span class="exam-info">⚠️ প্রতিটি ভুল উত্তরের জন্য ০.৫০ নম্বর কাটা যাবে</span>
+        </div>
+
+        <div class="result-dashboard" id="resultDashboard">
+            <div class="score-box">
+                <span class="score-label">আপনার ফলাফল</span>
+                <span class="final-score" id="finalScoreDisplay">0.00</span>
+                <div class="negative-alert" id="negativeInfo">(-0.00 ভুল উত্তরের জন্য)</div>
+            </div>
+            <p>ফলাফল ফিল্টার করুন:</p>
+            <div class="filter-buttons">
+                <button class="filter-btn btn-all active" onclick="filterQuestions('all', this)">সব দেখুন</button>
+                <button class="filter-btn btn-correct" onclick="filterQuestions('correct', this)">সঠিক (<span id="countCorrect">0</span>)</button>
+                <button class="filter-btn btn-wrong" onclick="filterQuestions('wrong', this)">ভুল (<span id="countWrong">0</span>)</button>
+                <button class="filter-btn btn-skipped" onclick="filterQuestions('skipped', this)">উত্তর দেননি (<span id="countSkipped">0</span>)</button>
+            </div>
+            <br>
+            <a href="primary-teacher.html" style="color: #3498db; text-decoration: none; font-weight: 600;">মেনুতে ফিরে যান</a>
+        </div>
+
+        <div id="quizContainer"></div>
+
+        <div class="submit-container" id="submitContainer">
+            <button class="big-submit-btn" onclick="submitExam()">পরীক্ষা শেষ করুন</button>
+        </div>
+
+    </div>
+
+    <div class="dark-toggle-btn" onclick="toggleDarkMode()">
+        <i class="fas fa-moon" id="darkIcon"></i>
+    </div>
+
+    <script>
+        // Questions Data Array (1 to 174)
+        const quizData = [
+            { q: "১. His father died ___ two months.", opts: ["at", "in", "on", "for"], ans: 2, info: "সিভিল সার্জন কার্যালয়, মাগুরা - ২০২৩" },
+            { q: "২. You are always ___ a hurry.", opts: ["at", "on", "in", "with"], ans: 3, info: "বিআরটিসি - ২০২৩" },
+            { q: "৩. I shall meet you ___ 5 o'clock ___ Sunday.", opts: ["in, on", "on, at", "at, on", "at, in"], ans: 3, info: "জাতীয় গণমাধ্যম ইন্সটিটিউট - ২০২৩" },
+            { q: "৪. He deals ___ wheat.", opts: ["at", "on", "with", "in"], ans: 4, info: "কর অঞ্চল-১, চট্টগ্রাম - ২০২৩" },
+            { q: "৫. It is my strongest belief ___ reading.", opts: ["in", "on", "at", "with"], ans: 1, info: "বাংলাদেশ পুলিশ, স্পেশাল ব্রাঞ্চ - ২০২৩" },
+            { q: "৬. He lives ___ Dhaka.", opts: ["at", "on", "in", "by"], ans: 3, info: "বাংলাদেশ পুলিশ, স্পেশাল ব্রাঞ্চ - ২০২৩" },
+            { q: "৭. Rahim went to the mountains ___ his vacation.", opts: ["in", "at", "for", "on"], ans: 4, info: "নিপোর্ট - ২০২৩" },
+            { q: "৮. The paper is ___ the table.", opts: ["at", "in", "on", "with"], ans: 3, info: "প্রত্নতত্ত্ব অধিদপ্তর - ২০২৩" },
+            { q: "৯. He met me ___ Sunday.", opts: ["in", "at", "on", "for"], ans: 3, info: "বিআরটিসি - ২০২৩" },
+            { q: "১০. Put ___ your dress.", opts: ["in", "on", "at", "out"], ans: 2, info: "স্থাপত্য অধিদপ্তর - ২০২৩" },
+            { q: "১১. Nazma is good ___ Mathematics.", opts: ["in", "with", "on", "at"], ans: 4, info: "বন অধিদপ্তর - ২০২৩" },
+            { q: "১২. Let me congratulate you ___ your success.", opts: ["at", "in", "on", "for"], ans: 3, info: "বন অধিদপ্তর - ২০২৩" },
+            { q: "১৩. We should live ___ harmony.", opts: ["in", "at", "on", "with"], ans: 1, info: "রাজউক - ২০২৩" },
+            { q: "১৪. He is efficient ___ English.", opts: ["at", "in", "on", "for"], ans: 2, info: "নিপোর্ট - ২০২৩" },
+            { q: "১৫. His allegation was based ___ facts.", opts: ["in", "at", "on", "by"], ans: 3, info: "নিপোর্ট - ২০২৩" },
+            { q: "১৬. They were pleased ___ his behavior.", opts: ["in", "on", "with", "at"], ans: 4, info: "গণযোগাযোগ অধিদপ্তর - ২০২৩" },
+            { q: "১৭. Patriotism is inherent ___ man.", opts: ["at", "on", "in", "for"], ans: 3, info: "গণযোগাযোগ অধিদপ্তর - ২০২৩" },
+            { q: "১৮. I am not bad ___ tennis.", opts: ["in", "at", "on", "with"], ans: 2, info: "নিপোর্ট - ২০২৩" },
+            { q: "১৯. They arranged to meet ___ seven.", opts: ["in", "on", "at", "by"], ans: 3, info: "মৎস্য ও প্রাণিসম্পদ তথ্য দপ্তর - ২০২৩" },
+            { q: "২০. Meet me ___ FLID.", opts: ["in", "on", "at", "by"], ans: 3, info: "মৎস্য ও প্রাণিসম্পদ তথ্য দপ্তর - ২০২৩" },
+            { q: "২১. He lives ___ Mirpur ___ Dhaka.", opts: ["in, at", "at, in", "on, in", "at, at"], ans: 2, info: "তথ্য অধিদফতর - ২০২৩" },
+            { q: "২২. John Smith is good ___ mathematics.", opts: ["in", "at", "on", "with"], ans: 2, info: "পরিবেশ অধিদপ্তর - ২০২৩" },
+            { q: "২৩. He is dull ___ physics.", opts: ["in", "on", "with", "at"], ans: 4, info: "বিস্ফোরক অধিদপ্তর - ২০২৩" },
+            { q: "২৪. I found him plunged ___ thought.", opts: ["on", "at", "in", "into"], ans: 3, info: "বিস্ফোরক অধিদপ্তর - ২০২৩" },
+            { q: "২৫. The news appeared ___ the dailies.", opts: ["on", "in", "at", "for"], ans: 2, info: "বাংলাদেশ শিল্প ও গবেষণা পরিষদ - ২০২৩" },
+            { q: "২৬. He used to be the most powerful person ___ the party.", opts: ["on", "at", "for", "in"], ans: 4, info: "বাংলাদেশ শিল্প ও গবেষণা পরিষদ - ২০২৩" },
+            { q: "২৭. The news appeared ___ the media.", opts: ["at", "in", "on", "to"], ans: 2, info: "পরিবেশ অধিদপ্তর - ২০২৩" },
+            { q: "২৮. I'm sorry, I can't come to your house ___ Friday.", opts: ["in", "at", "on", "for"], ans: 3, info: "ডিসি অফিস, ফরিদপুর - ২০২৩" },
+            { q: "২৯. She lives ___ the USA.", opts: ["at", "on", "in", "to"], ans: 3, info: "বন অধিদপ্তর, সিলেট - ২০২৩" },
+            { q: "৩০. I have faith ___ his honesty.", opts: ["on", "in", "at", "for"], ans: 2, info: "বাংলাদেশ ফলিত পুষ্টি গবেষণা ও প্রশিক্ষণ ইনস্টিটিউট - ২০২৩" },
+            { q: "৩১. You curse him ___ his back.", opts: ["in", "at", "on", "with"], ans: 3, info: "বাংলাদেশ পানি উন্নয়ন বোর্ড - ২০২৩" },
+            { q: "৩২. He is ___ a trip to London.", opts: ["in", "at", "on", "with"], ans: 3, info: "বাংলাদেশ পানি উন্নয়ন বোর্ড - ২০২৩" },
+            { q: "৩৩. He was absorbed ___ deep thought.", opts: ["at", "on", "in", "with"], ans: 3, info: "রেলপথ মন্ত্রণালয় - ২০২৩" },
+            { q: "৩৪. The boy is accomplished ___ painting.", opts: ["at", "in", "on", "with"], ans: 2, info: "বিআরটিসি - ২০২৩" },
+            { q: "৩৫. He saw me ___ lunch.", opts: ["in", "on", "at", "for"], ans: 3, info: "কাস্টম হাউস, বেনাপোল - ২০২৩" },
+            { q: "৩৬. He works ___ a bank.", opts: ["on", "at", "in", "for"], ans: 3, info: "কাস্টম হাউস, বেনাপোল - ২০২৩" },
+            { q: "৩৭. Hasib will leave ___ no time.", opts: ["in", "at", "on", "with"], ans: 1, info: "কর অঞ্চল-১২, ঢাকা - ২০২৩" },
+            { q: "৩৮. You can bank ___ him.", opts: ["at", "on", "in", "for"], ans: 2, info: "অর্থ মন্ত্রণালয় - ২০২৩" },
+            { q: "৩৯. He takes pride ___ his wealth.", opts: ["on", "at", "of", "in"], ans: 4, info: "সুরক্ষা সেবা বিভাগ - ২০২৩" },
+            { q: "৪০. I get up ___ 6 a.m.", opts: ["in", "on", "at", "with"], ans: 3, info: "কর্ণেল মালেক মেডিকেল কলেজ - ২০২৩" },
+            { q: "৪১. Traffic is heavy ___ the day time.", opts: ["at", "in", "on", "for"], ans: 2, info: "কর্ণেল মালেক মেডিকেল কলেজ - ২০২৩" },
+            { q: "৪২. Examination is knocking ___ the door.", opts: ["in", "on", "at", "with"], ans: 3, info: "জেলা পরিবার পরিকল্পনা কার্যালয়, দিনাজপুর - ২০২৩" },
+            { q: "৪৩. The increase of body fat has an effect ___ human health.", opts: ["in", "at", "for", "on"], ans: 4, info: "বাণিজ্য মন্ত্রণালয় - ২০২৩" },
+            { q: "৪৪. Jamil wrote a fine book ___ grammar.", opts: ["in", "at", "on", "of"], ans: 3, info: "জাতীয় গ্রন্থকেন্দ্র - ২০২৩" },
+            { q: "৪৫. He is bent ___ doing that.", opts: ["in", "on", "at", "to"], ans: 2, info: "ট্যাকসেস আপীলাত ট্রাইবুনাল - ২০২৩" },
+            { q: "৪৬. He succeeded ___ passing the examination.", opts: ["at", "on", "in", "for"], ans: 3, info: "বিদ্যুৎ ও জ্বালানি মন্ত্রণালয় - ২০২৩" },
+            { q: "৪৭. Bangladesh is rich ___ natural gas.", opts: ["at", "on", "in", "with"], ans: 3, info: "বিদ্যুৎ ও জ্বালানি মন্ত্রণালয় - ২০২৩" },
+            { q: "৪৮. The Principal complemented the student ___ his brilliant success.", opts: ["at", "for", "in", "on"], ans: 4, info: "বিসিএসআইআর - ২০২৩" },
+            { q: "৪৯. Patriotism is the quality inherent ___ a man.", opts: ["at", "on", "in", "with"], ans: 3, info: "বিসিএসআইআর - ২০২৩" },
+            { q: "৫০. The young man was dressed ___ silk.", opts: ["with", "by", "at", "in"], ans: 4, info: "সুপ্রীম কোর্ট - ২০২৩" },
+            { q: "৫১. They have not yet arrived ___ any decision.", opts: ["in", "at", "on", "to"], ans: 2, info: "সুপ্রীম কোর্ট - ২০২৩" },
+            { q: "৫২. He studied sociology ___ Dhaka University.", opts: ["in", "on", "at", "to"], ans: 3, info: "সুপ্রীম কোর্ট - ২০২৩" },
+            { q: "৫৩. The exam will commence ___ the 25th September.", opts: ["in", "at", "on", "from"], ans: 3, info: "জনপ্রশাসন মন্ত্রণালয় - ২০২৩" },
+            { q: "৫৪. He is good ___ tennis.", opts: ["in", "at", "on", "with"], ans: 2, info: "জনপ্রশাসন মন্ত্রণালয় - ২০২৩" },
+            { q: "৫৫. He is at home ___ English.", opts: ["in", "at", "on", "with"], ans: 1, info: "কাস্টম হাউজ, পানগাঁও - ২০২৩" },
+            { q: "৫৬. He was born ___ exactly 2 am.", opts: ["in", "on", "at", "with"], ans: 3, info: "শ্রম ও কর্মসংস্থান মন্ত্রণালয় - ২০২৩" },
+            { q: "৫৭. The dog is running ___ the fox.", opts: ["on", "in", "at", "with"], ans: 3, info: "শ্রম ও কর্মসংস্থান মন্ত্রণালয় - ২০২৩" },
+            { q: "৫৮. The ball hit Sumon ___ the face.", opts: ["in", "at", "on", "to"], ans: 3, info: "কর অঞ্চল-৯, ঢাকা - ২০২৩" },
+            { q: "৫৯. Keep the book ___ the shelf.", opts: ["at", "in", "on", "by"], ans: 2, info: "কর অঞ্চল-৯, ঢাকা - ২০২৩" },
+            { q: "৬০. The apartment ___ the left has been vacated.", opts: ["in", "at", "on", "by"], ans: 3, info: "কাস্টমস মূল্যায়ন ও অভ্যন্তরীণ নিরীক্ষা - ২০২৩" },
+            { q: "৬১. John Smith is good ___ Mathematics.", opts: ["in", "on", "at", "with"], ans: 3, info: "ডিসি অফিস, জামালপুর - ২০২৩" },
+            { q: "৬২. He lives ___ Mouchak ___ Dhaka.", opts: ["in, at", "at, in", "on, in", "at, at"], ans: 2, info: "জ্বালানি ও খানিজ সম্পদ বিভাগ - ২০২৩" },
+            { q: "৬৩. Meet me ___ Monday.", opts: ["in", "at", "on", "by"], ans: 3, info: "জ্বালানি ও খানিজ সম্পদ বিভাগ - ২০২৩" },
+            { q: "৬৪. Mango sells ___ tk 50 per kg.", opts: ["in", "at", "on", "with"], ans: 2, info: "জ্বালানি ও খানিজ সম্পদ বিভাগ - ২০২৩" },
+            { q: "৬৫. He arrived ___ Monday.", opts: ["in", "at", "on", "by"], ans: 3, info: "ডিসি অফিস, চাঁদপুর - ২০২৪" },
+            { q: "৬৬. He lives ___ Khulna.", opts: ["at", "on", "in", "to"], ans: 3, info: "মৎস অধিদপ্তর - ২০২৪" },
+            { q: "৬৭. The cow lives ___ grass.", opts: ["in", "at", "for", "on"], ans: 4, info: "মৎস অধিদপ্তর - ২০২৪" },
+            { q: "৬৮. Write an essay ___ agriculture.", opts: ["in", "at", "on", "of"], ans: 3, info: "মৎস অধিদপ্তর - ২০২৪" },
+            { q: "৬৯. Open ___ page 30.", opts: ["in", "at", "on", "by"], ans: 2, info: "মৎস অধিদপ্তর - ২০২৪" },
+            { q: "৭০. Water freezes ___ 0°C.", opts: ["in", "on", "at", "by"], ans: 3, info: "বাংলাদেশ পরমাণু কৃষি গবেষণা ইনস্টিটিউট - ২০২৪" },
+            { q: "৭১. Rahim went home ___ foot.", opts: ["in", "with", "on", "by"], ans: 3, info: "কর আপীল অঞ্চল-১ - ২০২৪" },
+            { q: "৭২. He aimed ___ the flying bird.", opts: ["at", "on", "to", "with"], ans: 1, info: "বাংলাদেশ প্রতিযোগিতা কমিশন - ২০২৪" },
+            { q: "৭৩. I will go to your house ___ Monday morning.", opts: ["in", "at", "on", "by"], ans: 3, info: "ডিসি অফিস, টাঙ্গাইল - ২০২৪" },
+            { q: "৭৪. The shop closes ___ midnight.", opts: ["in", "on", "with", "at"], ans: 4, info: "ডিসি অফিস, টাঙ্গাইল - ২০২৪" },
+            { q: "৭৫. My birthday is ___ February.", opts: ["at", "on", "in", "of"], ans: 3, info: "মৎস অধিদপ্তর - ২০২৪" },
+            { q: "৭৬. He will finish the work ___ a month.", opts: ["at", "on", "with", "in"], ans: 4, info: "মৎস অধিদপ্তর - ২০২৪" },
+            { q: "৭৭. We should not laugh ___ the poor.", opts: ["on", "in", "at", "for"], ans: 3, info: "মৎস অধিদপ্তর - ২০২৪" },
+            { q: "৭৮. The ball is ___ my head.", opts: ["in", "at", "on", "by"], ans: 3, info: "কর অঞ্চল-গাজীপুর - ২০২৪" },
+            { q: "৭৯. He put his wallet ___ his pocket.", opts: ["on", "at", "in", "with"], ans: 3, info: "কাস্টমস রিস্ক ম্যানেজমেন্ট - ২০২৪" },
+            { q: "৮০. I was pleased ___ your answer.", opts: ["in", "on", "at", "with"], ans: 3, info: "কাস্টমস রিস্ক ম্যানেজমেন্ট - ২০২৪" },
+            { q: "৮১. I met my cousin ___ 5 pm.", opts: ["in", "on", "with", "at"], ans: 4, info: "ডিসি অফিস, জামালপুর - ২০২৪" },
+            { q: "৮২. Look ___ the bird.", opts: ["in", "on", "at", "to"], ans: 3, info: "কর আপীল অঞ্চল-২, ঢাকা - ২০২৪" },
+            { q: "৮৩. We live ___ rice.", opts: ["in", "at", "with", "on"], ans: 4, info: "কর আপীল অঞ্চল-২, ঢাকা - ২০২৪" },
+            { q: "৮৪. I could not know him ___ first sight.", opts: ["in", "on", "at", "by"], ans: 3, info: "বিপিএসসি - ২০২৪" },
+            { q: "৮৫. Trust ___ God.", opts: ["at", "in", "on", "with"], ans: 2, info: "সিভিল সার্জন কার্যালয়, ঠাকুরগাঁও - ২০২৪" },
+            { q: "৮৬. He was born ___ Khulna.", opts: ["at", "on", "in", "by"], ans: 3, info: "সিভিল সার্জন কার্যালয়, ঠাকুরগাঁও - ২০২৪" },
+            { q: "৮৭. He is accurate ___ what he says.", opts: ["at", "on", "for", "in"], ans: 4, info: "সড়ক পরিবহন ও মহাসড়ক বিভাগ - ২০২৪" },
+            { q: "৮৮. Don't run ___ the road.", opts: ["in", "at", "on", "with"], ans: 3, info: "সিভিল সার্জন কার্যালয়, সাতক্ষীরা - ২০২৪" },
+            { q: "৮৯. Don't smile ___ the poor.", opts: ["on", "in", "at", "for"], ans: 3, info: "সিভিল সার্জন কার্যালয়, সাতক্ষীরা - ২০২৪" },
+            { q: "৯০. His health is ___ bad condition.", opts: ["at", "on", "in", "with"], ans: 3, info: "বাংলাদেশ টেক্সটাইল মিলস করপোরেশন - ২০২৪" },
+            { q: "৯১. Never jeer ___ the poor.", opts: ["on", "in", "at", "for"], ans: 3, info: "সিভিল সার্জন কার্যালয়, সুনামগঞ্জ - ২০২৪" },
+            { q: "৯২. Did you find your phone ___ the bed?", opts: ["in", "at", "with", "on"], ans: 4, info: "সিভিল সার্জন কার্যালয়, সুনামগঞ্জ - ২০২৪" },
+            { q: "৯৩. Jerry was quick ___ his works.", opts: ["in", "on", "at", "with"], ans: 3, info: "কাস্টম হাউস, ঢাকা - ২০২৪" },
+            { q: "৯৪. He commented favorably ___ the point.", opts: ["in", "at", "on", "for"], ans: 3, info: "খাদ্য মন্ত্রণালয় - ২০২৪" },
+            { q: "৯৫. We should capitalize ___ our population.", opts: ["in", "at", "on", "for"], ans: 3, info: "কাস্টম হাউস, ঢাকা - ২০২৪" },
+            { q: "৯৬. He wrote the letter ___ blue ink.", opts: ["by", "with", "at", "in"], ans: 4, info: "কাস্টম হাউস, ঢাকা - ২০২৪" },
+            { q: "৯৭. Do not shout ___ me.", opts: ["on", "at", "in", "for"], ans: 2, info: "সিভিল সার্জন কার্যালয়, সিলেট - ২০২৪" },
+            { q: "৯৮. I am good ___ English.", opts: ["in", "on", "at", "with"], ans: 3, info: "সিভিল সার্জন কার্যালয়, সিলেট - ২০২৪" },
+            { q: "৯৯. My birthday is ___ November.", opts: ["at", "on", "in", "with"], ans: 3, info: "সিভিল সার্জন কার্যালয়, সিলেট - ২০২৪" },
+            { q: "১০০. God took pity ___ him.", opts: ["at", "in", "on", "for"], ans: 3, info: "সিভিল সার্জন কার্যালয়, সিলেট - ২০২৪" },
+            { q: "১০১. He is not interested ___ cycling.", opts: ["at", "in", "on", "with"], ans: 2, info: "সিজেএম আদালত, খুলনা - ২০২৪" },
+            { q: "১০২. The jury were divided ___ their opinion.", opts: ["at", "on", "with", "in"], ans: 4, info: "সিজেএম আদালত, খুলনা - ২০২৪" },
+            { q: "১০৩. The news appeared ___ Ittefaq.", opts: ["at", "in", "on", "by"], ans: 2, info: "যুব ও ক্রীড়া মন্ত্রণালয় - ২০২৪" },
+            { q: "১০৪. Her authority ___ mathematics is known to all.", opts: ["at", "on", "in", "for"], ans: 3, info: "যুব ও ক্রীড়া মন্ত্রণালয় - ২০২৪" },
+            { q: "১০৫. I was alarmed ___ the news.", opts: ["in", "on", "with", "at"], ans: 4, info: "সরকারি কর্মচারী হাসপাতাল - ২০২৪" },
+            { q: "১০৬. The train arrived exactly ___ time.", opts: ["at", "in", "on", "by"], ans: 3, info: "সরকারি কর্মচারী হাসপাতাল - ২০২৪" },
+            { q: "১০৭. The teacher congratulated the students ___ their bright result.", opts: ["for", "at", "in", "on"], ans: 4, info: "আয়কর গোয়েন্দা ও তদন্ত ইউনিট - ২০২৪" },
+            { q: "১০৮. You are ___ time.", opts: ["at", "in", "on", "with"], ans: 3, info: "আয়কর গোয়েন্দা ও তদন্ত ইউনিট - ২০২৪" },
+            { q: "১০৯. He is absorbed ___ thought.", opts: ["at", "on", "in", "with"], ans: 3, info: "কৃষি মন্ত্রণালয় - ২০২৪" },
+            { q: "১১০. He is proficient ___ music.", opts: ["at", "in", "on", "with"], ans: 2, info: "আন্তর্জাতিক মাতৃভাষা ইনস্টিটিউট - ২০২৪" },
+            { q: "১১১. I wonder ___ his ignorance.", opts: ["in", "on", "at", "for"], ans: 3, info: "আন্তর্জাতিক মাতৃভাষা ইনস্টিটিউট - ২০২৪" },
+            { q: "১১২. We trust ___ Allah.", opts: ["at", "in", "on", "with"], ans: 2, info: "ই-ট্যাক্স ম্যানেজমেন্ট ইউনিট - ২০২৪" },
+            { q: "১১৩. We write ___ ink.", opts: ["with", "by", "in", "on"], ans: 3, info: "সিভিল সার্জন কার্যালয়, মৌলভীবাজার - ২০২৪" },
+            { q: "১১৪. I get up in the morning ___ 6 AM.", opts: ["in", "on", "with", "at"], ans: 4, info: "সিভিল সার্জন কার্যালয়, মৌলভীবাজার - ২০২৪" },
+            { q: "১১৫. They selected me for the job only ___ merit.", opts: ["in", "at", "on", "for"], ans: 3, info: "কর অঞ্চল-২২, ঢাকা - ২০২৪" },
+            { q: "১১৬. My friend always goes home ___ feet.", opts: ["by", "with", "in", "on"], ans: 4, info: "কর অঞ্চল-২২, ঢাকা - ২০২৪" },
+            { q: "১১৭. He is weak ___ Mathematics.", opts: ["at", "on", "for", "in"], ans: 4, info: "কর অঞ্চল-১৭, ঢাকা - ২০২৪" },
+            { q: "১১৮. The dog barked ___ me.", opts: ["in", "on", "at", "to"], ans: 3, info: "কর অঞ্চল-১৭, ঢাকা - ২০২৪" },
+            { q: "১১৯. He will meet us ___ the meeting.", opts: ["in", "on", "with", "at"], ans: 4, info: "কর অঞ্চল-২৪, ঢাকা - ২০২৪" },
+            { q: "১২০. All his efforts ended ___ smoke.", opts: ["at", "on", "with", "in"], ans: 4, info: "কর অঞ্চল-২৪, ঢাকা - ২০২৪" },
+            { q: "১২১. There was dust ___ the floor.", opts: ["in", "at", "on", "by"], ans: 3, info: "বাংলাদেশ মাদ্রাসা শিক্ষক প্রশিক্ষণ ইনস্টিটিউট - ২০২৪" },
+            { q: "১২২. He suddenly jumped ___ a bus.", opts: ["in", "at", "on", "with"], ans: 3, info: "ডিসি অফিস, গাইবান্ধা - ২০২৪" },
+            { q: "১২৩. He is expert ___ English.", opts: ["at", "in", "on", "with"], ans: 2, info: "কারিগরি শিক্ষা অধিদপ্তর - ২০২৪" },
+            { q: "১২৪. I rely ___ you.", opts: ["at", "in", "on", "for"], ans: 3, info: "সিভিল সার্জন কার্যালয়, কিশোরগঞ্জ - ২০২৫" },
+            { q: "১২৫. The Titanic sank ___ 1912 A.D.", opts: ["on", "at", "by", "in"], ans: 4, info: "ডিএমপি - ২০২৫" },
+            { q: "১২৬. I was standing ___ the queue.", opts: ["on", "at", "in", "by"], ans: 3, info: "সিভিল সার্জন কার্যালয়, শরীয়তপুর - ২০২৫" },
+            { q: "১২৭. The student came ___ the classroom.", opts: ["at", "on", "with", "in"], ans: 4, info: "সিভিল সার্জন কার্যালয়, শরীয়তপুর - ২০২৫" },
+            { q: "১২৮. He fell ___ the ground.", opts: ["in", "at", "on", "to"], ans: 3, info: "সিভিল সার্জন কার্যালয়, শরীয়তপুর - ২০২৫" },
+            { q: "১২৯. She deals ___ cloth.", opts: ["on", "with", "in", "for"], ans: 3, info: "ভূমি রেকর্ড ও জরিপ অধিদপ্তর - ২০২৫" },
+            { q: "১৩০. She has special interest ___ history.", opts: ["at", "on", "in", "with"], ans: 3, info: "ভূমি রেকর্ড ও জরিপ অধিদপ্তর - ২০২৫" },
+            { q: "১৩১. My brother is well versed ___ Economics.", opts: ["at", "on", "with", "in"], ans: 4, info: "বাংলাদেশ পুলিশ হাসপাতাল - ২০২৫" },
+            { q: "১৩২. In Bangladesh we drive ___ the left.", opts: ["in", "at", "on", "by"], ans: 3, info: "বাংলাদেশ পুলিশ হাসপাতাল - ২০২৫" },
+            { q: "১৩৩. The solution of the problem dawned ___ me.", opts: ["in", "at", "on", "to"], ans: 3, info: "বাংলাদেশ পুলিশ হাসপাতাল - ২০২৫" },
+            { q: "১৩৪. He has no interest ___ Mathematics.", opts: ["at", "on", "in", "for"], ans: 3, info: "আইবিবি - ২০২৫" },
+            { q: "১৩৫. Khalid is good ___ cricket.", opts: ["in", "on", "at", "with"], ans: 3, info: "আইবিবি - ২০২৫" },
+            { q: "১৩৬. Don't stand ___ the desk.", opts: ["in", "at", "on", "by"], ans: 3, info: "পুলিশ স্পেশাল ব্রাঞ্চ - ২০২৫" },
+            { q: "১৩৭. I want to live ___ peace with you.", opts: ["at", "on", "in", "with"], ans: 3, info: "হজ অফিস - ২০২৫" },
+            { q: "১৩৮. The disgusted man grumbled ___ his fate.", opts: ["in", "on", "with", "at"], ans: 4, info: "জাতীয় স্থানীয় সরকার ইনস্টিটিউট - ২০২৫" },
+            { q: "১৩۹. The girl is expert ___ drawing.", opts: ["in", "on", "at", "with"], ans: 3, info: "সুপ্রীম কোর্ট - ২০২৫" },
+            { q: "১৪০. Please leave your key ___ the reception.", opts: ["in", "on", "with", "at"], ans: 4, info: "বিপিএটিসি - ২০২৫" },
+            { q: "১৪১. Do you know at what time you have to arrive ___?", opts: ["in", "on", "there", "at"], ans: 3, info: "সরকারি কর্মচারী হাসপাতাল - ২০২৫" },
+            { q: "১৪২. She reads ___ class six.", opts: ["at", "on", "in", "to"], ans: 3, info: "বিপিএটিসি - ২০২৫" },
+            { q: "১৪৩. Focus ___ your study.", opts: ["in", "at", "on", "for"], ans: 3, info: "বিপিএটিসি - ২০২৫" },
+            { q: "১৪৪. Open ___ page 40.", opts: ["in", "on", "at", "to"], ans: 3, info: "বাংলাদেশ সাংবাদিক কল্যাণ ট্রাস্ট - ২০২৫" },
+            { q: "১৪৫. I abide ___ Dhaka.", opts: ["at", "on", "in", "by"], ans: 3, info: "সিভিল সার্জন কার্যালয়, বরিশাল - ২০২৫" },
+            { q: "১৪৬. It was my parents who decided ___ this university.", opts: ["in", "at", "with", "on"], ans: 4, info: "নিরাপদ খাদ্য কর্তৃপক্ষ - ২০২৫" },
+            { q: "১৪৭. We enjoyed watching boats ___ the river.", opts: ["in", "at", "on", "by"], ans: 3, info: "নিরাপদ খাদ্য কর্তৃপক্ষ - ২০২৫" },
+            { q: "১৪৮. I live ___ Mirpur 10.", opts: ["in", "on", "at", "to"], ans: 3, info: "বন অধিদপ্তর - ২০২৫" },
+            { q: "১৪৯. My father was working ___ the garden.", opts: ["at", "on", "with", "in"], ans: 4, info: "বন অধিদপ্তর - ২০২৫" },
+            { q: "১৫০. They live ___ catching fish.", opts: ["in", "at", "by", "on"], ans: 4, info: "বাংলাদেশ সেতু কর্তৃপক্ষ - ২০২৫" },
+            { q: "১৫১. The nurse attended ___ the patient.", opts: ["in", "at", "on", "to"], ans: 3, info: "বাংলাদেশ সেতু কর্তৃপক্ষ - ২০২৫" },
+            { q: "১৫২. The girl was reclining ___ the couch.", opts: ["in", "at", "with", "on"], ans: 4, info: "বাংলাদেশ সেতু কর্তৃপক্ষ - ২০২৫" },
+            { q: "১৫৩. There were many people ___ the concert.", opts: ["in", "on", "with", "at"], ans: 4, info: "অভ্যন্তরীণ সম্পদ বিভাগ - ২০২৫" },
+            { q: "১৫৪. Would you please find out Bangladesh ___ the map.", opts: ["in", "at", "on", "to"], ans: 3, info: "অভ্যন্তরীণ সম্পদ বিভাগ - ২০২৫" },
+            { q: "১৫৫. He has great confidence ___ his assistant.", opts: ["at", "on", "in", "with"], ans: 3, info: "অভ্যন্তরীণ সম্পদ বিভাগ - ২০২৫" },
+            { q: "১৫৬. He is dull ___ English.", opts: ["in", "on", "at", "with"], ans: 3, info: "ডিসি অফিস, জয়পুরহাট - ২০২৫" },
+            { q: "১৫৭. The leader arrives ___ a decision at last.", opts: ["in", "on", "at", "to"], ans: 3, info: "কারিগরি শিক্ষা অধিদপ্তর - ২০২৫" },
+            { q: "১৫৮. He is looking ___ the newspaper.", opts: ["in", "on", "at", "to"], ans: 3, info: "প্রবাসী কল্যাণ মন্ত্রণালয় - ২০২৫" },
+            { q: "১৫৯. Can you guess ___ her age?", opts: ["in", "on", "at", "to"], ans: 3, info: "প্রবাসী কল্যাণ মন্ত্রণালয় - ২০২৫" },
+            { q: "১৬০. The boy acted ___ my suggestions.", opts: ["in", "at", "for", "on"], ans: 4, info: "জনপ্রশাসন মন্ত্রণালয় - ২০২৫" },
+            { q: "১৬১. I was born ___ 1999.", opts: ["at", "on", "with", "in"], ans: 4, info: "স্বাস্থ্য শিক্ষা অধিদপ্তর - ২০২৫" },
+            { q: "১৬২. My office is ___ the third floor.", opts: ["in", "at", "on", "by"], ans: 3, info: "বাংলাদেশ অ্যাক্রেডিটেশন কাউন্সিল - ২০২৫" },
+            { q: "১৬৩. Pay the bill ___ cash.", opts: ["by", "with", "in", "on"], ans: 3, info: "বাংলাদেশ অ্যাক্রেডিটেশন কাউন্সিল - ২০২৫" },
+            { q: "১৬৪. Rahman is quick ___ understanding.", opts: ["at", "on", "with", "in"], ans: 4, info: "কারিগরি শিক্ষা অধিদপ্তর - ২০২৫" },
+            { q: "১৬৫. Abdullah will come ___ March.", opts: ["at", "on", "in", "to"], ans: 3, info: "আরকাইভস ও গ্রন্থাগার অধিদপ্তর - ২০২৫" },
+            { q: "১৬৬. He is rich ___ vitamins.", opts: ["at", "on", "with", "in"], ans: 4, info: "খাদ্য অধিদপ্তর - ২০২৫" },
+            { q: "১৬৭. He pointed ___ the map ___ the wall.", opts: ["at, on", "at, in", "on, in", "in, on"], ans: 1, info: "প্রতিরক্ষা মন্ত্রণালয় - ২০২৫" },
+            { q: "১৬৮. She gave me the letter ___ an envelope.", opts: ["at", "on", "with", "in"], ans: 4, info: "ডিসি অফিস, মানিকগঞ্জ - ২০২৫" },
+            { q: "১৬৯. He mused ___ his lot.", opts: ["in", "at", "with", "on"], ans: 4, info: "বিভাগীয় কমিশনারের কার্যালয়, চট্টগ্রাম - ২০২৫" },
+            { q: "১৭০. Are you doing anything special ___ the weekend?", opts: ["in", "on", "at", "for"], ans: 3, info: "বিভাগীয় কমিশনারের কার্যালয়, চট্টগ্রাম - ২০২৫" },
+            { q: "১৭১. He insistent ___ his innocence.", opts: ["in", "at", "on", "for"], ans: 3, info: "স্বাস্থ্য সেবা বিভাগ - ২০২৫" },
+            { q: "১৭২. He always tries to cut a brilliant figure ___ the examination.", opts: ["at", "on", "with", "in"], ans: 4, info: "ডিসি অফিস, নারায়ণগঞ্জ - ২০২৫" },
+            { q: "১৭৩. She succeeded ___ her rigorous work.", opts: ["at", "on", "in", "for"], ans: 3, info: "ঢাকা মেডিকেল কলেজ হাসপাতাল - ২০২৫" },
+            { q: "১৭৪. Road accidents ___ Bangladesh.", opts: ["at", "on", "with", "in"], ans: 4, info: "বিদ্যুৎ বিভাগ - ২০২৫" }
+        ];
+
+        let timeLeft = 100 * 60; // 100 Minutes
+        const timerDisplay = document.getElementById('timer');
+        let countdown;
+        let userAnswers = {};
+
+        // Render Questions Dynamically
+        function renderQuestions() {
+            const container = document.getElementById('quizContainer');
+            let htmlContent = '';
+
+            quizData.forEach((item, index) => {
+                const qId = index + 1;
+                const correctAns = item.ans;
+                const optA = item.opts[0];
+                const optB = item.opts[1];
+                const optC = item.opts[2];
+                const optD = item.opts[3];
+
+                htmlContent += `
+                <div class="mcq-box" id="q${qId}" data-correct="${correctAns}">
+                    <p class="question">${item.q}</p>
+                    <ul class="options">
+                        <li class="option-item" onclick="selectOption(${qId}, 1)">A. ${optA}</li>
+                        <li class="option-item" onclick="selectOption(${qId}, 2)">B. ${optB}</li>
+                        <li class="option-item" onclick="selectOption(${qId}, 3)">C. ${optC}</li>
+                        <li class="option-item" onclick="selectOption(${qId}, 4)">D. ${optD}</li>
+                    </ul>
+                    <div class="explanation">✅ সঠিক উত্তর: ${['A','B','C','D'][correctAns-1]}. ${item.opts[correctAns-1]}<br><small>(${item.info})</small></div>
+                </div>`;
+            });
+
+            container.innerHTML = htmlContent;
+        }
+
+        // Start Timer
+        function startTimer() {
+            countdown = setInterval(() => {
+                let minutes = Math.floor(timeLeft / 60);
+                let seconds = timeLeft % 60;
+                seconds = seconds < 10 ? '0' + seconds : seconds;
+                timerDisplay.innerText = `${minutes}:${seconds}`;
+                
+                if (timeLeft <= 0) {
+                    clearInterval(countdown);
+                    submitExam();
+                }
+                timeLeft--;
+            }, 1000);
+        }
+
+        function selectOption(qId, optionIdx) {
+            const questionBox = document.getElementById(`q${qId}`);
+            if (questionBox.classList.contains('submitted')) return;
+
+            const options = questionBox.querySelectorAll('.option-item');
+            options.forEach(opt => opt.classList.remove('selected'));
+
+            options[optionIdx - 1].classList.add('selected');
+            userAnswers[qId] = optionIdx;
+        }
+
+        function submitExam() {
+            clearInterval(countdown);
+            
+            let correctCount = 0;
+            let wrongCount = 0;
+            let skippedCount = 0;
+            
+            const allQuestions = document.querySelectorAll('.mcq-box');
+            
+            allQuestions.forEach((questionBox, index) => {
+                const qId = index + 1;
+                const correctAns = parseInt(questionBox.getAttribute('data-correct'));
+                const userAns = userAnswers[qId];
+                const options = questionBox.querySelectorAll('.option-item');
+                const explanation = questionBox.querySelector('.explanation');
+
+                questionBox.classList.add('submitted');
+
+                if (userAns) {
+                    if (userAns === correctAns) {
+                        correctCount++;
+                        options[userAns - 1].classList.add('correct');
+                        questionBox.classList.add('status-correct');
+                    } else {
+                        wrongCount++;
+                        options[userAns - 1].classList.add('wrong');
+                        options[correctAns - 1].classList.add('correct');
+                        questionBox.classList.add('status-wrong');
+                    }
+                } else {
+                    skippedCount++;
+                    options[correctAns - 1].classList.add('correct');
+                    questionBox.classList.add('status-skipped');
+                }
+                
+                explanation.style.display = 'block';
+            });
+
+            // Calculate Score with 0.50 negative marking
+            const negativeMarks = wrongCount * 0.50;
+            const finalScore = correctCount - negativeMarks;
+
+            // UI Changes
+            document.getElementById('introHeader').style.display = 'none';
+            document.getElementById('submitContainer').style.display = 'none';
+            document.getElementById('stickyHeader').style.display = 'none';
+            document.getElementById('resultDashboard').style.display = 'block';
+
+            // Set Scores
+            document.getElementById('finalScoreDisplay').innerText = finalScore.toFixed(2);
+            document.getElementById('negativeInfo').innerText = `(-${negativeMarks.toFixed(2)} ভুল উত্তরের জন্য)`;
+            
+            document.getElementById('countCorrect').innerText = correctCount;
+            document.getElementById('countWrong').innerText = wrongCount;
+            document.getElementById('countSkipped').innerText = skippedCount;
+
+            // Scroll to Top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Filter Logic
+        function filterQuestions(filterType, btnElement) {
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            btnElement.classList.add('active');
+
+            const allQuestions = document.querySelectorAll('.mcq-box');
+
+            allQuestions.forEach(box => {
+                box.style.display = 'none';
+
+                if (filterType === 'all') {
+                    box.style.display = 'block';
+                } else if (filterType === 'correct' && box.classList.contains('status-correct')) {
+                    box.style.display = 'block';
+                } else if (filterType === 'wrong' && box.classList.contains('status-wrong')) {
+                    box.style.display = 'block';
+                } else if (filterType === 'skipped' && box.classList.contains('status-skipped')) {
+                    box.style.display = 'block';
+                }
+            });
+        }
+
+        // Dark Mode Logic
+        function toggleDarkMode() {
+            const body = document.body;
+            const icon = document.getElementById('darkIcon');
+            body.classList.toggle('dark-mode');
+            if (body.classList.contains('dark-mode')) {
+                icon.classList.remove('fa-moon');
+                icon.classList.add('fa-sun');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                icon.classList.remove('fa-sun');
+                icon.classList.add('fa-moon');
+                localStorage.setItem('theme', 'light');
+            }
+        }
+
+        window.onload = function() {
+            renderQuestions(); // Render the questions first
+            startTimer(); // Start the timer
+
+            if (localStorage.getItem('theme') === 'dark') {
+                document.body.classList.add('dark-mode');
+                document.getElementById('darkIcon').classList.remove('fa-moon');
+                document.getElementById('darkIcon').classList.add('fa-sun');
+            }
+        }
+    </script>
+
+</body>
+</html>
